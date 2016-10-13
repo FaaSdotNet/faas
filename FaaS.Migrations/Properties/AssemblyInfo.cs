@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FaaS.Entities")]
+[assembly: AssemblyTitle("FaaS.Migrations")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("FaaS.Entities")]
+[assembly: AssemblyProduct("FaaS.Migrations")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,9 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("88b1f427-50cc-4f9d-abe5-0e963ba684a6")]
-
-[assembly: InternalsVisibleTo("FaaS.Migrations")]
+[assembly: Guid("6f022ce0-f7d3-4599-a47b-7452b5514775")]
 
 // Version information for an assembly consists of the following four values:
 //

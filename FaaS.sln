@@ -5,6 +5,12 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaaS.Entities", "FaaS.Entities\FaaS.Entities.csproj", "{88B1F427-50CC-4F9D-ABE5-0E963BA684A6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{47A795C7-B5DF-4815-89C5-5D4D4D0186B5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{19D73EAC-CBF9-4FE3-B71E-47CA8523F480}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaaS.Migrations", "FaaS.Migrations\FaaS.Migrations.csproj", "{6F022CE0-F7D3-4599-A47B-7452B5514775}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +21,16 @@ Global
 		{88B1F427-50CC-4F9D-ABE5-0E963BA684A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88B1F427-50CC-4F9D-ABE5-0E963BA684A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88B1F427-50CC-4F9D-ABE5-0E963BA684A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F022CE0-F7D3-4599-A47B-7452B5514775}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F022CE0-F7D3-4599-A47B-7452B5514775}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F022CE0-F7D3-4599-A47B-7452B5514775}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F022CE0-F7D3-4599-A47B-7452B5514775}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{88B1F427-50CC-4F9D-ABE5-0E963BA684A6} = {47A795C7-B5DF-4815-89C5-5D4D4D0186B5}
+		{6F022CE0-F7D3-4599-A47B-7452B5514775} = {19D73EAC-CBF9-4FE3-B71E-47CA8523F480}
 	EndGlobalSection
 EndGlobal

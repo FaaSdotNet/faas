@@ -7,7 +7,7 @@ namespace FaaS.Entities.Contexts
     internal class FaaSContext : DbContext
     {
         /// <summary>
-        /// Exposes logging capabilities to <see cref="Repositories.GameStoreRepository"/>.
+        /// Exposes logging capabilities to <see cref="Repositories.UserRepository"/>.
         /// </summary>
         internal Action<string> Log { get; set; }
 
