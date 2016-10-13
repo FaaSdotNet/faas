@@ -1,30 +1,64 @@
-﻿using FaaS.Entities.DataAccessModels;
+﻿using FaaS.Entities.Configuration;
+using FaaS.Entities.Contexts;
+using FaaS.Entities.DataAccessModels;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FaaS.Entities.Repositories
 {
     public class OptionRepository : IOptionRepository
     {
-        public Task<Option> AddOption(Element element, Option option)
+        private FaaSContext _context;
+
+        public OptionRepository(IOptions<ConnectionOptions> connectionOptions)
         {
-            throw new NotImplementedException();
+            _context = new FaaSContext(connectionOptions.Value.ConnectionString);
         }
 
-        public Task<Option> DeleteOption(Option option)
+        public async Task<Option> AddOption(Element element, Option option)
         {
-            throw new NotImplementedException();
+            if (element == null)
+            {
+                throw new ArgumentNullException(nameof(element));
+            }
+            if (option == null)
+            {
+                throw new ArgumentNullException(nameof(option));
+            }
+
+            option.Element = _context.Elements.Find(element.Id);
+            option.ElementId = element.Id;
+
+            Option addedOption = _context.Options.Add(option);
+            await _context.SaveChangesAsync();
+
+            return addedOption;
         }
 
-        public Task<IEnumerable<Option>> GetAllOptions()
+        public async Task<Option> DeleteOption(Option option)
         {
-            throw new NotImplementedException();
+            if (option == null)
+            {
+                throw new ArgumentNullException(nameof(option));
+            }
+
+            Option deletedOption = _context.Options.Remove(option);
+            await _context.SaveChangesAsync();
+
+            return deletedOption;
         }
 
-        public Task<IEnumerable<Option>> GetAllOptions(Element element)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<IEnumerable<Option>> GetAllOptions()
+            => await _context.Options.ToArrayAsync();
+
+        public async Task<IEnumerable<Option>> GetAllOptions(Element element)
+            => await _context
+            .Options
+            .Where(option => option.ElementId == element.Id)
+            .ToArrayAsync();
     }
 }

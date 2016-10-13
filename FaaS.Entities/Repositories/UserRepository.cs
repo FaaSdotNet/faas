@@ -1,30 +1,57 @@
-﻿using FaaS.Entities.DataAccessModels;
+﻿using FaaS.Entities.Configuration;
+using FaaS.Entities.Contexts;
+using FaaS.Entities.DataAccessModels;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FaaS.Entities.Repositories
 {
     class UserRepository : IUserRepository
     {
-        public Task<User> AddUser(User user)
+        private FaaSContext _context;
+
+        public UserRepository(IOptions<ConnectionOptions> connectionOptions)
         {
-            throw new NotImplementedException();
+            _context = new FaaSContext(connectionOptions.Value.ConnectionString);
         }
 
-        public Task<User> DeleteUser(User user)
+        public async Task<User> AddUser(User user)
         {
-            throw new NotImplementedException();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            User addedUser = _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return addedUser;
         }
 
-        public Task<IEnumerable<User>> GetAllUsers()
+        public async Task<User> DeleteUser(User user)
         {
-            throw new NotImplementedException();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            User deletedUser = _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return deletedUser;
         }
 
-        public Task<User> GetSingleUser(string googleId)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<IEnumerable<User>> GetAllUsers()
+            => await _context.Users.ToArrayAsync();
+
+        public async Task<User> GetSingleUser(string googleId)
+            => await _context
+            .Users
+            .Where(user => user.GoogleId == googleId)
+            .SingleOrDefaultAsync();
     }
 }

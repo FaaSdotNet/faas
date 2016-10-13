@@ -1,35 +1,71 @@
-﻿using FaaS.Entities.DataAccessModels;
+﻿using FaaS.Entities.Configuration;
+using FaaS.Entities.Contexts;
+using FaaS.Entities.DataAccessModels;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FaaS.Entities.Repositories
 {
     public class ProjectRepository : IProjectRepository
     {
-        public Task<Project> AddProject(User user, Project project)
+        private FaaSContext _context;
+
+        public ProjectRepository(IOptions<ConnectionOptions> connectionOptions)
         {
-            throw new NotImplementedException();
+            _context = new FaaSContext(connectionOptions.Value.ConnectionString);
         }
 
-        public Task<Project> DeleteProject(Project project)
+        public async Task<Project> AddProject(User user, Project project)
         {
-            throw new NotImplementedException();
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            if (project == null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
+
+            project.User = _context.Users.Find(user.Id);
+            project.UserId = user.Id;
+
+            Project addedProject = _context.Projects.Add(project);
+            await _context.SaveChangesAsync();
+
+            return addedProject;
         }
 
-        public Task<IEnumerable<Project>> GetAllProjects()
+        public async Task<Project> DeleteProject(Project project)
         {
-            throw new NotImplementedException();
+            if (project == null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
+
+            Project deletedProject = _context.Projects.Remove(project);
+            await _context.SaveChangesAsync();
+
+            return deletedProject;
         }
 
-        public Task<IEnumerable<Project>> GetAllProjects(User user)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<IEnumerable<Project>> GetAllProjects()
+            => await _context.Projects.ToArrayAsync();
 
-        public Task<Project> GetSingleProject(string name)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<IEnumerable<Project>> GetAllProjects(User user)
+            => await _context
+            .Projects
+            .Where(project => project.UserId == user.Id)
+            .ToArrayAsync();
+
+
+        public async Task<Project> GetSingleProject(string name)
+            => await _context
+            .Projects
+            .Where(project => project.Name == name)
+            .SingleOrDefaultAsync();
     }
 }

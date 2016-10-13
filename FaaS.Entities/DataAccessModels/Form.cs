@@ -8,7 +8,7 @@ namespace FaaS.Entities.DataAccessModels
     public class Form : ModelBase
     {
         [ForeignKey("Project")]
-        public int ProjectId { get; set; }
+        public Guid ProjectId { get; set; }
 
         [Required]
         public Project Project { get; set; }

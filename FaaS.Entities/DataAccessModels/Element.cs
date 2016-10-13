@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FaaS.Entities.DataAccessModels
 {
     public class Element : ModelBase
     {
         [ForeignKey("Form")]
-        public int FormId { get; set; }
+        public Guid FormId { get; set; }
 
         [Required]
         public Form Form { get; set; }

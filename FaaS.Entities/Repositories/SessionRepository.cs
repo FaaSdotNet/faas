@@ -1,25 +1,50 @@
-﻿using FaaS.Entities.DataAccessModels;
+﻿using FaaS.Entities.Configuration;
+using FaaS.Entities.Contexts;
+using FaaS.Entities.DataAccessModels;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Threading.Tasks;
 
 namespace FaaS.Entities.Repositories
 {
     public class SessionRepository : ISessionRepository
     {
-        public Task<Session> AddSession(Session session)
+        private FaaSContext _context;
+
+        public SessionRepository(IOptions<ConnectionOptions> connectionOptions)
         {
-            throw new NotImplementedException();
+            _context = new FaaSContext(connectionOptions.Value.ConnectionString);
         }
 
-        public Task<Session> DeleteSession(Session session)
+        public async Task<Session> AddSession(Session session)
         {
-            throw new NotImplementedException();
+            if (session == null)
+            {
+                throw new ArgumentNullException(nameof(session));
+            }
+
+            Session addedSession = _context.Sessions.Add(session);
+            await _context.SaveChangesAsync();
+
+            return addedSession;
         }
 
-        public Task<IEnumerable<Session>> GetAllSessions()
+        public async Task<Session> DeleteSession(Session session)
         {
-            throw new NotImplementedException();
+            if (session == null)
+            {
+                throw new ArgumentNullException(nameof(session));
+            }
+
+            Session deletedSession = _context.Sessions.Remove(session);
+            await _context.SaveChangesAsync();
+
+            return deletedSession;
         }
+
+        public async Task<IEnumerable<Session>> GetAllSessions()
+            => await _context.Sessions.ToArrayAsync();
     }
 }

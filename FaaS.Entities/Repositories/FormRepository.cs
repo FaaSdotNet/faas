@@ -1,35 +1,70 @@
-﻿using FaaS.Entities.DataAccessModels;
+﻿using FaaS.Entities.Configuration;
+using FaaS.Entities.Contexts;
+using FaaS.Entities.DataAccessModels;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FaaS.Entities.Repositories
 {
     public class FormRepository : IFormRepository
     {
-        public Task<Form> AddForm(Project project, Form form)
+        private FaaSContext _context;
+
+        public FormRepository(IOptions<ConnectionOptions> connectionOptions)
         {
-            throw new NotImplementedException();
+            _context = new FaaSContext(connectionOptions.Value.ConnectionString);
         }
 
-        public Task<Form> DeleteForm(Form form)
+        public async Task<Form> AddForm(Project project, Form form)
         {
-            throw new NotImplementedException();
+            if (project == null)
+            {
+                throw new ArgumentNullException(nameof(project));
+            }
+            if (form == null)
+            {
+                throw new ArgumentNullException(nameof(form));
+            }
+
+            form.Project = _context.Projects.Find(project.Id);
+            form.ProjectId = project.Id;
+
+            Form addedForm = _context.Forms.Add(form);
+            await _context.SaveChangesAsync();
+
+            return addedForm;
         }
 
-        public Task<IEnumerable<Form>> GetAllForms()
+        public async Task<Form> DeleteForm(Form form)
         {
-            throw new NotImplementedException();
+            if (form == null)
+            {
+                throw new ArgumentNullException(nameof(form));
+            }
+
+            Form deletedForm = _context.Forms.Remove(form);
+            await _context.SaveChangesAsync();
+
+            return deletedForm;
         }
 
-        public Task<IEnumerable<Form>> GetAllForms(Project project)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<IEnumerable<Form>> GetAllForms()
+            => await _context.Forms.ToArrayAsync();
 
-        public Task<Form> GetSingleForm(string name)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<IEnumerable<Form>> GetAllForms(Project project)
+            => await _context
+            .Forms
+            .Where(form => form.ProjectId == project.Id)
+            .ToArrayAsync();
+
+        public async Task<Form> GetSingleForm(string name)
+            => await _context
+            .Forms
+            .Where(form => form.Name == name)
+            .SingleOrDefaultAsync();
     }
 }
