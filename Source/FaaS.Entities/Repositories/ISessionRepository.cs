@@ -6,10 +6,12 @@ namespace FaaS.Entities.Repositories
 {
     public interface ISessionRepository
     {
-        Task<IEnumerable<Session>> GetAllSessions();
+        Task<IEnumerable<Session>> List();
        
-        Task<Session> AddSession(Session session);
+        Task<Session> Add(Session session);
 
-        Task<Session> DeleteSession(Session session);
+        Task<Session> Delete(Session session);
+
+        Task<Session> Update(Session session);
     }
 }
