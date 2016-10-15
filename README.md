@@ -1,4 +1,4 @@
-# Form as an service project in dotNet
+# Form as a service project in dotNet
 
 ## Description
 This project will provide simple Forms schema creation and submissions for users.

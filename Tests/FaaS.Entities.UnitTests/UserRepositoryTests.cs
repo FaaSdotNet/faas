@@ -20,7 +20,6 @@ namespace FaaS.Entities.UnitTests
         {
             get
             {
-                yield return new object[] { "104560124403688998123", DateTime.Now, Enumerable.Empty<Project>() };
                 yield return new object[] { null, DateTime.Now, Enumerable.Empty<Project>() };
                 yield return new object[] { "104560124403688998123", DateTime.Now, (IEnumerable<Project>)null };
             }
@@ -88,7 +87,7 @@ namespace FaaS.Entities.UnitTests
 
         [Theory]
         [MemberData(nameof(InvalidAddUserArguments))]
-        public async void AddUser_NullGameOrDeveloperOrAwards_Throws(string googleId, DateTime registered, IEnumerable<Project> projects)
+        public async void AddUser_NullGoogleIdOrRegisteredOrProjects_Throws(string googleId, DateTime registered, IEnumerable<Project> projects)
         {
             await Assert.ThrowsAsync<ArgumentNullException>(() => _UserRepository.AddUser(googleId, registered, projects));
         }
