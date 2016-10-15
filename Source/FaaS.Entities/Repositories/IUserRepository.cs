@@ -8,10 +8,10 @@ namespace FaaS.Entities.Repositories
     {
         Task<User> GetSingleUser(string googleId);
 
-        Task<IEnumerable<User>> GetAllUsers();
+        Task<IEnumerable<User>> List();
 
-        Task<User> AddUser(User user);
+        Task<User> Add(User user);
 
-        Task<User> DeleteUser(User user);
+        Task<User> Delete(User user);
     }
 }

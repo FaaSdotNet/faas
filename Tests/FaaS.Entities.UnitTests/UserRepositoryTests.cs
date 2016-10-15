@@ -28,7 +28,7 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void GetSingleUser_Existing_ReturnsUser() 
         {
-            var actualUser = await _UserRepository.GetSingleUser("104560124403688998123");
+            var actualUser = await _UserRepository.GetSingleUser("TestGoogleId1");
 
             Assert.NotNull(actualUser);
             Assert.IsType<User>(actualUser);
@@ -47,7 +47,7 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void GetAllUsers_ReturnsAllUserInstances()
         {
-            var actualUsers = await _UserRepository.GetAllUsers();
+            var actualUsers = await _UserRepository.List();
 
             Assert.NotNull(actualUsers);
             Assert.NotEmpty(actualUsers);
@@ -61,7 +61,7 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void AddUser_Null_Throws()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _UserRepository.AddUser(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _UserRepository.Add(null));
         }
 
         [Fact]
@@ -73,7 +73,7 @@ namespace FaaS.Entities.UnitTests
                 Registered = DateTime.Now,
                 Projects = new List<Project>()
             };
-            User actualUser = await _UserRepository.AddUser(newUser);
+            User actualUser = await _UserRepository.Add(newUser);
 
             // Checks returned value
             Assert.NotNull(actualUser);
@@ -85,11 +85,46 @@ namespace FaaS.Entities.UnitTests
             Assert.NotNull(_UserRepository.GetSingleUser(newUser.GoogleId));
         }
 
+        [Fact]
+        public async void UpdateUser_Null_Throws()
+        {
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _UserRepository.Update(null));
+        }
+
+        [Fact]
+        public async void UpdateUser_NotNull_NotInDB()
+        {
+            var newUser = new User
+            {
+                GoogleId = "NotInDatabaseGoogleId",
+                Registered = DateTime.Now,
+                Projects = new List<Project>()
+            };
+
+            await Assert.ThrowsAsync<ArgumentException>(() => _UserRepository.Update(newUser));
+        }
+
+        [Fact]
+        public async void UpdateUser_NotNull_InDB()
+        {
+            User actualUser = await _UserRepository.GetSingleUser("TestGoogleId1");
+
+            actualUser.GoogleId = "NotHisPreviousGoogleId";
+
+            actualUser = await _UserRepository.Update(actualUser);
+            actualUser = await _UserRepository.GetSingleUser("NotHisPreviousGoogleId");
+
+            // Checks returned value
+            Assert.NotNull(actualUser);
+            Assert.Equal("NotHisPreviousGoogleId", actualUser.GoogleId);
+            Assert.NotEqual(Guid.Empty, actualUser.Id);
+        }
+
         [Theory]
         [MemberData(nameof(InvalidAddUserArguments))]
         public async void AddUser_NullGoogleIdOrRegisteredOrProjects_Throws(string googleId, DateTime registered, IEnumerable<Project> projects)
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _UserRepository.AddUser(googleId, registered, projects));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _UserRepository.Add(googleId, registered, projects));
         }
 
         [Fact]
@@ -107,7 +142,7 @@ namespace FaaS.Entities.UnitTests
                     GetTestProjectWithoutForms(252),
             };
 
-            User actualUser = await _UserRepository.AddUser(newUser.GoogleId, newUser.Registered, projects);
+            User actualUser = await _UserRepository.Add(newUser.GoogleId, newUser.Registered, projects);
 
             // Checks returned value
             Assert.NotNull(actualUser);
@@ -136,12 +171,16 @@ namespace FaaS.Entities.UnitTests
             };
 
             // Mock users
+            User testUser1 = GetTestUserWithoutProjects(1);
+            User testUser2 = GetTestUserWithoutProjects(2);
+            User testUser3 = GetTestUserWithoutProjects(3);
+            User testUser4 = GetTestUserWithoutProjects(4);
             var usersData = new List<User>
             {
-                new User { GoogleId = "104560124403688998121", Registered = DateTime.Now.AddDays(1)},
-                new User { GoogleId = "104560124403688998122", Registered = DateTime.Now.AddDays(2)},
-                new User { GoogleId = "104560124403688998123", Registered = DateTime.Now.AddDays(3)},
-                new User { GoogleId = "104560124403688998124", Registered = DateTime.Now.AddDays(3)},
+                testUser1,
+                testUser2,
+                testUser3,
+                testUser4
             };
 
             // Mock context
@@ -200,7 +239,21 @@ namespace FaaS.Entities.UnitTests
         }
 
         /// <summary>
-        /// Creates new test <see cref="Project"/> object with no <see cref="Award.Games"/>.
+        /// Creates new test <see cref="User"/> object with no <see cref="User.Projects"/>.
+        /// Object name and identifier is accompanied with <paramref name="identifier"/>.
+        /// </summary>
+        private static User GetTestUserWithoutProjects(int identifier)
+        {
+            return new User
+            {
+                GoogleId = $"TestGoogleId{identifier}",
+                Registered = DateTime.Now.AddDays(identifier),
+                Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(identifier)}}}")
+            };
+        }
+
+        /// <summary>
+        /// Creates new test <see cref="Project"/> object with no <see cref="Project.Forms"/>.
         /// Object name and identifier is accompanied with <paramref name="identifier"/>.
         /// </summary>
         private static Project GetTestProjectWithoutForms(int identifier)
