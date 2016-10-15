@@ -1,0 +1,34 @@
+{
+  "version": 2,
+  "exports": {
+    "FaaS.Entities/1.0.0": {
+      "type": "project",
+      "framework": ".NETFramework,Version=v4.6.2",
+      "compile": {
+        "bin/Debug/FaaS.Entities.dll": {}
+      },
+      "runtime": {
+        "../../packages/EntityFramework.6.1.3/lib/net45/EntityFramework.SqlServer.dll": {},
+        "../../packages/EntityFramework.6.1.3/lib/net45/EntityFramework.dll": {},
+        "../../packages/Microsoft.Extensions.Configuration.1.0.0/lib/netstandard1.1/Microsoft.Extensions.Configuration.dll": {},
+        "../../packages/Microsoft.Extensions.Configuration.Abstractions.1.0.0/lib/netstandard1.0/Microsoft.Extensions.Configuration.Abstractions.dll": {},
+        "../../packages/Microsoft.Extensions.DependencyInjection.Abstractions.1.0.0/lib/netstandard1.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {},
+        "../../packages/Microsoft.Extensions.Options.1.0.0/lib/netstandard1.0/Microsoft.Extensions.Options.dll": {},
+        "../../packages/Microsoft.Extensions.Primitives.1.0.0/lib/netstandard1.0/Microsoft.Extensions.Primitives.dll": {},
+        "../../packages/System.IO.4.1.0/lib/net462/System.IO.dll": {},
+        "../../packages/System.Reflection.4.1.0/lib/net462/System.Reflection.dll": {},
+        "../../packages/System.Runtime.4.1.0/lib/net462/System.Runtime.dll": {},
+        "../../packages/System.Runtime.Extensions.4.1.0/lib/net462/System.Runtime.Extensions.dll": {},
+        "../../packages/System.Runtime.InteropServices.4.1.0/lib/net462/System.Runtime.InteropServices.dll": {},
+        "bin/Debug/FaaS.Entities.dll": {}
+      },
+      "contentFiles": {
+        "bin/Debug/FaaS.Entities.pdb": {
+          "buildAction": "None",
+          "codeLanguage": "any",
+          "copyToOutput": true
+        }
+      }
+    }
+  }
+}

@@ -4,6 +4,7 @@ namespace FaaS.Migrations.FaaSContextMigrations
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
+    using FaaS.Entities.DataAccessModels;
 
     internal sealed class FaaSContextConfiguration : DbMigrationsConfiguration<FaaS.Entities.Contexts.FaaSContext>
     {

@@ -1,0 +1,24 @@
+{
+  "version": "1.0.0-*",
+  "testRunner": "xunit",
+  "dependencies": {
+    "NSubstitute": "2.0.0-rc",
+    "xunit": "2.2.0-beta2-build3300",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "AutoMapper": "5.0.2",
+    "EntityFramework": "6.1.3",
+    "Microsoft.Extensions.Options": "1.0.0",
+    "Microsoft.Extensions.Logging.Abstractions": "1.0.0"
+  },
+
+  "frameworks": {
+    "net462": {
+      "dependencies": {
+        "FaaS.Entities": {
+          "target": "project"
+        }
+
+      }
+    }
+  }
+}

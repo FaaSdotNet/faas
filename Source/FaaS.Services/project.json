@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "Microsoft.Extensions.Configuration.Abstractions": "1.0.0",
+    "Microsoft.Extensions.Logging.Abstractions": "1.0.0",
+    "Microsoft.Extensions.Options": "1.0.0",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0"
+  },
+  "frameworks": {
+    "net462": {
+      "dependencies": {
+        "FaaS.Entities": {
+          "target": "project"
+        }
+      }
+    }
+  }
+}

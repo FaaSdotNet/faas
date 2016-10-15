@@ -14,6 +14,18 @@ namespace FaaS.Entities.Repositories
     {
         private FaaSContext _context;
 
+        /// <summary>
+        /// Constructor indended for tests' purposes only.
+        /// </summary>
+        /// <param name="faaSContext">Instance of (eventually mocked) DbContext</param>
+        internal UserRepository(FaaSContext faaSContext)
+        {
+            if (faaSContext == null)
+                throw new ArgumentNullException(nameof(faaSContext));
+
+            _context = faaSContext;
+        }
+
         public UserRepository(IOptions<ConnectionOptions> connectionOptions)
         {
             _context = new FaaSContext(connectionOptions.Value.ConnectionString);
@@ -27,6 +39,31 @@ namespace FaaS.Entities.Repositories
             }
 
             User addedUser = _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return addedUser;
+        }
+
+        public async Task<User> AddUser(string googleId, DateTime registered, IEnumerable<Project> projects)
+        {
+            if (googleId == null)
+                throw new ArgumentNullException(nameof(googleId));
+            if (registered == null)
+                throw new ArgumentNullException(nameof(registered));
+            if (projects == null)
+                throw new ArgumentNullException(nameof(projects));
+
+            User user = new User
+            {
+                GoogleId = googleId,
+                Registered = registered
+            };
+
+            projects
+                .ToList()
+                .ForEach(user.Projects.Add);
+
+            var addedUser = _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
             return addedUser;

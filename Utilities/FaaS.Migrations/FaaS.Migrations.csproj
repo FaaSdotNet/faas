@@ -67,12 +67,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FaaS.Entities\FaaS.Entities.csproj">
+    <ProjectReference Include="..\..\Source\FaaS.Entities\FaaS.Entities.csproj">
       <Project>{88b1f427-50cc-4f9d-abe5-0e963ba684a6}</Project>
       <Name>FaaS.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="FaaSContextMigrations\Migrations\201610132114141_Initial.resx">
       <DependentUpon>201610132114141_Initial.cs</DependentUpon>

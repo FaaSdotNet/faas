@@ -23,6 +23,7 @@ using System.Runtime.InteropServices;
 [assembly: Guid("88b1f427-50cc-4f9d-abe5-0e963ba684a6")]
 
 [assembly: InternalsVisibleTo("FaaS.Migrations")]
+[assembly: InternalsVisibleTo("FaaS.Entities.UnitTests")]
 
 // Version information for an assembly consists of the following four values:
 //
