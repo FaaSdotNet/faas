@@ -20,8 +20,8 @@ namespace FaaS.Entities.UnitTests
         {
             get
             {
-                yield return new object[] { null, DateTime.Now, Enumerable.Empty<Project>() };
-                yield return new object[] { "104560124403688998123", DateTime.Now, (IEnumerable<Project>)null };
+                yield return new object[] { null, new DateTime(2016, 5, 19, 3, 15, 0), Enumerable.Empty<Project>() };
+                yield return new object[] { "104560124403688998123", new DateTime(2016, 5, 19, 3, 15, 0), (IEnumerable<Project>)null };
             }
         }
 
