@@ -28,7 +28,7 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void GetSingleUser_Existing_ReturnsUser() 
         {
-            var actualUser = await _UserRepository.GetSingleUser("TestGoogleId1");
+            var actualUser = await _UserRepository.Get("TestGoogleId1");
 
             Assert.NotNull(actualUser);
             Assert.IsType<User>(actualUser);
@@ -39,7 +39,7 @@ namespace FaaS.Entities.UnitTests
         [InlineData("")]
         public async void GetSingleUser_NullOrEmpty_ReturnsUser(string googleId)
         {
-            var actualUser = await _UserRepository.GetSingleUser(googleId);
+            var actualUser = await _UserRepository.Get(googleId);
 
             Assert.Null(actualUser);
         }
@@ -82,7 +82,7 @@ namespace FaaS.Entities.UnitTests
             Assert.NotEqual(Guid.Empty, actualUser.Id);
 
             // Check storage is persistant
-            Assert.NotNull(_UserRepository.GetSingleUser(newUser.GoogleId));
+            Assert.NotNull(_UserRepository.Get(newUser.GoogleId));
         }
 
         [Fact]
@@ -107,12 +107,12 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void UpdateUser_NotNull_InDB()
         {
-            User actualUser = await _UserRepository.GetSingleUser("TestGoogleId1");
+            User actualUser = await _UserRepository.Get("TestGoogleId1");
 
             actualUser.GoogleId = "NotHisPreviousGoogleId";
 
             actualUser = await _UserRepository.Update(actualUser);
-            actualUser = await _UserRepository.GetSingleUser("NotHisPreviousGoogleId");
+            actualUser = await _UserRepository.Get("NotHisPreviousGoogleId");
 
             // Checks returned value
             Assert.NotNull(actualUser);
@@ -151,7 +151,7 @@ namespace FaaS.Entities.UnitTests
             Assert.NotEqual(Guid.Empty, actualUser.Id);
 
             // Checks storage is persistant
-            Assert.NotNull(_UserRepository.GetSingleUser(newUser.GoogleId));
+            Assert.NotNull(_UserRepository.Get(newUser.GoogleId));
         }
 
         /// <summary>

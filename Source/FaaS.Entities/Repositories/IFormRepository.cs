@@ -6,14 +6,15 @@ namespace FaaS.Entities.Repositories
 {
     public interface IFormRepository
     {
-        Task<Form> GetSingleForm(string name);
+        Task<Form> Get(string name);
 
-        Task<IEnumerable<Form>> GetAllForms();
+        Task<IEnumerable<Form>> List();
 
-        Task<IEnumerable<Form>> GetAllForms(Project project);
+        Task<IEnumerable<Form>> List(Project project);
 
-        Task<Form> AddForm(Project project, Form form);
+        Task<Form> Add(Project project, Form form);
 
-        Task<Form> DeleteForm(Form form);
+        Task<Form> Delete(Form form);
+        Task<Form> Update(Form form);
     }
 }

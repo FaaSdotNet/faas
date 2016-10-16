@@ -12,14 +12,14 @@ namespace FaaS.Entities.Repositories
 {
     public class ElementRepository : IElementRepository
     {
-        private FaaSContext _context;
+        private readonly FaaSContext _context;
 
         public ElementRepository(IOptions<ConnectionOptions> connectionOptions)
         {
             _context = new FaaSContext(connectionOptions.Value.ConnectionString);
         }
 
-        public async Task<Element> AddElement(Form form, Element element)
+        public async Task<Element> Add(Form form, Element element)
         {
             if (form == null)
             {
@@ -33,35 +33,50 @@ namespace FaaS.Entities.Repositories
             element.Form = _context.Forms.Find(form.Id);
             element.FormId = form.Id;
 
-            Element addedElement = _context.Elements.Add(element);
+            var addedElement = _context.Elements.Add(element);
             await _context.SaveChangesAsync();
 
             return addedElement;
         }
 
-        public async Task<Element> DeleteElement(Element element)
+        public async Task<Element> Update(Element updatedElement)
+        {
+            if (updatedElement == null)
+            {
+                throw new ArgumentNullException(nameof(updatedElement));
+            }
+
+            updatedElement = _context.Elements.Attach(updatedElement);
+            _context.Entry(updatedElement).State = EntityState.Modified;
+         
+            await _context.SaveChangesAsync();
+
+            return updatedElement;
+        }
+
+        public async Task<Element> Delete(Element element)
         {
             if (element == null)
             {
                 throw new ArgumentNullException(nameof(element));
             }
 
-            Element deletedElement = _context.Elements.Remove(element);
+            var deletedElement = _context.Elements.Remove(element);
             await _context.SaveChangesAsync();
 
             return deletedElement;
         }
 
-        public async Task<IEnumerable<Element>> GetAllElements()
+        public async Task<IEnumerable<Element>> GetAll()
             => await _context.Elements.ToArrayAsync();
 
-        public async Task<IEnumerable<Element>> GetAllElements(Form form)
+        public async Task<IEnumerable<Element>> GetAll(Form form)
             => await _context
             .Elements
             .Where(element => element.FormId == form.Id)
             .ToArrayAsync();
 
-        public async Task<Element> GetSingleElement(string name)
+        public async Task<Element> Get(string name)
             => await _context
             .Elements
             .Where(element => element.Name == name)

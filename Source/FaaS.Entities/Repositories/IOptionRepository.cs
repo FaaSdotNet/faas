@@ -6,12 +6,16 @@ namespace FaaS.Entities.Repositories
 {
     public interface IOptionRepository
     {
-        Task<IEnumerable<Option>> GetAllOptions();
+        Task<IEnumerable<Option>> List();
 
-        Task<IEnumerable<Option>> GetAllOptions(Element element);
+        Task<IEnumerable<Option>> List(Element element);
 
-        Task<Option> AddOption(Element element, Option option);
+        Task<Option> Add(Element element, Option option);
 
-        Task<Option> DeleteOption(Option option);
+        Task<Option> Delete(Option option);
+        Task<Option> Update(Option option);
+        Task<Option> Get(long id);
+
+
     }
 }

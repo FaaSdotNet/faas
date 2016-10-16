@@ -6,14 +6,16 @@ namespace FaaS.Entities.Repositories
 {
     public interface IProjectRepository
     {
-        Task<Project> GetSingleProject(string name);
+        Task<Project> Get(string name);
+        Task<Project> Get(long id);
+    
+        Task<IEnumerable<Project>> List();
 
-        Task<IEnumerable<Project>> GetAllProjects();
+        Task<IEnumerable<Project>> List(User user);
 
-        Task<IEnumerable<Project>> GetAllProjects(User user);
+        Task<Project> Add(User user, Project project);
+        Task<Project> Update(Project project);
 
-        Task<Project> AddProject(User user, Project project);
-
-        Task<Project> DeleteProject(Project project);
+        Task<Project> Delete(Project project);
      }
 }

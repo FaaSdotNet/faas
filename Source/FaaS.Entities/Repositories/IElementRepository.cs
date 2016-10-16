@@ -6,14 +6,16 @@ namespace FaaS.Entities.Repositories
 {
     public interface IElementRepository
     {
-        Task<Element> GetSingleElement(string name);
+        Task<Element> Get(string name);
 
-        Task<IEnumerable<Element>> GetAllElements();
+        Task<IEnumerable<Element>> GetAll();
 
-        Task<IEnumerable<Element>> GetAllElements(Form form);
+        Task<IEnumerable<Element>> GetAll(Form form);
 
-        Task<Element> AddElement(Form form, Element element);
+        Task<Element> Add(Form form, Element element);
 
-        Task<Element> DeleteElement(Element element);
+        Task<Element> Update(Element element);
+
+        Task<Element> Delete(Element element);
     }
 }
