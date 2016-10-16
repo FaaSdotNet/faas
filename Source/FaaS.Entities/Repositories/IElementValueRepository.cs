@@ -1,4 +1,5 @@
-﻿using FaaS.Entities.DataAccessModels;
+﻿using System;
+using FaaS.Entities.DataAccessModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -17,5 +18,8 @@ namespace FaaS.Entities.Repositories
 
 
         Task<ElementValue> Delete(ElementValue elementValue);
+
+        Task<ElementValue> Get(Guid id);
+
     }
 }

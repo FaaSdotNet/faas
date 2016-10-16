@@ -8,6 +8,7 @@ namespace FaaS.Entities.Repositories
     public interface IUserRepository
     {
         Task<User> Get(string googleId);
+        Task<User> Get(Guid id);
 
         Task<IEnumerable<User>> List();
 

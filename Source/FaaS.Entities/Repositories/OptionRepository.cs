@@ -59,7 +59,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedOption));
             }
 
-            updatedOption = _context.Options.Attach(updatedOption);
+            _context.Options.Attach(updatedOption);
             _context.Entry(updatedOption).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
@@ -67,8 +67,10 @@ namespace FaaS.Entities.Repositories
             return updatedOption;
         }
 
-        public async Task<Option> Get(long id) 
-            => await _context.Options.FindAsync(id);
+        public async Task<Option> Get(Guid id)
+            => await _context.Options.SingleOrDefaultAsync(e => e.Id == id);
+
+
 
         public async Task<IEnumerable<Option>> List()
             => await _context.Options.ToArrayAsync();

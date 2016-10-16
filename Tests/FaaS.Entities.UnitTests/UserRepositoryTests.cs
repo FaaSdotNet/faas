@@ -14,7 +14,7 @@ namespace FaaS.Entities.UnitTests
 {
     public class UserRepositoryTests
     {
-        private UserRepository _UserRepository;
+        private readonly UserRepository _UserRepository;
 
         public static IEnumerable<object[]> InvalidAddUserArguments
         {
@@ -107,7 +107,7 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void UpdateUser_NotNull_InDB()
         {
-            User actualUser = await _UserRepository.Get("TestGoogleId1");
+            var actualUser = await _UserRepository.Get("TestGoogleId1");
 
             actualUser.GoogleId = "NotHisPreviousGoogleId";
 

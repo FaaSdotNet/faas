@@ -1,4 +1,5 @@
-﻿using FaaS.Entities.DataAccessModels;
+﻿using System;
+using FaaS.Entities.DataAccessModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,7 +8,7 @@ namespace FaaS.Entities.Repositories
     public interface IProjectRepository
     {
         Task<Project> Get(string name);
-        Task<Project> Get(long id);
+        Task<Project> Get(Guid id);
     
         Task<IEnumerable<Project>> List();
 

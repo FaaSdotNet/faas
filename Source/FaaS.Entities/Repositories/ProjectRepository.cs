@@ -46,7 +46,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedProject));
             }
 
-            updatedProject = _context.Projects.Attach(updatedProject);
+            _context.Projects.Attach(updatedProject);
             _context.Entry(updatedProject).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
@@ -82,7 +82,7 @@ namespace FaaS.Entities.Repositories
             .Projects
             .Where(project => project.Name == name)
             .SingleOrDefaultAsync();
-        public async Task<Project> Get(long id)
-          => await _context.Projects.FindAsync(id);
+        public async Task<Project> Get(Guid id)
+          => await _context.Projects.SingleOrDefaultAsync(e => e.Id == id);
     }
 }

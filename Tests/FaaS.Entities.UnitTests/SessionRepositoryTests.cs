@@ -15,12 +15,12 @@ namespace FaaS.Entities.UnitTests
 {
     public class SessionRepositoryTests
     {
-        private SessionRepository _SessionRepository;
+        private readonly SessionRepository _sessionRepository;
 
         [Fact]
         public async void AddSession_Null_Throws()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _SessionRepository.Add(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _sessionRepository.Add(null));
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace FaaS.Entities.UnitTests
                 Filled = DateTime.Now,
                 ElementValues = new List<ElementValue>()
             };
-            Session actualSession = await _SessionRepository.Add(newSession);
+            var actualSession = await _sessionRepository.Add(newSession);
 
             // Checks returned value
             Assert.NotNull(actualSession);
@@ -40,9 +40,27 @@ namespace FaaS.Entities.UnitTests
         }
 
         [Fact]
+        public async void GetSession_NotNull_ReturnsSessionWithId()
+        {
+            var guid = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
+            var actualSession = await _sessionRepository.Get(guid);
+        
+            Assert.NotNull(actualSession);
+            Assert.Equal(guid, actualSession.Id);
+        }
+
+        [Fact]
+        public async void GetSession_Null_ReturnsNullSessionForWrongGuid()
+        {
+            var guid = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(100)}}}");
+            var actualSession = await _sessionRepository.Get(guid);
+            Assert.Null(actualSession);
+        }
+
+        [Fact]
         public async void UpdateSession_Null_Throws()
         {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _SessionRepository.Update(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => _sessionRepository.Update(null));
         }
 
         [Fact]
@@ -54,25 +72,25 @@ namespace FaaS.Entities.UnitTests
                 ElementValues = new List<ElementValue>()
             };
 
-            await Assert.ThrowsAsync<ArgumentException>(() => _SessionRepository.Update(newSession));
+            await Assert.ThrowsAsync<ArgumentException>(() => _sessionRepository.Update(newSession));
         }
 
         [Fact]
         public async void UpdateSession_NotNull_InDB()
         {
-            Session actualSession = new Session
-            {
-                Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}")
-            };
+            var guid = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
+            var initialDate = new DateTime(2016, 5, 19, 3, 15, 0);
 
-            actualSession.Filled = new DateTime(2016, 5, 19, 3, 15, 0).AddDays(7);
+            var actualSession = await _sessionRepository.Get(guid);
 
-            actualSession = await _SessionRepository.Update(actualSession);
+            actualSession.Filled = initialDate.AddDays(7);
+
+            actualSession = await _sessionRepository.Update(actualSession);
 
             // Checks returned value
             Assert.NotNull(actualSession);
-            Assert.Equal(new DateTime(2016, 5, 19, 3, 15, 0).AddDays(7), actualSession.Filled);
-            Assert.Equal(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"), actualSession.Id);
+            Assert.Equal(initialDate.AddDays(7), actualSession.Filled);
+            Assert.Equal(guid, actualSession.Id);
             Assert.NotEqual(Guid.Empty, actualSession.Id);
         }
 
@@ -83,7 +101,8 @@ namespace FaaS.Entities.UnitTests
         public SessionRepositoryTests()
         {
             // Mock awards
-            Session testSession1 = GetTestSessionWithoutElementValues(1);
+
+            var testSession1 = GetTestSessionWithoutElementValues(1);
             Session testSession2 = GetTestSessionWithoutElementValues(2);
 
             var sessionData = new List<Session>
@@ -93,10 +112,10 @@ namespace FaaS.Entities.UnitTests
             };
 
             // Mock users
-            ElementValue testElementValue1 = GetTestElementValueWithoutElementAndSession(1);
-            ElementValue testElementValue2 = GetTestElementValueWithoutElementAndSession(1);
-            ElementValue testElementValue3 = GetTestElementValueWithoutElementAndSession(1);
-            ElementValue testElementValue4 = GetTestElementValueWithoutElementAndSession(1);
+            var testElementValue1 = GetTestElementValueWithoutElementAndSession(1);
+            var testElementValue2 = GetTestElementValueWithoutElementAndSession(2);
+            var testElementValue3 = GetTestElementValueWithoutElementAndSession(3);
+            var testElementValue4 = GetTestElementValueWithoutElementAndSession(4);
             var elementValueData = new List<ElementValue>
             {
                 testElementValue1,
@@ -113,7 +132,7 @@ namespace FaaS.Entities.UnitTests
             contextSubsitute.Sessions.Returns(sessionsSubstitute);
             contextSubsitute.ElementValues.Returns(elementValuesSubstitute);
 
-            _SessionRepository = new SessionRepository(contextSubsitute);
+            _sessionRepository = new SessionRepository(contextSubsitute);
         }
 
         /// <summary>

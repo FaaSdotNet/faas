@@ -59,13 +59,17 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedForm));
             }
 
-            updatedForm = _context.Forms.Attach(updatedForm);
+            _context.Forms.Attach(updatedForm);
             _context.Entry(updatedForm).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
 
             return updatedForm;
         }
+
+        public async Task<Form> Get(Guid id)
+            => await _context.Forms.SingleOrDefaultAsync(e => e.Id == id);
+
 
         public async Task<IEnumerable<Form>> List()
             => await _context.Forms.ToArrayAsync();

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Core;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -69,16 +70,21 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedSession));
             }
 
-            updatedSession =_context.Sessions.Attach(updatedSession);
-            _context.Entry(updatedSession).State = EntityState.Modified;
+            if (updatedSession.Id == Guid.Empty)
+            {
+                throw new ArgumentException("Session is not in db!");
+            }
 
+            //_context.Sessions.Attach(updatedSession);
+            //var entry = _context.Entry(updatedSession);
+            //entry.Property(e => e.Filled).IsModified = true;
             await _context.SaveChangesAsync();
 
             return updatedSession;
         }
 
-        public async Task<Session> Get(long id) =>
-            await _context.Sessions.FindAsync(id);
+        public async Task<Session> Get(Guid id) =>
+            await _context.Sessions.SingleOrDefaultAsync(e => e.Id == id);
 
     }
 }

@@ -53,7 +53,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(elementValue));
             }
 
-            elementValue = _context.ElementValues.Attach(elementValue);
+            _context.ElementValues.Attach(elementValue);
             _context.Entry(elementValue).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
@@ -73,6 +73,9 @@ namespace FaaS.Entities.Repositories
 
             return deletedElementValue;
         }
+
+        public async Task<ElementValue> Get(Guid id)
+            => await _context.ElementValues.SingleOrDefaultAsync(e => e.Id == id);
 
         public async Task<IEnumerable<ElementValue>> List()
             => await _context.ElementValues.ToArrayAsync();
