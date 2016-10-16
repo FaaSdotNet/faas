@@ -13,5 +13,6 @@ namespace FaaS.Entities.Repositories
         Task<Session> Delete(Session session);
 
         Task<Session> Update(Session session);
+        Task<Session> Get(long id);
     }
 }

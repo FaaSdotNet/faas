@@ -12,7 +12,7 @@ namespace FaaS.Entities.Repositories
 {
     public class SessionRepository : ISessionRepository
     {
-        private FaaSContext _context;
+        private readonly FaaSContext _context;
 
         /// <summary>
         /// Constructor indended for tests' purposes only.
@@ -40,7 +40,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(session));
             }
 
-            Session addedSession = _context.Sessions.Add(session);
+            var addedSession = _context.Sessions.Add(session);
             await _context.SaveChangesAsync();
 
             return addedSession;
@@ -53,7 +53,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(session));
             }
 
-            Session deletedSession = _context.Sessions.Remove(session);
+            var deletedSession = _context.Sessions.Remove(session);
             await _context.SaveChangesAsync();
 
             return deletedSession;
@@ -69,16 +69,16 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedSession));
             }
 
-            Session oldSession = _context.Sessions.Where(session => session.Id == updatedSession.Id).SingleOrDefault();
-            if (oldSession == null)
-            {
-                throw new ArgumentException(nameof(oldSession));
-            }
-            oldSession = updatedSession;
+            updatedSession =_context.Sessions.Attach(updatedSession);
+            _context.Entry(updatedSession).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
 
-            return oldSession;
+            return updatedSession;
         }
+
+        public async Task<Session> Get(long id) =>
+            await _context.Sessions.FindAsync(id);
+
     }
 }

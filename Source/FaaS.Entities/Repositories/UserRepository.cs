@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace FaaS.Entities.Repositories
 {
-    class UserRepository : IUserRepository
+    public class UserRepository : IUserRepository
     {
-        private FaaSContext _context;
+        private readonly FaaSContext _context;
 
         /// <summary>
         /// Constructor indended for tests' purposes only.
@@ -40,7 +40,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(user));
             }
 
-            User addedUser = _context.Users.Add(user);
+            var addedUser = _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
             return addedUser;
@@ -61,7 +61,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(projects));
             }
 
-            User user = new User
+            var user = new User
             {
                 GoogleId = googleId,
                 Registered = registered
@@ -71,10 +71,8 @@ namespace FaaS.Entities.Repositories
                 .ToList()
                 .ForEach(user.Projects.Add);
 
-            var addedUser = _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-
-            return addedUser;
+            var result = await Add(user);
+            return result;
         }
 
         public async Task<User> Update(User updatedUser)
@@ -84,16 +82,15 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedUser));
             }
 
-            User oldUser = _context.Users.Where(user => user.Id == updatedUser.Id).SingleOrDefault();
-            if (oldUser == null)
-            {
-                throw new ArgumentException(nameof(oldUser));
-            }
-            oldUser = updatedUser;
+            updatedUser =_context.Users.Attach(updatedUser);
+            var entry = _context.Entry(updatedUser);
+            entry.Property(e => e.Registered).IsModified = true;
+            entry.Property(e => e.GoogleId).IsModified = true;
+            // other changed properties
 
             await _context.SaveChangesAsync();
 
-            return oldUser;
+            return updatedUser;
         }
 
         public async Task<User> Delete(User user)
@@ -103,7 +100,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(user));
             }
 
-            User deletedUser = _context.Users.Remove(user);
+            var deletedUser = _context.Users.Remove(user);
             await _context.SaveChangesAsync();
 
             return deletedUser;
@@ -112,7 +109,7 @@ namespace FaaS.Entities.Repositories
         public async Task<IEnumerable<User>> List()
             => await _context.Users.ToArrayAsync();
 
-        public async Task<User> GetSingleUser(string googleId)
+        public async Task<User> Get(string googleId)
             => await _context
             .Users
             .Where(user => user.GoogleId == googleId)
