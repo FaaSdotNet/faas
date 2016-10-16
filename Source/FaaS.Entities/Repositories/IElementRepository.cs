@@ -1,4 +1,5 @@
-﻿using FaaS.Entities.DataAccessModels;
+﻿using System;
+using FaaS.Entities.DataAccessModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,6 +8,7 @@ namespace FaaS.Entities.Repositories
     public interface IElementRepository
     {
         Task<Element> Get(string name);
+        Task<Element> Get(Guid id);
 
         Task<IEnumerable<Element>> GetAll();
 

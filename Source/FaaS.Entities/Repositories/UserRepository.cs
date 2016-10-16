@@ -82,11 +82,14 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedUser));
             }
 
-            updatedUser =_context.Users.Attach(updatedUser);
-            var entry = _context.Entry(updatedUser);
-            entry.Property(e => e.Registered).IsModified = true;
-            entry.Property(e => e.GoogleId).IsModified = true;
-            // other changed properties
+            if (updatedUser.Id == Guid.Empty)
+            {
+                throw new ArgumentException("User not in db!");
+            }
+
+            //_context.Users.Attach(updatedUser);
+            //var entry = _context.Entry(updatedUser);
+            //entry.State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
 
@@ -105,6 +108,11 @@ namespace FaaS.Entities.Repositories
 
             return deletedUser;
         }
+
+        public async Task<User> Get(Guid id)
+            => await _context.Users.SingleOrDefaultAsync(e => e.Id == id);
+
+
 
         public async Task<IEnumerable<User>> List()
             => await _context.Users.ToArrayAsync();

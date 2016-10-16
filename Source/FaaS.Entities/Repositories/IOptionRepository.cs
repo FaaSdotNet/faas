@@ -1,4 +1,5 @@
-﻿using FaaS.Entities.DataAccessModels;
+﻿using System;
+using FaaS.Entities.DataAccessModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,8 +15,6 @@ namespace FaaS.Entities.Repositories
 
         Task<Option> Delete(Option option);
         Task<Option> Update(Option option);
-        Task<Option> Get(long id);
-
-
+        Task<Option> Get(Guid id);
     }
 }
