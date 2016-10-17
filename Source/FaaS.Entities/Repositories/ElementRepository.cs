@@ -19,6 +19,20 @@ namespace FaaS.Entities.Repositories
             _context = new FaaSContext(connectionOptions.Value.ConnectionString);
         }
 
+        /// <summary>
+        /// Constructor indended for tests' purposes only.
+        /// </summary>
+        /// <param name="faaSContext">Instance of (eventually mocked) DbContext</param>
+        internal ElementRepository(FaaSContext faaSContext)
+        {
+            if (faaSContext == null)
+            {
+                throw new ArgumentNullException(nameof(faaSContext));
+            }
+
+            _context = faaSContext;
+        }
+
         public async Task<Element> Add(Form form, Element element)
         {
             if (form == null)

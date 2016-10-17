@@ -19,6 +19,20 @@ namespace FaaS.Entities.Repositories
             _context = new FaaSContext(connectionOptions.Value.ConnectionString);
         }
 
+        /// <summary>
+        /// Constructor indended for tests' purposes only.
+        /// </summary>
+        /// <param name="faaSContext">Instance of (eventually mocked) DbContext</param>
+        internal ElementValueRepository(FaaSContext faaSContext)
+        {
+            if (faaSContext == null)
+            {
+                throw new ArgumentNullException(nameof(faaSContext));
+            }
+
+            _context = faaSContext;
+        }
+
         public async Task<ElementValue> Add(Element element, Session session, ElementValue elementValue)
         {
             if (element == null)
@@ -34,10 +48,19 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(elementValue));
             }
 
-            elementValue.Element = _context.Elements.Find(element.Id);
-            elementValue.ElementId = element.Id;
+            Element elementType = _context.Elements.SingleOrDefault(e => e.Id == element.Id);
+            Session cantFindSuitableName = _context.Sessions.SingleOrDefault(s => s.Id == session.Id);
 
-            elementValue.Session = _context.Sessions.Find(session.Id);
+            if(elementType == null)
+            {
+                throw new ArgumentException("element not in DB");
+            }
+            if(cantFindSuitableName == null)
+            {
+                throw new ArgumentException("session not in DB");
+            }
+
+            elementValue.ElementId = element.Id;
             elementValue.SessionId = session.Id;
 
             var addedElementValue = _context.ElementValues.Add(elementValue);
@@ -51,6 +74,11 @@ namespace FaaS.Entities.Repositories
             if (elementValue == null)
             {
                 throw new ArgumentNullException(nameof(elementValue));
+            }
+
+            if(_context.ElementValues.Find(elementValue.Id) == null)
+            {
+                throw new ArgumentException("Element Value not in DB");
             }
 
             _context.ElementValues.Attach(elementValue);

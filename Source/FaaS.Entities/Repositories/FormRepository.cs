@@ -19,6 +19,20 @@ namespace FaaS.Entities.Repositories
             _context = new FaaSContext(connectionOptions.Value.ConnectionString);
         }
 
+        /// <summary>
+        /// Constructor indended for tests' purposes only.
+        /// </summary>
+        /// <param name="faaSContext">Instance of (eventually mocked) DbContext</param>
+        internal FormRepository(FaaSContext faaSContext)
+        {
+            if (faaSContext == null)
+            {
+                throw new ArgumentNullException(nameof(faaSContext));
+            }
+
+            _context = faaSContext;
+        }
+
         public async Task<Form> Add(Project project, Form form)
         {
             if (project == null)
@@ -57,6 +71,11 @@ namespace FaaS.Entities.Repositories
             if (updatedForm == null)
             {
                 throw new ArgumentNullException(nameof(updatedForm));
+            }
+
+            if(_context.Forms.Find(updatedForm.Id) == null)
+            {
+                throw new ArgumentException("Form not in DB");
             }
 
             _context.Forms.Attach(updatedForm);

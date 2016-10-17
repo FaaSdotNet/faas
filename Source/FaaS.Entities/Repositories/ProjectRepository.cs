@@ -13,6 +13,20 @@ namespace FaaS.Entities.Repositories
     public class ProjectRepository : IProjectRepository
     {
         private readonly FaaSContext _context;
+        
+        /// <summary>
+        /// Constructor indended for tests' purposes only.
+        /// </summary>
+        /// <param name="faaSContext">Instance of (eventually mocked) DbContext</param>
+        internal ProjectRepository(FaaSContext faaSContext)
+        {
+            if (faaSContext == null)
+            {
+                throw new ArgumentNullException(nameof(faaSContext));
+            }
+
+            _context = faaSContext;
+        }
 
         public ProjectRepository(IOptions<ConnectionOptions> connectionOptions)
         {
@@ -44,6 +58,11 @@ namespace FaaS.Entities.Repositories
             if (updatedProject == null)
             {
                 throw new ArgumentNullException(nameof(updatedProject));
+            }
+
+            if(_context.Projects.Find(updatedProject.Id) == null)
+            {
+                throw new ArgumentException("Project not in DB");
             }
 
             _context.Projects.Attach(updatedProject);

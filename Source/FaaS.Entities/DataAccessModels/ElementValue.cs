@@ -17,7 +17,7 @@ namespace FaaS.Entities.DataAccessModels
 
         [Required]
         public Session Session { get; set; }
-
+        
         public string Value { get; set; }
     }
 }

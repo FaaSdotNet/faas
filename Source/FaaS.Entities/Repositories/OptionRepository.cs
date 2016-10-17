@@ -19,6 +19,20 @@ namespace FaaS.Entities.Repositories
             _context = new FaaSContext(connectionOptions.Value.ConnectionString);
         }
 
+        /// <summary>
+        /// Constructor indended for tests' purposes only.
+        /// </summary>
+        /// <param name="faaSContext">Instance of (eventually mocked) DbContext</param>
+        internal OptionRepository(FaaSContext faaSContext)
+        {
+            if (faaSContext == null)
+            {
+                throw new ArgumentNullException(nameof(faaSContext));
+            }
+
+            _context = faaSContext;
+        }
+
         public async Task<Option> Add(Element element, Option option)
         {
             if (element == null)
@@ -57,6 +71,11 @@ namespace FaaS.Entities.Repositories
             if (updatedOption == null)
             {
                 throw new ArgumentNullException(nameof(updatedOption));
+            }
+
+            if(_context.Options.Find(updatedOption.Id) == null)
+            {
+                throw new ArgumentException("Option not in DB");
             }
 
             _context.Options.Attach(updatedOption);
