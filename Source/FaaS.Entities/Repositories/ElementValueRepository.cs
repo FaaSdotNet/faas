@@ -76,13 +76,15 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(elementValue));
             }
 
-            if(_context.ElementValues.Find(elementValue.Id) == null)
+            ElementValue oldElementValue = _context.ElementValues.SingleOrDefault(evalue => evalue.Id == elementValue.Id);
+            if (oldElementValue == null)
             {
-                throw new ArgumentException("Element Value not in DB");
+                throw new ArgumentException("ElementValue not in db!");
             }
 
             _context.ElementValues.Attach(elementValue);
-            _context.Entry(elementValue).State = EntityState.Modified;
+            var entry = _context.Entry(elementValue);
+            entry.State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
 
@@ -96,7 +98,14 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(elementValue));
             }
 
-            var deletedElementValue = _context.ElementValues.Remove(elementValue);
+            ElementValue oldElementValue = _context.ElementValues.SingleOrDefault(evalue => evalue.Id == elementValue.Id);
+            if (oldElementValue == null)
+            {
+                throw new ArgumentException("ElementValue not in db!");
+            }
+
+            ElementValue deletedElementValue = _context.ElementValues.Remove(oldElementValue);
+
             await _context.SaveChangesAsync();
 
             return deletedElementValue;

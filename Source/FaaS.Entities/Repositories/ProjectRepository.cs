@@ -44,6 +44,11 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(project));
             }
 
+            User actualUser = _context.Users.SingleOrDefault(userForProject => userForProject.Id == user.Id);
+            if (actualUser == null)
+            {
+                return null;
+            }
             project.User = _context.Users.Find(user.Id);
             project.UserId = user.Id;
 
@@ -60,13 +65,15 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedProject));
             }
 
-            if(_context.Projects.Find(updatedProject.Id) == null)
+            Project oldProject = _context.Projects.Where(project => project.Id == updatedProject.Id).SingleOrDefault();
+            if (oldProject == null)
             {
                 throw new ArgumentException("Project not in DB");
             }
 
             _context.Projects.Attach(updatedProject);
-            _context.Entry(updatedProject).State = EntityState.Modified;
+            var entry = _context.Entry(updatedProject);
+            entry.State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
 
@@ -80,7 +87,14 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(project));
             }
 
-            var deletedProject = _context.Projects.Remove(project);
+            Project oldProject = _context.Projects.Where(projectToDelete => projectToDelete.Id == project.Id)
+                                                    .SingleOrDefault();
+            if (oldProject == null)
+            {
+                return null;
+            }
+
+            var deletedProject = _context.Projects.Remove(oldProject);
             await _context.SaveChangesAsync();
 
             return deletedProject;
@@ -94,7 +108,6 @@ namespace FaaS.Entities.Repositories
             .Projects
             .Where(project => project.UserId == user.Id)
             .ToArrayAsync();
-
 
         public async Task<Project> Get(string name)
             => await _context

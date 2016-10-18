@@ -82,14 +82,15 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedUser));
             }
 
-            if (updatedUser.Id == Guid.Empty)
+            User oldUser = _context.Users.Where(user => user.Id == updatedUser.Id).SingleOrDefault();
+            if (oldUser == null)
             {
                 throw new ArgumentException("User not in db!");
             }
 
-            //_context.Users.Attach(updatedUser);
-            //var entry = _context.Entry(updatedUser);
-            //entry.State = EntityState.Modified;
+            _context.Users.Attach(updatedUser);
+            var entry = _context.Entry(updatedUser);
+            entry.State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
 
@@ -103,7 +104,14 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(user));
             }
 
-            var deletedUser = _context.Users.Remove(user);
+            User oldUser = _context.Users.Where(userToDelete => userToDelete.Id == user.Id).SingleOrDefault();
+            if (oldUser == null)
+            {
+                throw new ArgumentException("User not in db!");
+            }
+
+            User deletedUser = _context.Users.Remove(oldUser);
+
             await _context.SaveChangesAsync();
 
             return deletedUser;
@@ -111,8 +119,6 @@ namespace FaaS.Entities.Repositories
 
         public async Task<User> Get(Guid id)
             => await _context.Users.SingleOrDefaultAsync(e => e.Id == id);
-
-
 
         public async Task<IEnumerable<User>> List()
             => await _context.Users.ToArrayAsync();

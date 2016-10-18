@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
-using System.Data.Entity.Core;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -54,7 +53,14 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(session));
             }
 
-            var deletedSession = _context.Sessions.Remove(session);
+            Session oldSession = _context.Sessions.Where(sessionToDelete => sessionToDelete.Id == session.Id).SingleOrDefault();
+            if (oldSession == null)
+            {
+                throw new ArgumentException("Session not in db!");
+            }
+
+            Session deletedSession = _context.Sessions.Remove(oldSession);
+
             await _context.SaveChangesAsync();
 
             return deletedSession;
@@ -70,14 +76,16 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedSession));
             }
 
-            if (updatedSession.Id == Guid.Empty)
+            Session oldSession = _context.Sessions.Where(session => session.Id == updatedSession.Id).SingleOrDefault();
+            if (oldSession == null)
             {
                 throw new ArgumentException("Session is not in db!");
             }
 
-            //_context.Sessions.Attach(updatedSession);
-            //var entry = _context.Entry(updatedSession);
-            //entry.Property(e => e.Filled).IsModified = true;
+            _context.Sessions.Attach(updatedSession);
+            var entry = _context.Entry(updatedSession);
+            entry.State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
 
             return updatedSession;

@@ -60,7 +60,13 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(option));
             }
 
-            var deletedOption = _context.Options.Remove(option);
+            Option oldOption = _context.Options.SingleOrDefault(optionToDelete => optionToDelete.Id == option.Id);
+            if (oldOption == null)
+            {
+                return null;
+            }
+            Option deletedOption = _context.Options.Remove(oldOption);
+
             await _context.SaveChangesAsync();
 
             return deletedOption;
@@ -73,13 +79,15 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedOption));
             }
 
-            if(_context.Options.Find(updatedOption.Id) == null)
+            Option oldOption = _context.Options.SingleOrDefault(option => option.Id == updatedOption.Id);
+            if (oldOption == null)
             {
-                throw new ArgumentException("Option not in DB");
+                throw new ArgumentException("Option not in db!");
             }
 
             _context.Options.Attach(updatedOption);
-            _context.Entry(updatedOption).State = EntityState.Modified;
+            var entry = _context.Entry(updatedOption);
+            entry.State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
 
@@ -88,8 +96,6 @@ namespace FaaS.Entities.Repositories
 
         public async Task<Option> Get(Guid id)
             => await _context.Options.SingleOrDefaultAsync(e => e.Id == id);
-
-
 
         public async Task<IEnumerable<Option>> List()
             => await _context.Options.ToArrayAsync();

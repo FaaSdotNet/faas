@@ -2,21 +2,15 @@
 using FaaS.Entities.DataAccessModels;
 using FaaS.Entities.Repositories;
 using NSubstitute;
-using NSubstitute.Core;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using Xunit;
 
 namespace FaaS.Entities.UnitTests
 {
-    public class FormRepositoryTests
+    public class FormRepositoryTests : TestBase
     {
-        private readonly FormRepository _FormRepository;
-        private readonly ProjectRepository _ProjectRepository;
-
         [Fact]
         public async void GetSingleForm_Existing_ReturnsForm()
         {
@@ -179,7 +173,7 @@ namespace FaaS.Entities.UnitTests
         /// https://msdn.microsoft.com/en-us/library/dn314429.aspx
         /// List has to be used in order for addition to be possible.
         /// </summary>
-        public FormRepositoryTests()
+        public FormRepositoryTests()// : base()
         {
             // Mock projects
             Project testProject1 = GetTestProjectWithoutForms(1);
@@ -232,101 +226,5 @@ namespace FaaS.Entities.UnitTests
             _ProjectRepository = new ProjectRepository(contextSubsitute);
             _FormRepository = new FormRepository(contextSubsitute);
         }
-
-        /// <summary>
-        /// Creates substitute for a <see cref="DbSet{TEntity}"/> with database replaced with an in-memory structure represented by <paramref name="data"/>.
-        /// Can be used for querying and addition, including async operations.
-        /// </summary>
-        /// <typeparam name="TType">Type of data and <see cref="DbSet{TEntity}"/> to substitute</typeparam>
-        /// <param name="data">Initial content of "database"</param>
-        /// <returns>Queryable that can be used as <see cref="DbSet{TEntity}"/> substitute.</returns>
-        private static IQueryable<TType> SubstituteQueryable<TType>(ICollection<TType> data)
-            where TType : ModelBase
-        {
-            var queryableData = data.AsQueryable();
-            var queryableSubstitute = Substitute.For<IQueryable<TType>, IDbAsyncEnumerable<TType>, DbSet<TType>>();
-
-            // Mock queryable
-            queryableSubstitute.Provider.Returns(new TestDbAsyncQueryProvider<TType>(queryableData.Provider));
-            queryableSubstitute.Expression.Returns(queryableData.Expression);
-            queryableSubstitute.ElementType.Returns(queryableData.ElementType);
-            queryableSubstitute.GetEnumerator().Returns(queryableData.GetEnumerator());
-
-            // Mock addition
-            ((DbSet<TType>)queryableSubstitute).Add(null).ReturnsForAnyArgs(callInfo => SimulateAddition(callInfo, data));
-
-            // Mock async
-            ((IDbAsyncEnumerable<TType>)queryableSubstitute).GetAsyncEnumerator().Returns(new TestDbAsyncEnumerator<TType>(data.GetEnumerator()));
-
-            return queryableSubstitute;
-        }
-
-        /// <summary>
-        /// Reads <typeparamref name="TType"/> from <paramref name="callInfo"/> and stores it to the <paramref name="data"/>.
-        /// To emulate reald DB, it also sets <see cref="ModelBase.Id"/> with new <see cref="Guid"/> and returns the very
-        /// object the method was provided with.
-        /// </summary>
-        private static TType SimulateAddition<TType>(CallInfo callInfo, ICollection<TType> data)
-            where TType : ModelBase
-        {
-            TType entry = callInfo.Arg<TType>();
-
-            entry.Id = Guid.NewGuid();
-            data.Add(callInfo.Arg<TType>());
-
-            return entry;
-        }
-
-        /// <summary>
-        /// Creates new test <see cref="Project"/> object with no <see cref="Project.Forms"/>.
-        /// Object name and identifier is accompanied with <paramref name="identifier"/>.
-        /// </summary>
-        private static Project GetTestProjectWithoutForms(int identifier)
-        {
-            return new Project
-            {
-                Name = $"TestProject{identifier}",
-                Created = DateTime.Now,
-                Description = $"TestDescription{identifier}",
-                Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(identifier)}}}")
-            };
-        }
-
-        /// <summary>
-        /// Creates new test <see cref="Form"/> object with no <see cref="Form.Elements"/>.
-        /// Object name and identifier is accompanied with <paramref name="identifier"/>.
-        /// </summary>
-        private static Form GetTestFormWithoutElements(int identifier)
-        {
-            return new Form
-            {
-                Name = $"TestForm{identifier}",
-                Created = DateTime.Now,
-                Description = $"TestDescription{identifier}",
-                Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(identifier)}}}")
-            };
-        }
-
-        /// <summary>
-        /// Creates new test <see cref="Element"/> object with no <see cref="Element.ElementValues"/> and <see cref="Element.Options"/> .
-        /// Object name and identifier is accompanied with <paramref name="identifier"/>.
-        /// </summary>
-        private static Element GetTestElementWithoutElementValuesAndOptions(int identifier, bool mandatory)
-        {
-            return new Element
-            {
-                Name = $"TestElement{identifier}",
-                Description = $"TestDescription{identifier}",
-                Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(identifier)}}}"),
-                Type = 1,
-                Mandatory = mandatory
-            };
-        }
-
-        /// <summary>
-        /// Formates given <paramref name="identifier"/> to (at least) 12 characters long string where all missing characters are replaced with 0.
-        /// <see cref="String"/> formatted in this way can be used as last part a GUID.
-        /// </summary>
-        private static string FormatForLastGuidPart(int identifier) => identifier.ToString().PadLeft(12, '0');
     }
 }
