@@ -82,7 +82,7 @@ namespace FaaS.Entities.Repositories
             Option oldOption = _context.Options.SingleOrDefault(option => option.Id == updatedOption.Id);
             if (oldOption == null)
             {
-                throw new ArgumentException("Option not in db!");
+                return null;
             }
 
             _context.Options.Attach(updatedOption);

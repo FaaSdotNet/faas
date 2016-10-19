@@ -151,7 +151,8 @@ namespace FaaS.Entities.UnitTests
                 Value = "ValueNotInDb"
             };
 
-            await Assert.ThrowsAsync<ArgumentException>(() => _ElementValueRepository.Update(newElementValue));
+            var updatedElement = await _ElementValueRepository.Update(newElementValue);
+            Assert.Null(updatedElement);
         }
 
         [Fact]
@@ -211,7 +212,17 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void DeleteElementVAlue_NotNull_InDb()
         {
-            throw new NotImplementedException();
+            ElementValue elementToDelete = GetTestElementValueWithoutElementAndSession(1);
+
+            var deletedElement = await _ElementValueRepository.Delete(elementToDelete);
+
+            // Checks returned value
+            Assert.NotNull(deletedElement);
+            Assert.Equal("TestValue1", deletedElement.Value);
+            Assert.NotEqual(Guid.Empty, deletedElement.Id);
+
+            deletedElement = await _ElementValueRepository.Get(elementToDelete.Id);
+            Assert.Null(deletedElement);
         }
 
 

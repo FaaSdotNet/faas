@@ -92,7 +92,8 @@ namespace FaaS.Entities.UnitTests
                 Elements = new List<Element>()
             };
 
-            await Assert.ThrowsAsync<ArgumentException>(() => _FormRepository.Update(newForm));
+            var updatedForm = await _FormRepository.Update(newForm);
+            Assert.Null(updatedForm);
         }
 
         [Fact]
@@ -165,7 +166,17 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void DeleteForm_NotNull_InDb()
         {
-            throw new NotImplementedException();
+            Form formToDelete = GetTestFormWithoutElements(1);
+
+            var deletedForm = await _FormRepository.Delete(formToDelete);
+
+            // Checks returned value
+            Assert.NotNull(deletedForm);
+            Assert.Equal("TestForm1", deletedForm.Name);
+            Assert.NotEqual(Guid.Empty, deletedForm.Id);
+
+            deletedForm = await _FormRepository.Get(formToDelete.Id);
+            Assert.Null(deletedForm);
         }
 
 

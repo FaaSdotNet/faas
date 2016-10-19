@@ -60,7 +60,13 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(form));
             }
 
-            var deletedForm = _context.Forms.Remove(form);
+            Form oldForm = _context.Forms.SingleOrDefault(formToDelete => formToDelete.Id == form.Id);
+            if (oldForm == null)
+            {
+                return null;
+            }
+
+            var deletedForm = _context.Forms.Remove(oldForm);
             await _context.SaveChangesAsync();
 
             return deletedForm;
@@ -73,9 +79,10 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedForm));
             }
 
-            if(_context.Forms.Find(updatedForm.Id) == null)
+            Form oldForm = _context.Forms.SingleOrDefault(form => form.Id == updatedForm.Id);
+            if (oldForm == null)
             {
-                throw new ArgumentException("Form not in DB");
+                return null;
             }
 
             _context.Forms.Attach(updatedForm);

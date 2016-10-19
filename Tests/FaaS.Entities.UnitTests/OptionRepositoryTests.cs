@@ -101,7 +101,8 @@ namespace FaaS.Entities.UnitTests
                 Label = "NotInDbOptionLabel"
             };
 
-            await Assert.ThrowsAsync<ArgumentException>(() => _OptionRepository.Update(newOption));
+            var updatedOption = await _OptionRepository.Update(newOption);
+            Assert.Null(updatedOption);
         }
 
         [Fact]
@@ -160,7 +161,17 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void DeleteOption_NotNull_InDb()
         {
-            throw new NotImplementedException();
+            Option optionToDelete = GetTestOption(1);
+
+            var deletedOption = await _OptionRepository.Delete(optionToDelete);
+
+            // Checks returned value
+            Assert.NotNull(deletedOption);
+            Assert.Equal("TestOption1", deletedOption.Label);
+            Assert.NotEqual(Guid.Empty, deletedOption.Id);
+
+            deletedOption = await _OptionRepository.Get(optionToDelete.Id);
+            Assert.Null(deletedOption);
         }
 
         /// <summary>

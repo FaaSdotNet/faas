@@ -49,13 +49,13 @@ namespace FaaS.Entities.Repositories
             }
 
             Element elementType = _context.Elements.SingleOrDefault(e => e.Id == element.Id);
-            Session cantFindSuitableName = _context.Sessions.SingleOrDefault(s => s.Id == session.Id);
+            Session elementSession = _context.Sessions.SingleOrDefault(s => s.Id == session.Id);
 
-            if(elementType == null)
+            if (elementType == null)
             {
                 throw new ArgumentException("element not in DB");
             }
-            if(cantFindSuitableName == null)
+            if (elementSession == null)
             {
                 throw new ArgumentException("session not in DB");
             }
@@ -79,7 +79,7 @@ namespace FaaS.Entities.Repositories
             ElementValue oldElementValue = _context.ElementValues.SingleOrDefault(evalue => evalue.Id == elementValue.Id);
             if (oldElementValue == null)
             {
-                throw new ArgumentException("ElementValue not in db!");
+                return null;
             }
 
             _context.ElementValues.Attach(elementValue);
@@ -101,7 +101,7 @@ namespace FaaS.Entities.Repositories
             ElementValue oldElementValue = _context.ElementValues.SingleOrDefault(evalue => evalue.Id == elementValue.Id);
             if (oldElementValue == null)
             {
-                throw new ArgumentException("ElementValue not in db!");
+                return null;
             }
 
             ElementValue deletedElementValue = _context.ElementValues.Remove(oldElementValue);
