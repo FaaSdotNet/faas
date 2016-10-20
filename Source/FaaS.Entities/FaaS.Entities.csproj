@@ -95,7 +95,6 @@
     <Compile Include="DataAccessModels\Element.cs" />
     <Compile Include="DataAccessModels\Form.cs" />
     <Compile Include="DataAccessModels\ModelBase.cs" />
-    <Compile Include="DataAccessModels\Option.cs" />
     <Compile Include="DataAccessModels\Project.cs" />
     <Compile Include="DataAccessModels\Session.cs" />
     <Compile Include="DataAccessModels\User.cs" />
@@ -107,11 +106,9 @@
     <Compile Include="Repositories\IElementRepository.cs" />
     <Compile Include="Repositories\IElementValueRepository.cs" />
     <Compile Include="Repositories\IFormRepository.cs" />
-    <Compile Include="Repositories\IOptionRepository.cs" />
     <Compile Include="Repositories\IProjectRepository.cs" />
     <Compile Include="Repositories\ISessionRepository.cs" />
     <Compile Include="Repositories\IUserRepository.cs" />
-    <Compile Include="Repositories\OptionRepository.cs" />
     <Compile Include="Repositories\ProjectRepository.cs" />
     <Compile Include="Repositories\SessionRepository.cs" />
     <Compile Include="Repositories\UserRepository.cs" />

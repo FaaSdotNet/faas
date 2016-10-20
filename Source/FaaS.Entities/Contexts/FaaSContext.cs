@@ -63,12 +63,6 @@ namespace FaaS.Entities.Contexts
 
             modelBuilder
                 .Entity<Element>()
-                .HasMany(element => element.Options)
-                .WithRequired(option => option.Element)
-                .WillCascadeOnDelete();
-
-            modelBuilder
-                .Entity<Element>()
                 .HasMany(element => element.ElementValues)
                 .WithRequired(elementValue => elementValue.Element)
                 .WillCascadeOnDelete();
@@ -92,8 +86,6 @@ namespace FaaS.Entities.Contexts
         public virtual DbSet<Form> Forms { get; set; }
 
         public virtual DbSet<Element> Elements { get; set; }
-
-        public virtual DbSet<Option> Options { get; set; }
 
         public virtual DbSet<ElementValue> ElementValues { get; set; }
 

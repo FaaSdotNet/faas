@@ -11,5 +11,13 @@ namespace FaaS.Entities.DataAccessModels
         /// </summary>
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+
+        public string DisplayName { get; set; }
+
+        /// <summary>
+        /// Specifying unique constraint is not enough as string without fixed length (with max length) are hard to index and store.
+        /// </summary>
+        [Required, Index(IsUnique = true), MaxLength(254)]
+        public string CodeName { get; set; }
     }
 }

@@ -18,7 +18,6 @@ namespace FaaS.Entities.UnitTests
         protected FormRepository _FormRepository;
         protected ElementRepository _ElementRepository;
         protected ElementValueRepository _ElementValueRepository;
-        protected OptionRepository _OptionRepository;
         protected SessionRepository _SessionRepository;
 
         public TestBase()
@@ -81,17 +80,6 @@ namespace FaaS.Entities.UnitTests
                 testElementValue3
             };
 
-            Option testOption1 = GetTestOption(1);
-            Option testOption2 = GetTestOption(2);
-            Option testOption3 = GetTestOption(3);
-
-            var optionsData = new List<Option>
-            {
-                testOption1,
-                testOption2,
-                testOption3
-            };
-
             Session testSession1 = GetTestSessionWithoutElementValues(1);
             Session testSession2 = GetTestSessionWithoutElementValues(2);
             Session testSession3 = GetTestSessionWithoutElementValues(3);
@@ -143,16 +131,6 @@ namespace FaaS.Entities.UnitTests
             testElement2.FormId = testForm2.Id;
             testElement3.FormId = testForm2.Id;
 
-            testElement2.Options = new List<Option>
-            {
-                testOption1,
-                testOption2,
-                testOption3
-            };
-            testOption1.ElementId = testElement2.Id;
-            testOption2.ElementId = testElement2.Id;
-            testOption3.ElementId = testElement2.Id;
-
             testElement1.ElementValues = new List<ElementValue>
             {
                 testElementValue1
@@ -185,7 +163,6 @@ namespace FaaS.Entities.UnitTests
             var formsSubstitute = SubstituteQueryable(formsData);
             var elementsSubstiture = SubstituteQueryable(elementsData);
             var elementValuesSubstitute = SubstituteQueryable(elementValuesData);
-            var optionsSubstitute = SubstituteQueryable(optionsData);
             var sessionSubstitute = SubstituteQueryable(sessionsData);
 
             var contextSubsitute = Substitute.For<FaaSContext>();
@@ -194,7 +171,6 @@ namespace FaaS.Entities.UnitTests
             contextSubsitute.Forms.Returns(formsSubstitute);
             contextSubsitute.Elements.Returns(elementsSubstiture);
             contextSubsitute.ElementValues.Returns(elementValuesSubstitute);
-            contextSubsitute.Options.Returns(optionsSubstitute);
             contextSubsitute.Sessions.Returns(sessionSubstitute);
 
             _UserRepository = new UserRepository(contextSubsitute);
@@ -202,7 +178,6 @@ namespace FaaS.Entities.UnitTests
             _FormRepository = new FormRepository(contextSubsitute);
             _ElementRepository = new ElementRepository(contextSubsitute);
             _ElementValueRepository = new ElementValueRepository(contextSubsitute);
-            _OptionRepository = new OptionRepository(contextSubsitute);
             _SessionRepository = new SessionRepository(contextSubsitute);
         }
 
@@ -328,21 +303,9 @@ namespace FaaS.Entities.UnitTests
                 Name = $"TestElement{identifier}",
                 Description = $"TestDescription{identifier}",
                 Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(identifier)}}}"),
+                Options = $"TestOption{identifier}",
                 Type = 1,
                 Mandatory = mandatory
-            };
-        }
-
-        /// <summary>
-        /// Creates new test <see cref="Option"/> object/>.
-        /// Object name and identifier is accompanied with <paramref name="identifier"/>.
-        /// </summary>
-        protected static Option GetTestOption(int identifier)
-        {
-            return new Option
-            {
-                Label = $"TestOption{identifier}",
-                Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(identifier)}}}")
             };
         }
 

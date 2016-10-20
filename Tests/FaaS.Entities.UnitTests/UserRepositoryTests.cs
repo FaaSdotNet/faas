@@ -11,8 +11,6 @@ namespace FaaS.Entities.UnitTests
 {
     public class UserRepositoryTests : TestBase
     {
-        //private readonly UserRepository _UserRepository;
-
         public static IEnumerable<object[]> InvalidAddUserArguments
         {
             get

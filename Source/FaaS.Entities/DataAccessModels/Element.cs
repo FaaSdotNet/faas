@@ -18,16 +18,13 @@ namespace FaaS.Entities.DataAccessModels
 
         public string Description { get; set; }
 
+        public string Options { get; set; }
+
         [Required]
         public int Type { get; set; }
 
         [Required]
         public bool Mandatory { get; set; }
-
-        /// <summary>
-        /// Collection of all options for an element. Effectively creating 1:N relation.
-        /// </summary>
-        public virtual ICollection<Option> Options { get; set; } = new List<Option>();
 
         /// <summary>
         /// Collection of all values for an element. Effectively creating 1:N relation.

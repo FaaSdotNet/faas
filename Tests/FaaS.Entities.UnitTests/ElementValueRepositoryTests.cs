@@ -93,7 +93,7 @@ namespace FaaS.Entities.UnitTests
                 Description = "TestDescriptionNotInDb",
                 ElementValues = new List<ElementValue>(),
                 Mandatory = true,
-                Options = new List<Option>()
+                Options = "TestOption"
             };
             Session actualSession = await _SessionRepository.Get(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"));
 
