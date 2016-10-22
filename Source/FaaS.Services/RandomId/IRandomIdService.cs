@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace FaaS.Services.RandomId
 {
-    interface IRandomIdService
+    public interface IRandomIdService
     {
         string GenerateRandomString(int entropyBits);
     }
