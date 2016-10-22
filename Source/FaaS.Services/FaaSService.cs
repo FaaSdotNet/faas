@@ -386,7 +386,9 @@ namespace FaaS.Services.FaaS
         {
             _logger.LogInformation("GetSession");
 
-            throw new NotImplementedException();
+            Session dataAccessSessionModel = await _sessionRepository.Get(codeName);
+
+            return _mapper.Map<DataTransferModels.Session>(dataAccessSessionModel);
         }
 
         public async Task<DataTransferModels.User> GetUser(string codeName)
@@ -402,84 +404,120 @@ namespace FaaS.Services.FaaS
         {
             _logger.LogInformation("RemoveElement");
 
-            throw new NotImplementedException();
+            Element dataAccessElementModel = _mapper.Map<Element>(element);
+            dataAccessElementModel = await _elementRepository.Delete(dataAccessElementModel);
+
+            return _mapper.Map<DataTransferModels.Element>(dataAccessElementModel);
         }
 
-        public async Task<DataTransferModels.ElementValue> RemoveElementValue(DataTransferModels.ElementValue element)
+        public async Task<DataTransferModels.ElementValue> RemoveElementValue(DataTransferModels.ElementValue elementValue)
         {
             _logger.LogInformation("RemoveElementValue");
 
-            throw new NotImplementedException();
+            ElementValue dataAccessElementValueModel = _mapper.Map<ElementValue>(elementValue);
+            dataAccessElementValueModel = await _elementValueRepository.Delete(dataAccessElementValueModel);
+
+            return _mapper.Map<DataTransferModels.ElementValue>(dataAccessElementValueModel);
         }
 
         public async Task<DataTransferModels.Form> RemoveForm(DataTransferModels.Form form)
         {
             _logger.LogInformation("RemoveForm");
 
-            throw new NotImplementedException();
+            Form dataAccessFormModel = _mapper.Map<Form>(form);
+            dataAccessFormModel = await _formRepository.Delete(dataAccessFormModel);
+
+            return _mapper.Map<DataTransferModels.Form>(dataAccessFormModel);
         }
 
         public async Task<DataTransferModels.Project> RemoveProject(DataTransferModels.Project project)
         {
             _logger.LogInformation("RemoveProject");
 
-            throw new NotImplementedException();
+            Project dataAccessProjectModel = _mapper.Map<Project>(project);
+            dataAccessProjectModel = await _projectRepository.Delete(dataAccessProjectModel);
+
+            return _mapper.Map<DataTransferModels.Project>(dataAccessProjectModel);
         }
 
         public async Task<DataTransferModels.Session> RemoveSession(DataTransferModels.Session session)
         {
             _logger.LogInformation("RemoveSession");
 
-            throw new NotImplementedException();
+            Session dataAccessSessionModel = _mapper.Map<Session>(session);
+            dataAccessSessionModel = await _sessionRepository.Delete(dataAccessSessionModel);
+
+            return _mapper.Map<DataTransferModels.Session>(dataAccessSessionModel);
         }
 
         public async Task<DataTransferModels.User> RemoveUser(DataTransferModels.User user)
         {
             _logger.LogInformation("RemoveUser");
 
-            throw new NotImplementedException();
+            User dataAccessUserModel = _mapper.Map<User>(user);
+            dataAccessUserModel = await _userRepository.Delete(dataAccessUserModel);
+
+            return _mapper.Map<DataTransferModels.User>(dataAccessUserModel);
         }
 
         public async Task<DataTransferModels.Element> UpdateElement(DataTransferModels.Element element)
         {
             _logger.LogInformation("UpdateElement");
 
-            throw new NotImplementedException();
+            Element dataAccessElementModel = _mapper.Map<Element>(element);
+            dataAccessElementModel = await _elementRepository.Update(dataAccessElementModel);
+
+            return _mapper.Map<DataTransferModels.Element>(dataAccessElementModel);
         }
 
-        public async Task<DataTransferModels.ElementValue> UpdateElementValue(DataTransferModels.ElementValue element)
+        public async Task<DataTransferModels.ElementValue> UpdateElementValue(DataTransferModels.ElementValue elementValue)
         {
             _logger.LogInformation("UpdateElementValue");
 
-            throw new NotImplementedException();
+            ElementValue dataAccessElementValueModel = _mapper.Map<ElementValue>(elementValue);
+            dataAccessElementValueModel = await _elementValueRepository.Update(dataAccessElementValueModel);
+
+            return _mapper.Map<DataTransferModels.ElementValue>(dataAccessElementValueModel);
         }
 
         public async Task<DataTransferModels.Form> UpdateForm(DataTransferModels.Form form)
         {
             _logger.LogInformation("UpdateForm");
 
-            throw new NotImplementedException();
+            Form dataAccessFormModel = _mapper.Map<Form>(form);
+            dataAccessFormModel = await _formRepository.Update(dataAccessFormModel);
+
+            return _mapper.Map<DataTransferModels.Form>(dataAccessFormModel);
         }
 
         public async Task<DataTransferModels.Project> UpdateProject(DataTransferModels.Project project)
         {
             _logger.LogInformation("UpdateProject");
 
-            throw new NotImplementedException();
+            Project dataAccessProjectModel = _mapper.Map<Project>(project);
+            dataAccessProjectModel = await _projectRepository.Update(dataAccessProjectModel);
+
+            return _mapper.Map<DataTransferModels.Project>(dataAccessProjectModel);
         }
 
         public async Task<DataTransferModels.Session> UpdateSession(DataTransferModels.Session session)
         {
             _logger.LogInformation("UpdateSession");
 
-            throw new NotImplementedException();
+            Session dataAccessSessionModel = _mapper.Map<Session>(session);
+            dataAccessSessionModel = await _sessionRepository.Update(dataAccessSessionModel);
+
+            return _mapper.Map<DataTransferModels.Session>(dataAccessSessionModel);
         }
 
         public async Task<DataTransferModels.User> UpdateUser(DataTransferModels.User user)
         {
             _logger.LogInformation("UpdateUser");
 
-            throw new NotImplementedException();
+            User dataAccessUserModel = _mapper.Map<User>(user);
+            dataAccessUserModel = await _userRepository.Update(dataAccessUserModel);
+
+            return _mapper.Map<DataTransferModels.User>(dataAccessUserModel);
         }
     }
 }
