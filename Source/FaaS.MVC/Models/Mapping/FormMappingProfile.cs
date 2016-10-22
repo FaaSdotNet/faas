@@ -1,6 +1,8 @@
-﻿namespace FaaS.MVC.Models.Mapping
+﻿using AutoMapper;
+
+namespace FaaS.MVC.Models.Mapping
 {
-    public class FormMappingProfile
+    public class FormMappingProfile : Profile
     {
         
     }

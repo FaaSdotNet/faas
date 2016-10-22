@@ -10,13 +10,13 @@ namespace FaaS.MVC.Models.Forms
     public class FormModelView
     {
         [Display(Name = "Project name")]
-        public string ProjectName;
+        public string ProjectName { get; set; }
 
         [Display(Name = "Form name")]
-        public string FormName;
+        public string FormName { get; set; }
 
-        public DateTime Created;
+        public DateTime Created { get; set; }
 
-        public string Description;
+        public string Description { get; set; }
     }
 }
