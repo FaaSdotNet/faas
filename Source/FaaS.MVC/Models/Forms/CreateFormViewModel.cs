@@ -20,7 +20,7 @@ namespace FaaS.MVC.Models.Forms
 
         public string Description;
 
-        public IEnumerable Validate(ValidationContext validationContext)
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             throw new NotImplementedException();
         }

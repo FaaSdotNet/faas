@@ -1,12 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+using NLog.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using AutoMapper;
+using FaaS.Entities.Configuration;
+using FaaS.MVC.Configuration;
+using FaaS.Services;
+using FaaS.Services.Configuration;
+using FaaS.Services.RandomId;
+using FaaS.Entities.Repositories;
 
 namespace FaaS.MVC
 {
@@ -20,11 +29,8 @@ namespace FaaS.MVC
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
 
-            if (env.IsDevelopment())
-            {
-                // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
-                builder.AddApplicationInsightsSettings(developerMode: true);
-            }
+            env.ConfigureNLog("nlog.config");
+
             Configuration = builder.Build();
         }
 
@@ -33,10 +39,50 @@ namespace FaaS.MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-            services.AddApplicationInsightsTelemetry(Configuration);
+            // Configure model mappings
+            var mapper = new MapperConfiguration(cfg =>
+            {
+                ViewModelsMapperConfiguration.InitialializeMappings(cfg);
+                // TODO
+                //ServicesMapperConfiguration.InitialializeMappings(cfg);
+                //EntitiesMapperConfiguration.InitialializeMappings(cfg);
+            }).CreateMapper();
 
-            services.AddMvc();
+            // Do not allow application to start with broken configuration. Fail fast.
+            mapper.ConfigurationProvider.AssertConfigurationIsValid();
+            services.AddSingleton(mapper);
+
+            // Add framework services.
+            services.AddMvc().AddJsonOptions(o =>
+            {
+                var serializerSettings = o.SerializerSettings;
+                // Pretty-print
+                serializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                serializerSettings.Formatting = Formatting.Indented;
+                serializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                serializerSettings.Converters.Add(new StringEnumConverter());
+
+                JsonConvert.DefaultSettings = () => serializerSettings;
+            });
+
+            // Singleton - There will be at most one instance of the registered service type and the container will hold on to that instance until the container is disposed or goes out of scope. Clients will always receive that same instance from the container.
+            services
+                .AddSingleton<IRandomIdService, RandomIdService>()
+                .AddSingleton<IHttpContextAccessor, HttpContextAccessor>()
+                .AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
+            // Scoped - For every request within an implicitly or explicitly defined scope.
+            services
+                .Configure<ConnectionOptions>(options => options.ConnectionString = Configuration.GetConnectionString("GameStoreConnection"))
+                .AddScoped<IFaaSService, IFaaSService>();
+
+            // Transient - A new instance of the service type will be created each time the service is requested from the container. If multiple consumers depend on the service within the same graph, each consumer will get its own new instance of the given service.
+            services
+                .AddTransient<IProjectRepository, ProjectRepository>()
+                .AddTransient<IFormRepository, FormRepository>()
+                .AddTransient<IUserRepository, UserRepository>()
+                .AddTransient<ISessionRepository, SessionRepository>()
+                .AddTransient<IElementRepository, ElementRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,28 +90,37 @@ namespace FaaS.MVC
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+            loggerFactory.AddNLog();
 
-            app.UseApplicationInsightsRequestTelemetry();
-
+            app.UseStatusCodePages();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
+
+                // Custom middlerare example
+                //app.UseMiddleware<GuardianMiddleware>();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseApplicationInsightsExceptionTelemetry();
-
             app.UseStaticFiles();
 
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                    name: "home",
+                    template: "homePage",
+                    defaults: new { controller = "Home", action = "Index" });
+
+                routes.MapRoute(
+                    name: "id",
+                    template: "{controller=Home}/{action=Index}/{id:int}");
+
+                routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{codename?}");
             });
         }
     }
