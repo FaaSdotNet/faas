@@ -14,6 +14,9 @@ namespace FaaS.Entities.Repositories
         Task<Session> Delete(Session session);
 
         Task<Session> Update(Session session);
+
         Task<Session> Get(Guid id);
+
+        Task<Session> Get(string codeName);
     }
 }

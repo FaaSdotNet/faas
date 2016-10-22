@@ -94,5 +94,9 @@ namespace FaaS.Entities.Repositories
         public async Task<Session> Get(Guid id) =>
             await _context.Sessions.SingleOrDefaultAsync(e => e.Id == id);
 
+        public Task<Session> Get(string codeName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

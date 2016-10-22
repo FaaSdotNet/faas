@@ -21,5 +21,7 @@ namespace FaaS.Entities.Repositories
 
         Task<ElementValue> Get(Guid id);
 
+        Task<ElementValue> Get(string codeName);
+
     }
 }
