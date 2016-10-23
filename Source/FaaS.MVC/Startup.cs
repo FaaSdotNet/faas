@@ -16,6 +16,8 @@ using FaaS.Services;
 using FaaS.Services.Configuration;
 using FaaS.Services.RandomId;
 using FaaS.Entities.Repositories;
+using FaaS.MVC.Middleware;
+using FaaS.Services.FaaS;
 
 namespace FaaS.MVC
 {
@@ -71,8 +73,8 @@ namespace FaaS.MVC
 
             // Scoped - For every request within an implicitly or explicitly defined scope.
             services
-                .Configure<ConnectionOptions>(options => options.ConnectionString = Configuration.GetConnectionString("GameStoreConnection"))
-                .AddScoped<IFaaSService, IFaaSService>();
+                .Configure<ConnectionOptions>(options => options.ConnectionString = Configuration.GetConnectionString("FaaSConnection"))
+                .AddScoped<IFaaSService, FaaSService>();
 
             // Transient - A new instance of the service type will be created each time the service is requested from the container.
             // If multiple consumers depend on the service within the same graph, each consumer will get its own new instance of the given service.
@@ -97,7 +99,7 @@ namespace FaaS.MVC
                 app.UseDeveloperExceptionPage();
 
                 // Custom middlerare example
-                //app.UseMiddleware<GuardianMiddleware>();
+                app.UseMiddleware<GuardianMiddleware>();
             }
             else
             {

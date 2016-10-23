@@ -20,6 +20,7 @@ namespace FaaS.MVC.Models.Mapping
                 .ForMember(dst => dst.FormCodeName, opt => opt.MapFrom(src => src.FormCodeName))
                 .ForMember(dst => dst.DisplayName, opt => opt.MapFrom(src => src.DisplayName))
                 .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.Created))
+                .ForMember(dst => dst.Project, opt => opt.Ignore())
                 .ForMember(dst => dst.Description, opt => opt.MapFrom(src => src.Description));
         }
     }

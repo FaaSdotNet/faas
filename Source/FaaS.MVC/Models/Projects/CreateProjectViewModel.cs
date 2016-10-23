@@ -21,6 +21,8 @@ namespace FaaS.MVC.Models
 
         public SelectList FormList { get; set; }
 
+        public string UserName { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (ProjectCodeName != UrlEncoder.Default.Encode(ProjectCodeName))
