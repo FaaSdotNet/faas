@@ -27,5 +27,13 @@ namespace FaaS.MVC.Controllers.Web
             var projectsDTO = await _faaSService.GetAllProjects(_superUser);
             return View(_mapper.Map<IEnumerable<ProjectViewModel>>(projectsDTO));
         }
+
+        public async Task<IActionResult> Create()
+        {
+            var newGame = new CreateProjectViewModel();
+
+            return View(newGame);
+        }
+
     }
 }

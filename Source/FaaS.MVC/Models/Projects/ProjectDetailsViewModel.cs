@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FaaS.MVC.Models.Projects
+namespace FaaS.MVC.Models
 {
     public class ProjectDetailsViewModel : ProjectViewModel
     {
