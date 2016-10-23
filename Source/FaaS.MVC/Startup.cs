@@ -43,8 +43,8 @@ namespace FaaS.MVC
             var mapper = new MapperConfiguration(cfg =>
             {
                 ViewModelsMapperConfiguration.InitialializeMappings(cfg);
-                // TODO
-                //ServicesMapperConfiguration.InitialializeMappings(cfg);
+                
+                ServicesMapperConfiguration.InitializeMappings(cfg);
                 //EntitiesMapperConfiguration.InitialializeMappings(cfg);
             }).CreateMapper();
 
