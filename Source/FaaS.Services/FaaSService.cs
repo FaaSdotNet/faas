@@ -391,11 +391,20 @@ namespace FaaS.Services
             return _mapper.Map<DataTransferModels.Session>(dataAccessSessionModel);
         }
 
-        public async Task<DataTransferModels.User> GetUser(string codeName)
+        public async Task<DataTransferModels.User> GetUserCodeName(string codeName)
         {
             _logger.LogInformation("GetUser");
 
             User dataAccessUserModel = await _userRepository.Get(codeName);
+
+            return _mapper.Map<DataTransferModels.User>(dataAccessUserModel);
+        }
+
+        public async Task<DataTransferModels.User> GetUserGoogleId(string googleId)
+        {
+            _logger.LogInformation("GetUserGoogleId");
+
+            User dataAccessUserModel = await _userRepository.GetGoogle(googleId);
 
             return _mapper.Map<DataTransferModels.User>(dataAccessUserModel);
         }

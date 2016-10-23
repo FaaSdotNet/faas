@@ -123,7 +123,13 @@ namespace FaaS.Entities.Repositories
         public async Task<IEnumerable<User>> List()
             => await _context.Users.ToArrayAsync();
 
-        public async Task<User> Get(string googleId)
+        public async Task<User> Get(string codeName)
+            => await _context
+            .Users
+            .Where(user => user.CodeName == codeName)
+            .SingleOrDefaultAsync();
+
+        public async Task<User> GetGoogle(string googleId)
             => await _context
             .Users
             .Where(user => user.GoogleId == googleId)

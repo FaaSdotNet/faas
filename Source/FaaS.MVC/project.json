@@ -21,7 +21,8 @@
     "Microsoft.VisualStudio.Web.CodeGeneration.Tools": "1.0.0-preview2-final",
     "NLog": "4.3.10",
     "NLog.Extensions.Logging": "1.0.0-rtm-alpha4",
-    "FaaS.Services": "1.0.0-*"
+    "FaaS.Services": "1.0.0-*",
+    "Microsoft.AspNetCore.Session": "1.0.0"
   },
 
   "tools": {

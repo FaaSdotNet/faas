@@ -7,7 +7,9 @@ namespace FaaS.Services
     {
         Task<User> AddUser(User user);
 
-        Task<User> GetUser(string codeName);
+        Task<User> GetUserCodeName(string codeName);
+
+        Task<User> GetUserGoogleId(string googleId);
 
         Task<User[]> GetAllUsers();
 

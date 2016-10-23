@@ -18,9 +18,13 @@ namespace FaaS.MVC.Models
         [Required]
         public string GoogleId { get; set; }
 
+        [Required]
         public DateTime Registered { get; set; }
 
-        public SelectList ProjectList { get; set; }
+        public CreateUserViewModel()
+        {
+            Registered = DateTime.Now;
+        }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

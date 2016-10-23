@@ -1,0 +1,36 @@
+@model FaaS.MVC.Models.LogInUserViewModel
+
+@{
+    ViewData["Title"] = "Log In";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>User Log In</h2>
+
+<form asp-action="LogIn">
+    <div class="form-horizontal">
+        <h4>Log In</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="GoogleId" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="GoogleId" class="form-control" />
+                <span asp-validation-for="GoogleId" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Log In" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

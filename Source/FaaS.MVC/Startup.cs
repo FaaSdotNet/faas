@@ -1,5 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using FaaS.Entities.Configuration;
+using FaaS.Entities.Repositories;
+using FaaS.MVC.Configuration;
+using FaaS.MVC.Middleware;
+using FaaS.Services;
+using FaaS.Services.Configuration;
+using FaaS.Services.RandomId;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -7,17 +17,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using NLog.Extensions.Logging;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using AutoMapper;
-using FaaS.Entities.Configuration;
-using FaaS.MVC.Configuration;
-using FaaS.Services;
-using FaaS.Services.Configuration;
-using FaaS.Services.RandomId;
-using FaaS.Entities.Repositories;
-using FaaS.MVC.Middleware;
-using FaaS.Services;
 
 namespace FaaS.MVC
 {
@@ -85,6 +84,9 @@ namespace FaaS.MVC
                 .AddTransient<IUserRepository, UserRepository>()
                 .AddTransient<ISessionRepository, SessionRepository>()
                 .AddTransient<IElementRepository, ElementRepository>();
+
+            services.AddDistributedMemoryCache();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -108,6 +110,7 @@ namespace FaaS.MVC
             }
 
             app.UseStaticFiles();
+            app.UseSession();
 
             app.UseMvc(routes =>
             {
