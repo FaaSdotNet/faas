@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using FaaS.Entities.DataAccessModels;
+using FaaS.MVC.Models.Mapping;
 
 namespace FaaS.MVC.Configuration
 {
@@ -10,7 +12,7 @@ namespace FaaS.MVC.Configuration
     {
         public static void InitialializeMappings(IMapperConfigurationExpression cfg)
         {
-           // cfg.AddProfile<>();
+            cfg.AddProfile<ProjectMappingProfile>();
         }
     }
 }
