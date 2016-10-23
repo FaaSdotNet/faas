@@ -1,28 +1,49 @@
-@model FaaS.MVC.Models.Forms.CreateProjectViewModel
+@model FaaS.MVC.Models.CreateProjectViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "View";
 }
 
-<h2>Create</h2>
+<h2>View</h2>
 
-<form asp-action="Create">
+<form asp-action="View">
     <div class="form-horizontal">
         <h4>CreateProjectViewModel</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <label asp-for="CodeName" class="col-md-2 control-label"></label>
+            <label asp-for="ProjectCodeName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="CodeName" class="form-control" />
-                <span asp-validation-for="CodeName" class="text-danger" />
+                <input asp-for="ProjectCodeName" class="form-control" />
+                <span asp-validation-for="ProjectCodeName" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="Name" class="col-md-2 control-label"></label>
+            <label asp-for="DisplayName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger" />
+                <input asp-for="DisplayName" class="form-control" />
+                <span asp-validation-for="DisplayName" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Description" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Created" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="Created" class="form-control" />
+                <span asp-validation-for="Created" class="text-danger" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="UserName" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger" />
             </div>
         </div>
         <div class="form-group">

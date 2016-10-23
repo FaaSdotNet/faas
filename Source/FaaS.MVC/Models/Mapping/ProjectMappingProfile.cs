@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using FaaS.MVC.Models.Projects;
 
 namespace FaaS.MVC.Models.Mapping
 {

@@ -17,7 +17,7 @@ using FaaS.Services.Configuration;
 using FaaS.Services.RandomId;
 using FaaS.Entities.Repositories;
 using FaaS.MVC.Middleware;
-using FaaS.Services.FaaS;
+using FaaS.Services;
 
 namespace FaaS.MVC
 {
@@ -81,6 +81,7 @@ namespace FaaS.MVC
             services
                 .AddTransient<IProjectRepository, ProjectRepository>()
                 .AddTransient<IFormRepository, FormRepository>()
+                .AddTransient<IElementValueRepository, ElementValueRepository>()
                 .AddTransient<IUserRepository, UserRepository>()
                 .AddTransient<ISessionRepository, SessionRepository>()
                 .AddTransient<IElementRepository, ElementRepository>();

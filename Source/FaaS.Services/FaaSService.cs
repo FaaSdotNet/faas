@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using FaaS.Entities.Repositories;
 using AutoMapper;
 
-namespace FaaS.Services.FaaS
+namespace FaaS.Services
 {
     public class FaaSService : IFaaSService
     {
