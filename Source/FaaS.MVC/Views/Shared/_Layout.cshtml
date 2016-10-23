@@ -31,9 +31,36 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-controller="Projects" asp-action="Index">Projects</a></li>
-                    <li><a asp-controller="Froms" asp-action="Index">Forms</a></li>
-                    <li><a asp-controller="Users" asp-action="Index">Users</a></li>
+                    <li class="dropdown-toggle" >
+                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" asp-controller="Projects" asp-action="Index">
+                            Projects
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="Projects" asp-action="Index">List</a></li>
+                            <li><a asp-controller="Projects" asp-action="Create">Create</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown-toggle">
+                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" asp-controller="Froms" asp-action="Index">
+                            Forms
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="Forms" asp-action="Index">List</a></li>
+                            <li><a asp-controller="Forms" asp-action="Create">Create</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown-toggle">
+                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" asp-controller="Users" asp-action="Index">
+                            Users
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a asp-controller="Users" asp-action="Index">List</a></li>
+                            <li><a asp-controller="Users" asp-action="Create">Create</a></li>
+                        </ul>
+                    </li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                 </ul>

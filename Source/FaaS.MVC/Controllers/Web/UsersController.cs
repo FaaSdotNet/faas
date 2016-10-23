@@ -27,5 +27,12 @@ namespace FaaS.MVC.Controllers.Web
             var usersDTO = await _faaSService.GetAllUsers();
             return View(_mapper.Map<IEnumerable<ProjectViewModel>>(usersDTO));
         }
+
+        public async Task<IActionResult> Create()
+        {
+            var newUser = new CreateUserViewModel();
+
+            return View(newUser);
+        }
     }
 }
