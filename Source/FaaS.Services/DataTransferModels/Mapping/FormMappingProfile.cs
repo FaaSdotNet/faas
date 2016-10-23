@@ -20,7 +20,8 @@ namespace FaaS.Services.DataTransferModels.Mapping
                 .ForMember(dst => dst.Description, opt => opt.MapFrom(src => src.Description))
                 .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.Created))
                 .ForMember(dst => dst.Elements, opt => opt.Ignore())
-                .ForMember(dst => dst.Id, opt => opt.Ignore());
+                .ForMember(dst => dst.Id, opt => opt.Ignore())
+                .ForMember(dst => dst.ProjectId, opt => opt.Ignore());
         }
     }
 }

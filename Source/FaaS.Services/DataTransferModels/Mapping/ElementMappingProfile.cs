@@ -24,7 +24,8 @@ namespace FaaS.Services.DataTransferModels.Mapping
                 .ForMember(dst => dst.Mandatory, opt => opt.MapFrom(src => src.Mandatory))
                 .ForMember(dst => dst.Form, opt => opt.MapFrom(src => src.Form))
                 .ForMember(dst => dst.ElementValues, opt => opt.Ignore())
-                .ForMember(dst => dst.Id, opt => opt.Ignore());
+                .ForMember(dst => dst.Id, opt => opt.Ignore())
+                .ForMember(dst => dst.FormId, opt => opt.Ignore());
         }
     }
 }
