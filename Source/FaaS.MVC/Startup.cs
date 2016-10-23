@@ -42,10 +42,8 @@ namespace FaaS.MVC
             // Configure model mappings
             var mapper = new MapperConfiguration(cfg =>
             {
-                ViewModelsMapperConfiguration.InitialializeMappings(cfg);
-                
+                ViewModelsMapperConfiguration.InitializeMappings(cfg);
                 ServicesMapperConfiguration.InitializeMappings(cfg);
-                //EntitiesMapperConfiguration.InitialializeMappings(cfg);
             }).CreateMapper();
 
             // Do not allow application to start with broken configuration. Fail fast.
@@ -76,7 +74,8 @@ namespace FaaS.MVC
                 .Configure<ConnectionOptions>(options => options.ConnectionString = Configuration.GetConnectionString("GameStoreConnection"))
                 .AddScoped<IFaaSService, IFaaSService>();
 
-            // Transient - A new instance of the service type will be created each time the service is requested from the container. If multiple consumers depend on the service within the same graph, each consumer will get its own new instance of the given service.
+            // Transient - A new instance of the service type will be created each time the service is requested from the container.
+            // If multiple consumers depend on the service within the same graph, each consumer will get its own new instance of the given service.
             services
                 .AddTransient<IProjectRepository, ProjectRepository>()
                 .AddTransient<IFormRepository, FormRepository>()

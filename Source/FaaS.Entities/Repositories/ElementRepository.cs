@@ -96,7 +96,7 @@ namespace FaaS.Entities.Repositories
         public async Task<Element> Get(string name)
             => await _context
             .Elements
-            .Where(element => element.Name == name)
+            .Where(element => element.CodeName == name)
             .SingleOrDefaultAsync();
     }
 }

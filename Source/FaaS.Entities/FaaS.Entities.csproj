@@ -30,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper">
-      <HintPath>C:\Users\Wermington\.nuget\packages\AutoMapper\5.1.1\lib\net45\AutoMapper.dll</HintPath>
-    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -94,12 +91,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configurations\ConnectionOptions.cs" />
-    <Compile Include="Configurations\EntitiesMapperConfiguration.cs" />
     <Compile Include="Contexts\FaaSContext.cs" />
     <Compile Include="DataAccessModels\Element.cs" />
     <Compile Include="DataAccessModels\Form.cs" />
-    <Compile Include="DataAccessModels\Mapping\FormWrapperMappingProfile.cs" />
-    <Compile Include="DataAccessModels\Mapping\ProjectWrapperMappingProfile.cs" />
     <Compile Include="DataAccessModels\ModelBase.cs" />
     <Compile Include="DataAccessModels\Project.cs" />
     <Compile Include="DataAccessModels\Session.cs" />

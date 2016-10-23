@@ -109,7 +109,7 @@ namespace FaaS.Entities.Repositories
         public async Task<Form> Get(string name)
             => await _context
             .Forms
-            .Where(form => form.Name == name)
+            .Where(form => form.CodeName == name)
             .SingleOrDefaultAsync();
     }
 }

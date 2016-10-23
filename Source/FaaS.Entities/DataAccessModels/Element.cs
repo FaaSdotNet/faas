@@ -13,9 +13,6 @@ namespace FaaS.Entities.DataAccessModels
         [Required]
         public Form Form { get; set; }
 
-        [Required]
-        public string Name { get; set; }
-
         public string Description { get; set; }
 
         public string Options { get; set; }

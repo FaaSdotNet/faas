@@ -58,7 +58,7 @@ namespace FaaS.Entities.UnitTests
 
             var newForm = new Form
             {
-                Name = "NotInDbFormName",
+                CodeName = "NotInDbFormName",
                 Created = DateTime.Now,
                 Description = "TestDescriptionNew",
                 Elements = new List<Element>()
@@ -67,12 +67,12 @@ namespace FaaS.Entities.UnitTests
 
             // Checks returned value
             Assert.NotNull(actualForm);
-            Assert.Equal(newForm.Name, actualForm.Name);
+            Assert.Equal(newForm.CodeName, actualForm.CodeName);
             Assert.Equal(newForm.Created, actualForm.Created);
             Assert.NotEqual(Guid.Empty, actualForm.Id);
 
             // Check storage is persistant
-            Assert.NotNull(_FormRepository.Get(newForm.Name));
+            Assert.NotNull(_FormRepository.Get(newForm.CodeName));
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace FaaS.Entities.UnitTests
         {
             var newForm = new Form
             {
-                Name = "NotInDatabaseFormName",
+                CodeName = "NotInDatabaseFormName",
                 Created = DateTime.Now,
                 Description = "NotInDatabaseDescription",
                 Elements = new List<Element>()
@@ -101,14 +101,14 @@ namespace FaaS.Entities.UnitTests
         {
             var actualForm = await _FormRepository.Get("TestForm1");
 
-            actualForm.Name = "NotHisPreviousName";
+            actualForm.CodeName = "NotHisPreviousName";
 
             actualForm = await _FormRepository.Update(actualForm);
             actualForm = await _FormRepository.Get("NotHisPreviousName");
 
             // Checks returned value
             Assert.NotNull(actualForm);
-            Assert.Equal("NotHisPreviousName", actualForm.Name);
+            Assert.Equal("NotHisPreviousName", actualForm.CodeName);
             Assert.NotEqual(Guid.Empty, actualForm.Id);
         }
 
@@ -125,7 +125,7 @@ namespace FaaS.Entities.UnitTests
 
             var newForm = new Form
             {
-                Name = "TestFormNewName",
+                CodeName = "TestFormNewName",
                 Created = DateTime.Now,
                 Elements = elements
             };
@@ -134,13 +134,13 @@ namespace FaaS.Entities.UnitTests
 
             // Checks returned value
             Assert.NotNull(actualForm);
-            Assert.Equal(newForm.Name, actualForm.Name);
+            Assert.Equal(newForm.CodeName, actualForm.CodeName);
             Assert.Equal(newForm.Created, actualForm.Created);
             Assert.NotEqual(Guid.Empty, actualForm.Id);
             Assert.Equal(3, actualForm.Elements.Count);
 
             // Checks storage is persistant
-            Assert.NotNull(_FormRepository.Get(newForm.Name));
+            Assert.NotNull(_FormRepository.Get(newForm.CodeName));
         }
 
         [Fact]
@@ -154,7 +154,7 @@ namespace FaaS.Entities.UnitTests
         {
             var newForm = new Form
             {
-                Name = "TestProjectNotInDb",
+                CodeName = "TestProjectNotInDb",
                 Created = DateTime.Now,
                 Description = "TestDescriptionNotInDb",
                 Elements = new List<Element>()
@@ -172,7 +172,7 @@ namespace FaaS.Entities.UnitTests
 
             // Checks returned value
             Assert.NotNull(deletedForm);
-            Assert.Equal("TestForm1", deletedForm.Name);
+            Assert.Equal("TestForm1", deletedForm.CodeName);
             Assert.NotEqual(Guid.Empty, deletedForm.Id);
 
             deletedForm = await _FormRepository.Get(formToDelete.Id);

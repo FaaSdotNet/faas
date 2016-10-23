@@ -14,9 +14,6 @@ namespace FaaS.Entities.DataAccessModels
         public Project Project { get; set; }
 
         [Required]
-        public string Name { get; set; }
-
-        [Required]
         public DateTime Created { get; set; }
 
         public string Description { get; set; }

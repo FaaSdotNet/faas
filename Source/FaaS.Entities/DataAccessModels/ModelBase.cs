@@ -12,6 +12,7 @@ namespace FaaS.Entities.DataAccessModels
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
+        [Required]
         public string DisplayName { get; set; }
 
         /// <summary>

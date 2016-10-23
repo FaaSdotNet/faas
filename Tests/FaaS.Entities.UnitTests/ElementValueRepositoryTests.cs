@@ -88,7 +88,7 @@ namespace FaaS.Entities.UnitTests
             };
             Element newElement = new Element()
             {
-                Name = "TestElementNotInDb",
+                CodeName = "TestElementNotInDb",
                 Type = 2,
                 Description = "TestDescriptionNotInDb",
                 ElementValues = new List<ElementValue>(),

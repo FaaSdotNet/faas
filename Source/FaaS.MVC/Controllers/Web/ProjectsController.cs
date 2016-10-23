@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using FaaS.MVC.Models.Forms;
-using FaaS.MVC.Models.Projects;
+﻿using AutoMapper;
+using FaaS.MVC.Models;
 using FaaS.Services;
 using FaaS.Services.DataTransferModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace FaaS.MVC.Controllers.Web
 {
@@ -28,7 +25,7 @@ namespace FaaS.MVC.Controllers.Web
         public async Task<IActionResult> List()
         {
             var projectsDTO = await _faaSService.GetAllProjects(_superUser);
-            return View(_mapper.Map<IEnumerable<ProjectModelView>>(projectsDTO));
+            return View(_mapper.Map<IEnumerable<ProjectViewModel>>(projectsDTO));
         }
     }
 }

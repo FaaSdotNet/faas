@@ -112,7 +112,7 @@ namespace FaaS.Entities.Repositories
         public async Task<Project> Get(string name)
             => await _context
             .Projects
-            .Where(project => project.Name == name)
+            .Where(project => project.CodeName == name)
             .SingleOrDefaultAsync();
         public async Task<Project> Get(Guid id)
           => await _context.Projects.SingleOrDefaultAsync(e => e.Id == id);

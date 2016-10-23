@@ -1,27 +1,29 @@
-﻿using System;
-using System.Collections;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text.Encodings.Web;
-using System.Threading.Tasks;
 
-namespace FaaS.MVC.Models.Forms
+namespace FaaS.MVC.Models
 {
     public class CreateProjectViewModel : IValidatableObject
     {
         [Required]
         [Display(Name = "Code name")]
-        public string CodeName { get; set; }
+        public string ProjectCodeName { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public string DisplayName { get; set; }
 
-        public string Description;
+        public string Description { get; set; }
+
+        public DateTime Created { get; set; }
+
+        public SelectList FormList { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (CodeName != UrlEncoder.Default.Encode(CodeName))
+            if (ProjectCodeName != UrlEncoder.Default.Encode(ProjectCodeName))
             {
                 yield return new ValidationResult("Invalid code name");
             }
