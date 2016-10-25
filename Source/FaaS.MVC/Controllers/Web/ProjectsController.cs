@@ -77,7 +77,7 @@ namespace FaaS.MVC.Controllers.Web
             var projectsDTO = await _faaSService.GetAllProjects(existingUser);
             ViewBag.ProjectNames = projectsDTO.Select(p => p.DisplayName).ToList();
 
-            var existingProject = await _faaSService.GetProject(existingUser, id);
+            var existingProject = await _faaSService.GetProject(id);
 
             return View(_mapper.Map<ProjectDetailsViewModel>(existingProject));
         }
@@ -93,7 +93,7 @@ namespace FaaS.MVC.Controllers.Web
             var projectsDTO = await _faaSService.GetAllProjects(existingUser);
             ViewBag.ProjectNames = projectsDTO.Select(p => p.DisplayName).ToList();
 
-            var existingProject = await _faaSService.GetProject(existingUser, id);
+            var existingProject = await _faaSService.GetProject(id);
             HttpContext.Session.SetString("projectToDelete", id);
             return View(_mapper.Map<ProjectViewModel>(existingProject));
         }
@@ -131,7 +131,7 @@ namespace FaaS.MVC.Controllers.Web
 
             ViewData["userDisplayName"] = existingUser.DisplayName;
 
-            var existingProject = await _faaSService.GetProject(existingUser, projectCodeName);
+            var existingProject = await _faaSService.GetProject(projectCodeName);
             var deletedProject = await _faaSService.RemoveProject(existingProject);
 
             return RedirectToAction("Index");

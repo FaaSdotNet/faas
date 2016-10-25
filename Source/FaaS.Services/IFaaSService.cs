@@ -19,7 +19,7 @@ namespace FaaS.Services
 
         Task<Project> AddProject(User user, Project project);
 
-        Task<Project> GetProject(User user, string codeName);
+        Task<Project> GetProject(string codeName);
 
         Task<Project[]> GetAllProjects(User user);
 

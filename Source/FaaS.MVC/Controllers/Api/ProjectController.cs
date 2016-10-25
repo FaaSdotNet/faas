@@ -77,7 +77,7 @@ namespace FaaS.MVC.Controllers.Api
         [HttpGet("{codename}")]
         public async Task<IActionResult> GetGame(string codename)
         {
-            var game = await _faaSService.GetProject(_superUser, codename);
+            var game = await _faaSService.GetProject(codename);
             return Ok(game);
         }
 

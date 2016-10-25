@@ -363,22 +363,11 @@ namespace FaaS.Services
             return _mapper.Map<DataTransferModels.Form>(dataAccessFormModel);
         }
 
-        public async Task<DataTransferModels.Project> GetProject(DataTransferModels.User user, string codeName)
+        public async Task<DataTransferModels.Project> GetProject(string codeName)
         {
             _logger.LogInformation("GetProject");
 
-            
-            var existingUser = await _userRepository.Get(user.UserCodeName);
-            if (existingUser == null)
-            {
-                var message = $"User with code name {user.UserCodeName} does not exist.";
-                _logger.LogError(message);
-                throw new InvalidOperationException(message);
-            }
-
-            User dataAccessUserModel = _mapper.Map<User>(user);
             var dataAccessProjectModel = await _projectRepository.Get(codeName);
-            dataAccessProjectModel.User = dataAccessUserModel;
 
             return _mapper.Map<DataTransferModels.Project>(dataAccessProjectModel);
         }
