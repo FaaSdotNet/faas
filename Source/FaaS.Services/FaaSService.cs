@@ -123,9 +123,9 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            Project dataAccessProjectModel = _mapper.Map<Project>(project);
+            //Project dataAccessProjectModel = _mapper.Map<Project>(project);
             Form dataAccessFormModel = _mapper.Map<Form>(form);
-            dataAccessFormModel = await _formRepository.Add(dataAccessProjectModel, dataAccessFormModel);
+            dataAccessFormModel = await _formRepository.Add(/*dataAccessProjectModel*/ existingProject, dataAccessFormModel);
 
             return _mapper.Map<DataTransferModels.Form>(dataAccessFormModel);
         }
@@ -259,8 +259,8 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            Project dataAccessProjectModel = _mapper.Map<Project>(project);
-            var dataAccessFormModel = await _formRepository.List(dataAccessProjectModel);
+            //Project dataAccessProjectModel = _mapper.Map<Project>(project);
+            var dataAccessFormModel = await _formRepository.List(/*dataAccessProjectModel*/existingProject);
 
             return _mapper.Map<DataTransferModels.Form[]>(dataAccessFormModel);
         }
@@ -344,7 +344,7 @@ namespace FaaS.Services
             return _mapper.Map<DataTransferModels.ElementValue>(dataAccessElementValueModel);
         }
 
-        public async Task<DataTransferModels.Form> GetForm(DataTransferModels.Project project, string codeName)
+        public async Task<DataTransferModels.Form> GetForm(string codeName)
         {
             _logger.LogInformation("GetForm");
 
@@ -359,6 +359,7 @@ namespace FaaS.Services
 
             Project dataAccessProjectModel = _mapper.Map<Project>(project);*/
             var dataAccessFormModel = await _formRepository.Get(codeName);
+            dataAccessFormModel.Project = await _projectRepository.Get(dataAccessFormModel.ProjectId);    // not filling Project without this
 
             return _mapper.Map<DataTransferModels.Form>(dataAccessFormModel);
         }
@@ -483,7 +484,12 @@ namespace FaaS.Services
         {
             _logger.LogInformation("UpdateForm");
 
+            Form dalForm = await _formRepository.Get(form.FormCodeName);
             Form dataAccessFormModel = _mapper.Map<Form>(form);
+            dataAccessFormModel.Id = dalForm.Id;
+            dataAccessFormModel.Elements = dalForm.Elements;
+            dataAccessFormModel.ProjectId = dalForm.ProjectId;
+            dataAccessFormModel.Project = dalForm.Project;
             dataAccessFormModel = await _formRepository.Update(dataAccessFormModel);
 
             return _mapper.Map<DataTransferModels.Form>(dataAccessFormModel);

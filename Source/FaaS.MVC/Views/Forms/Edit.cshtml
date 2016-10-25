@@ -1,23 +1,16 @@
 @model FaaS.MVC.Models.CreateFormViewModel
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h2>Create</h2>
+<h2>Edit</h2>
 
-<form asp-action="Create">
+<form asp-action="Edit">
     <div class="form-horizontal">
         <h4>CreateFormViewModel</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="SelectedProjectCodeName" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <select asp-for="SelectedProjectCodeName" asp-items="@Model.ProjectList" class="form-control"></select>
-                <span asp-validation-for="SelectedProjectCodeName" class="text-danger" />
-            </div>
-        </div>
         <div class="form-group">
             <label asp-for="DisplayName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -25,13 +18,13 @@
                 <span asp-validation-for="DisplayName" class="text-danger" />
             </div>
         </div>
-        <!--<div class="form-group">
-            <label asp-for="Created" class="col-md-2 control-label"></label> 
+        <div class="form-group">
+            <!--<label asp-for="Created" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Created" type ="hidden" class="form-control" />
+                <input asp-for="Created" class="form-control" />
                 <span asp-validation-for="Created" class="text-danger" />
-            </div>
-        </div>-->
+            </div>-->
+        </div>
         <div class="form-group">
             <label asp-for="Description" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -40,8 +33,22 @@
             </div>
         </div>
         <div class="form-group">
+            <!--<label asp-for="FormCodeName" class="col-md-2 control-label"></label>-->
+            <div class="col-md-10">
+                <input asp-for="@Model.FormCodeName" type="hidden" class="form-control" />
+                <span asp-validation-for="FormCodeName" class="text-danger" />
+            </div>
+        </div>
+        <!--<div class="form-group">
+            <label asp-for="SelectedProjectCodeName" type="hidden" class="col-md-2 control-label"></label>
+            <div class="col-md-10">
+                <input asp-for="SelectedProjectCodeName" type="hidden" class="form-control" />
+                <span asp-validation-for="SelectedProjectCodeName" class="text-danger" />
+            </div>
+        </div>-->
+        <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Edit" class="btn btn-default" />
             </div>
         </div>
     </div>

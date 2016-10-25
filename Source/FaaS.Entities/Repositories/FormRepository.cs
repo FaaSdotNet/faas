@@ -44,7 +44,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(form));
             }
 
-            form.Project = _context.Projects.Find(project.Id);
+            form.Project = _context.Projects.SingleOrDefault(p => p.Id == project.Id);//.Find(project.Id);
             form.ProjectId = project.Id;
 
             var addedForm = _context.Forms.Add(form);

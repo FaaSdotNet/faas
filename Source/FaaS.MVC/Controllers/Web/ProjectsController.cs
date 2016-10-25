@@ -21,7 +21,7 @@ namespace FaaS.MVC.Controllers.Web
             _mapper = mapper;
         }
 
-        // GET: Products
+
         [ActionName("Index")]
         public async Task<IActionResult> List()
         {
@@ -43,7 +43,7 @@ namespace FaaS.MVC.Controllers.Web
             }
         }
 
-        // GET: Projects/Create
+        // GET: Forms/Create
         public async Task<IActionResult> Create()
         {
             var newProject = new CreateProjectViewModel();

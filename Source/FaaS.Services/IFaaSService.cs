@@ -29,7 +29,7 @@ namespace FaaS.Services
 
         Task<Form> AddForm(Project project, Form form);
 
-        Task<Form> GetForm(Project project, string codeName);
+        Task<Form> GetForm(string codeName);
 
         Task<Form[]> GetAllForms(Project project);
 

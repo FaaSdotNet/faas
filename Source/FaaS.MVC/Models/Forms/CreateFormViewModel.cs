@@ -6,13 +6,14 @@ using System.Text.Encodings.Web;
 
 namespace FaaS.MVC.Models
 {
-    public class CreateFormViewModel : IValidatableObject
+    public class CreateFormViewModel
     {
-        [Required]
-        [Display(Name = "Code name")]
-        public string FormCodeName;
+        /*[Required]    // user (probably) doesn't set codename
+        [Display(Name = "Code name")]*/ 
+        public string FormCodeName { get; set; }
 
         [Required]
+        [Display(Name ="Form name")]
         public string DisplayName { get; set; }
 
         public DateTime Created { get; set; }
@@ -20,10 +21,14 @@ namespace FaaS.MVC.Models
         public string Description { get; set; }
 
         public SelectList ElementList { get; set; }
+        
+        public SelectList ProjectList { get; set; }
+
+        public string SelectedProjectCodeName { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (FormCodeName != UrlEncoder.Default.Encode(FormCodeName))
+            if (FormCodeName != UrlEncoder.Default.Encode(DisplayName))
             {
                 yield return new ValidationResult("Invalid code name");
             }
