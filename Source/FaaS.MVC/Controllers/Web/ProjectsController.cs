@@ -90,10 +90,12 @@ namespace FaaS.MVC.Controllers.Web
 
             ViewData["userDisplayName"] = existingUser.DisplayName;
 
-            var existingProject = await _faaSService.GetProject(existingUser, id);
-            var deletedProject = await _faaSService.RemoveProject(existingProject);
+            var projectsDTO = await _faaSService.GetAllProjects(existingUser);
+            ViewBag.ProjectNames = projectsDTO.Select(p => p.DisplayName).ToList();
 
-            return RedirectToAction("Index");
+            var existingProject = await _faaSService.GetProject(existingUser, id);
+            HttpContext.Session.SetString("projectToDelete", id);
+            return View(_mapper.Map<ProjectViewModel>(existingProject));
         }
 
         // POST: Projects/Create
@@ -113,6 +115,26 @@ namespace FaaS.MVC.Controllers.Web
                 return RedirectToAction("Index");
             }
             return View(project);
+        }
+
+        // POST: Projects/Delete
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed()
+        {
+            var projectCodeName = HttpContext.Session.GetString("projectToDelete");
+
+            var userCodeName = HttpContext.Session.GetString("userCodeName");
+            var existingUser = await _faaSService.GetUserCodeName(userCodeName);
+
+            ViewData["userDisplayName"] = existingUser.DisplayName;
+
+            var existingProject = await _faaSService.GetProject(existingUser, projectCodeName);
+            var deletedProject = await _faaSService.RemoveProject(existingProject);
+
+            return RedirectToAction("Index");
         }
     }
 }
