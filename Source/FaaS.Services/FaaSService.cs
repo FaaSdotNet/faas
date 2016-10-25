@@ -367,7 +367,7 @@ namespace FaaS.Services
         {
             _logger.LogInformation("GetProject");
 
-            /*
+            
             var existingUser = await _userRepository.Get(user.UserCodeName);
             if (existingUser == null)
             {
@@ -376,8 +376,9 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            User dataAccessUserModel = _mapper.Map<User>(user);*/
+            User dataAccessUserModel = _mapper.Map<User>(user);
             var dataAccessProjectModel = await _projectRepository.Get(codeName);
+            dataAccessProjectModel.User = dataAccessUserModel;
 
             return _mapper.Map<DataTransferModels.Project>(dataAccessProjectModel);
         }

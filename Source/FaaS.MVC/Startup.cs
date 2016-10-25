@@ -116,7 +116,7 @@ namespace FaaS.MVC
             {
                 routes.MapRoute(
                     name: "home",
-                    template: "homePage",
+                    template: "Home",
                     defaults: new { controller = "Home", action = "Index" });
 
                 routes.MapRoute(

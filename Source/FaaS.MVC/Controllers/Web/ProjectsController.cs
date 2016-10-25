@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace FaaS.MVC.Controllers.Web
 {
@@ -28,8 +29,11 @@ namespace FaaS.MVC.Controllers.Web
             if (userCodeName != null)
             {
                 var userDTO = await _faaSService.GetUserCodeName(userCodeName);
-                var projectsDTO = await _faaSService.GetAllProjects(userDTO);
                 ViewData["userDisplayName"] = userDTO.DisplayName;
+
+                var projectsDTO = await _faaSService.GetAllProjects(userDTO);
+                ViewBag.ProjectNames = projectsDTO.Select(p => p.DisplayName).ToList();
+
                 return View(_mapper.Map<IEnumerable<ProjectViewModel>>(projectsDTO));
             }
             else
@@ -49,6 +53,10 @@ namespace FaaS.MVC.Controllers.Web
             {
                 var userDTO = await _faaSService.GetUserCodeName(userCodeName);
                 ViewData["userDisplayName"] = userDTO.DisplayName;
+
+                var projectsDTO = await _faaSService.GetAllProjects(userDTO);
+                ViewBag.ProjectNames = projectsDTO.Select(p => p.DisplayName).ToList();
+
                 return View(newProject);
             }
             else
@@ -58,14 +66,34 @@ namespace FaaS.MVC.Controllers.Web
             }
         }
 
-        public async Task<IActionResult> Details()
+        // GET: Project/Details
+        public async Task<IActionResult> Details(string id)
         {
             var userCodeName = HttpContext.Session.GetString("userCodeName");
             var existingUser = await _faaSService.GetUserCodeName(userCodeName);
 
             ViewData["userDisplayName"] = existingUser.DisplayName;
 
-            return View(_mapper.Map<UserDetailsViewModel>(existingUser));
+            var projectsDTO = await _faaSService.GetAllProjects(existingUser);
+            ViewBag.ProjectNames = projectsDTO.Select(p => p.DisplayName).ToList();
+
+            var existingProject = await _faaSService.GetProject(existingUser, id);
+
+            return View(_mapper.Map<ProjectDetailsViewModel>(existingProject));
+        }
+
+        // GET: Projects/Delete
+        public async Task<IActionResult> Delete(string id)
+        {
+            var userCodeName = HttpContext.Session.GetString("userCodeName");
+            var existingUser = await _faaSService.GetUserCodeName(userCodeName);
+
+            ViewData["userDisplayName"] = existingUser.DisplayName;
+
+            var existingProject = await _faaSService.GetProject(existingUser, id);
+            var deletedProject = await _faaSService.RemoveProject(existingProject);
+
+            return RedirectToAction("Index");
         }
 
         // POST: Projects/Create

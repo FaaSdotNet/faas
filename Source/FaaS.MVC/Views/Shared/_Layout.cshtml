@@ -37,8 +37,15 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a asp-controller="Projects" asp-action="Index">List</a></li>
-                            <li><a asp-controller="Projects" asp-action="Create">Create</a></li>
+                            <li><a asp-controller="Projects" asp-action="Create">Create new Project</a></li>
+                            <li><a asp-controller="Projects" asp-action="Index">List All Projects</a></li>
+                            @if (ViewBag.ProjectNames != null)
+                            {
+                                foreach (string projectName in ViewBag.ProjectNames)
+                                {
+                                    <li><a asp-controller="Projects" asp-action="Details">@projectName</a></li>
+                                }
+                            }
                         </ul>
                     </li>
                     <li class="dropdown-toggle" style="display:@(ViewData["userDisplayName"] == null ? "none" : "inline")">

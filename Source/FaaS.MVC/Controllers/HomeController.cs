@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using FaaS.MVC.Models;
 using FaaS.Services;
-using Microsoft.AspNetCore.Mvc;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FaaS.MVC.Controllers
 {
@@ -28,6 +28,10 @@ namespace FaaS.MVC.Controllers
             {
                 var userDTO = await _faaSService.GetUserCodeName(userCodeName);
                 ViewData["userDisplayName"] = userDTO.DisplayName;
+                
+                var projectsDTO = await _faaSService.GetAllProjects(userDTO);
+                ViewBag.ProjectNames = projectsDTO.Select(p => p.DisplayName).ToList();
+
                 return View(_mapper.Map<UserViewModel>(userDTO));
             }
             else
@@ -46,6 +50,10 @@ namespace FaaS.MVC.Controllers
             {
                 var userDTO = await _faaSService.GetUserCodeName(userCodeName);
                 ViewData["userDisplayName"] = userDTO.DisplayName;
+
+                var projectsDTO = await _faaSService.GetAllProjects(userDTO);
+                ViewBag.ProjectNames = projectsDTO.Select(p => p.DisplayName).ToList();
+
                 return View(_mapper.Map<UserViewModel>(userDTO));
             }
             else
@@ -64,6 +72,10 @@ namespace FaaS.MVC.Controllers
             {
                 var userDTO = await _faaSService.GetUserCodeName(userCodeName);
                 ViewData["userDisplayName"] = userDTO.DisplayName;
+
+                var projectsDTO = await _faaSService.GetAllProjects(userDTO);
+                ViewBag.ProjectNames = projectsDTO.Select(p => p.DisplayName).ToList();
+
                 return View(_mapper.Map<UserViewModel>(userDTO));
             }
             else

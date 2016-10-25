@@ -87,7 +87,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(project));
             }
 
-            Project oldProject = _context.Projects.Where(projectToDelete => projectToDelete.Id == project.Id)
+            Project oldProject = _context.Projects.Where(projectToDelete => projectToDelete.CodeName == project.CodeName)
                                                     .SingleOrDefault();
             if (oldProject == null)
             {
