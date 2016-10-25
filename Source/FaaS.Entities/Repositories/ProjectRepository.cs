@@ -44,13 +44,13 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(project));
             }
 
-            User actualUser = _context.Users.SingleOrDefault(userForProject => userForProject.Id == user.Id);
+            User actualUser = _context.Users.SingleOrDefault(userForProject => userForProject.CodeName == user.CodeName);
             if (actualUser == null)
             {
                 return null;
             }
-            project.User = _context.Users.Find(user.Id);
-            project.UserId = user.Id;
+            project.User = _context.Users.Find(actualUser.Id);
+            project.UserId = actualUser.Id;
 
             var addedProject = _context.Projects.Add(project);
             await _context.SaveChangesAsync();
@@ -104,10 +104,17 @@ namespace FaaS.Entities.Repositories
             => await _context.Projects.ToArrayAsync();
 
         public async Task<IEnumerable<Project>> List(User user)
-            => await _context
-            .Projects
-            .Where(project => project.UserId == user.Id)
+        {
+            User actualUser = _context.Users.SingleOrDefault(userForProject => userForProject.CodeName == user.CodeName);
+            if (actualUser == null)
+            {
+                return null;
+            }
+
+            return await _context.Projects
+            .Where(project => project.UserId == actualUser.Id)
             .ToArrayAsync();
+        }
 
         public async Task<Project> Get(string name)
             => await _context

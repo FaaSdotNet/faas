@@ -37,18 +37,40 @@ namespace FaaS.MVC.Controllers
             }
         }
 
-        public IActionResult About()
+        public async Task<IActionResult> About()
         {
             ViewData["Message"] = "Your application description page.";
 
-            return View();
+            string userCodeName = HttpContext.Session.GetString("userCodeName");
+            if (userCodeName != null)
+            {
+                var userDTO = await _faaSService.GetUserCodeName(userCodeName);
+                ViewData["userDisplayName"] = userDTO.DisplayName;
+                return View(_mapper.Map<UserViewModel>(userDTO));
+            }
+            else
+            {
+                ViewData["userDisplayName"] = null;
+                return View();
+            }
         }
 
-        public IActionResult Contact()
+        public async Task<IActionResult> Contact()
         {
             ViewData["Message"] = "Your contact page.";
 
-            return View();
+            string userCodeName = HttpContext.Session.GetString("userCodeName");
+            if (userCodeName != null)
+            {
+                var userDTO = await _faaSService.GetUserCodeName(userCodeName);
+                ViewData["userDisplayName"] = userDTO.DisplayName;
+                return View(_mapper.Map<UserViewModel>(userDTO));
+            }
+            else
+            {
+                ViewData["userDisplayName"] = null;
+                return View();
+            }
         }
 
         public IActionResult Error()

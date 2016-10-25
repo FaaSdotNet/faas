@@ -17,11 +17,13 @@ namespace FaaS.MVC.Models
 
         public string Description { get; set; }
 
+        [Required]
         public DateTime Created { get; set; }
 
-        public SelectList FormList { get; set; }
-
-        public string UserName { get; set; }
+        public CreateProjectViewModel()
+        {
+            Created = DateTime.Now;
+        }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

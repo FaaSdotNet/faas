@@ -134,7 +134,7 @@ namespace FaaS.Services
         {
             _logger.LogInformation("AddProject");
 
-            var existingUser = await _userRepository.Get(user.GoogleId);
+            var existingUser = await _userRepository.GetGoogle(user.GoogleId);
             if (existingUser == null)
             {
                 var message = $"User with Google ID {user.GoogleId} does not exist.";
@@ -269,7 +269,7 @@ namespace FaaS.Services
         {
             _logger.LogInformation("GetAllProjects for user");
 
-            var existingUser = await _userRepository.Get(user.GoogleId);
+            var existingUser = await _userRepository.GetGoogle(user.GoogleId);
             if (existingUser == null)
             {
                 var message = $"User with Google ID {user.GoogleId} does not exist.";
