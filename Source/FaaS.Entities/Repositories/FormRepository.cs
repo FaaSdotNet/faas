@@ -44,8 +44,13 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(form));
             }
 
-            form.Project = _context.Projects.SingleOrDefault(p => p.Id == project.Id);//.Find(project.Id);
-            form.ProjectId = project.Id;
+            Project actualProject = _context.Projects.SingleOrDefault(projectForForm => projectForForm.CodeName == project.CodeName);
+            if (actualProject == null)
+            {
+                return null;
+            }
+            form.Project = _context.Projects.Find(actualProject.Id);
+            form.ProjectId = actualProject.Id;
 
             var addedForm = _context.Forms.Add(form);
             await _context.SaveChangesAsync();
@@ -79,20 +84,22 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedForm));
             }
 
-            Form oldForm = _context.Forms.SingleOrDefault(form => form.Id == updatedForm.Id);
+            Form oldForm = _context.Forms.SingleOrDefault(form => form.CodeName == updatedForm.CodeName);
+            Project formProject = _context.Projects.SingleOrDefault(project => project.Id == oldForm.ProjectId);
+            oldForm.Project = formProject;
             if (oldForm == null)
             {
                 return null;
             }
 
-
-            //_context.Forms.Attach(updatedForm);
-            //_context.Entry(updatedForm).State = EntityState.Modified;
-            // for experimental purposes - use commented code if not working
-            _context.Entry(oldForm).CurrentValues.SetValues(updatedForm);
+            oldForm.DisplayName = updatedForm.DisplayName;
+            oldForm.Description = updatedForm.Description;
+            
+            _context.Entry(oldForm).State = EntityState.Modified;
+            
             await _context.SaveChangesAsync();
 
-            return updatedForm;
+            return oldForm;
         }
 
         public async Task<Form> Get(Guid id)

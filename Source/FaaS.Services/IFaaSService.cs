@@ -31,6 +31,8 @@ namespace FaaS.Services
 
         Task<Form> GetForm(string codeName);
 
+        Task<Form[]> GetAllForms();
+
         Task<Form[]> GetAllForms(Project project);
 
         Task<Form> UpdateForm(Form form);

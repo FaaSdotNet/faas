@@ -83,30 +83,32 @@ namespace FaaS.MVC.Controllers.Web
         // POST: Forms/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(CreateFormViewModel model)
+        public async Task<ActionResult> Create(CreateFormViewModel form)
         {
-            Form formDTO = new Form
+            if (ModelState.IsValid)
             {
-                Created = DateTime.Now,
-                Description = model.Description,
-                DisplayName = model.DisplayName,
-                FormCodeName = model.DisplayName,   // TODO set proper codename
-            };
+                try
+                {
+                    var allForms = await _faaSService.GetAllForms();
+                    var formDTO = _mapper.Map<CreateFormViewModel, Form>(form);
 
-            try
-            {
-                var projectDTO = await _faaSService.GetProject(model.SelectedProjectCodeName);
-                await _faaSService.AddForm(projectDTO, formDTO);
-                return RedirectToAction("Forms");
+                    formDTO.FormCodeName = allForms.Count().ToString();
+                    formDTO.Created = DateTime.Now;
+
+                    var projectDTO = await _faaSService.GetProject(form.SelectedProjectCodeName);
+                    await _faaSService.AddForm(projectDTO, formDTO);
+                    return RedirectToAction("Forms");
+                }
+                catch
+                {
+                    return RedirectToAction("Index", "Home");   // error page or something
+                }
             }
-            catch
-            {
-                return RedirectToAction("Index", "Home");   // error page or something
-            }
+            return View(form);
         }
 
         // GET: Forms/Edit/5
-        public async Task<ActionResult> Edit(string formCodeName)
+        public async Task<ActionResult> Edit(string id)
         {
             string userCodeName = HttpContext.Session.GetString("userCodeName");
             if (userCodeName == null)
@@ -116,27 +118,23 @@ namespace FaaS.MVC.Controllers.Web
             var userDTO = await _faaSService.GetUserCodeName(userCodeName);
             ViewData["userDisplayName"] = userDTO.DisplayName;
 
-            var form = await _faaSService.GetForm(formCodeName);
-            if (form == null)
+            var existingForm = await _faaSService.GetForm(id);
+            if (existingForm == null)
             {
                 RedirectToAction("Index", "Projects");
             }
 
-            CreateFormViewModel model = new CreateFormViewModel
-            {
-                Description = form.Description,
-                DisplayName = form.DisplayName,
-                FormCodeName = form.FormCodeName
-            };
-
-            return View(model);
+            HttpContext.Session.SetString("formToEdit", id);
+            return View(_mapper.Map<FormViewModel>(existingForm));
         }
 
         // POST: Forms/Edit/5
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(CreateFormViewModel model)
+        public async Task<ActionResult> Edit(FormViewModel model)
         {
+            var formCodeName = HttpContext.Session.GetString("formToEdit");
+
             string userCodeName = HttpContext.Session.GetString("userCodeName");
             if (userCodeName == null)
             {
@@ -147,18 +145,10 @@ namespace FaaS.MVC.Controllers.Web
 
             try
             {
-                var form = await _faaSService.GetForm(model.FormCodeName);
-                if (form == null)
-                {
-                    RedirectToAction("Index", "Projects");
-                }
-                
-                form.Description = model.Description;
-                form.DisplayName = model.DisplayName;
+                var formDTO = _mapper.Map<FormViewModel, Form>(model);
+                var updatedForm = await _faaSService.UpdateForm(formDTO);
 
-                await _faaSService.UpdateForm(form);
-
-                return RedirectToAction("Forms", "Forms", new { projectCodeName = form.Project.ProjectCodeName });
+                return RedirectToAction("Forms", "Forms", new { projectCodeName = updatedForm.Project.ProjectCodeName });
             }
             catch(Exception ex)
             {
