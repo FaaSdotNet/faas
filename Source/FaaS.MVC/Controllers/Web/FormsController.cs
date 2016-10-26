@@ -97,7 +97,7 @@ namespace FaaS.MVC.Controllers.Web
 
                     var projectDTO = await _faaSService.GetProject(form.SelectedProjectCodeName);
                     await _faaSService.AddForm(projectDTO, formDTO);
-                    return RedirectToAction("Forms");
+                    return RedirectToAction("Forms", "Forms" ,new { projectCodeName = form.SelectedProjectCodeName });
                 }
                 catch
                 {
