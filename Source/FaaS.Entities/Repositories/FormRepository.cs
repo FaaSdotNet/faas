@@ -85,9 +85,11 @@ namespace FaaS.Entities.Repositories
                 return null;
             }
 
-            _context.Forms.Attach(updatedForm);
-            _context.Entry(updatedForm).State = EntityState.Modified;
 
+            //_context.Forms.Attach(updatedForm);
+            //_context.Entry(updatedForm).State = EntityState.Modified;
+            // for experimental purposes - use commented code if not working
+            _context.Entry(oldForm).CurrentValues.SetValues(updatedForm);
             await _context.SaveChangesAsync();
 
             return updatedForm;

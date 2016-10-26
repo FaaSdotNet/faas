@@ -480,19 +480,25 @@ namespace FaaS.Services
             return _mapper.Map<DataTransferModels.ElementValue>(dataAccessElementValueModel);
         }
 
+        // updating description and display name only
         public async Task<DataTransferModels.Form> UpdateForm(DataTransferModels.Form form)
         {
             _logger.LogInformation("UpdateForm");
 
             Form dalForm = await _formRepository.Get(form.FormCodeName);
-            Form dataAccessFormModel = _mapper.Map<Form>(form);
+            /*Form dataAccessFormModel = _mapper.Map<Form>(form);
             dataAccessFormModel.Id = dalForm.Id;
             dataAccessFormModel.Elements = dalForm.Elements;
             dataAccessFormModel.ProjectId = dalForm.ProjectId;
-            dataAccessFormModel.Project = dalForm.Project;
-            dataAccessFormModel = await _formRepository.Update(dataAccessFormModel);
+            //dataAccessFormModel.Project = dalForm.Project;*/
+            //dataAccessFormModel = await _formRepository.Update(dataAccessFormModel);
 
-            return _mapper.Map<DataTransferModels.Form>(dataAccessFormModel);
+            // looks quite dumb but there are no elements in DTO Form and only display name and description can be updated
+            dalForm.DisplayName = form.DisplayName;
+            dalForm.Description = form.Description;
+            dalForm = await _formRepository.Update(dalForm);
+
+            return _mapper.Map<DataTransferModels.Form>(/*dataAccessFormModel*/ dalForm);
         }
 
         public async Task<DataTransferModels.Project> UpdateProject(DataTransferModels.Project project)

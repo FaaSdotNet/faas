@@ -74,7 +74,7 @@ namespace FaaS.MVC.Controllers.Web
 
             CreateFormViewModel model = new CreateFormViewModel
             {
-                ProjectList = projects //new List<Project>(await _faaSService.GetAllProjects(userDTO))
+                ProjectList = projects
             };
 
             return View(model);
@@ -97,7 +97,7 @@ namespace FaaS.MVC.Controllers.Web
             {
                 var projectDTO = await _faaSService.GetProject(model.SelectedProjectCodeName);
                 await _faaSService.AddForm(projectDTO, formDTO);
-                return RedirectToAction("Index");
+                return RedirectToAction("Forms");
             }
             catch
             {
@@ -160,7 +160,7 @@ namespace FaaS.MVC.Controllers.Web
 
                 return RedirectToAction("Forms", "Forms", new { projectCodeName = form.Project.ProjectCodeName });
             }
-            catch
+            catch(Exception ex)
             {
                 return RedirectToAction("Index", "Projects");
             }
