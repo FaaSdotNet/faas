@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - FaaS</title>
+    <title>FaaS - @ViewData["Title"]</title>
+    <link rel="shortcut icon" type="image/x-icon" href="~/images/faas_logo.png" />
 
     <environment names="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -37,25 +38,30 @@
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a asp-controller="Projects" asp-action="Create">Create new Project</a></li>
-                            <li><a asp-controller="Projects" asp-action="Index">List All Projects</a></li>
-                            @if (ViewBag.ProjectNames != null)
+                            <li><a asp-controller="Projects" asp-action="Create">Create a new Project</a></li>
+                            @if (ViewBag.ProjectDictionary != null)
                             {
-                                foreach (string projectName in ViewBag.ProjectNames)
+                                foreach (var item in ViewBag.ProjectDictionary)
                                 {
-                                    <li><a asp-controller="Projects" asp-action="Details">@projectName</a></li>
+                                    <li><a asp-controller="Projects" asp-action="Index" asp-route-id="@item.Key">@item.Value</a></li>
                                 }
                             }
                         </ul>
                     </li>
-                    <li class="dropdown-toggle" style="display:@(ViewData["userDisplayName"] == null ? "none" : "inline")">
-                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" asp-controller="Froms" asp-action="Index">
+                    <li class="dropdown-toggle" style="display:@(ViewData["projectDisplayName"] == null ? "none" : "inline")">
+                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" asp-controller="Forms" asp-action="Index">
                             Forms
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a asp-controller="Forms" asp-action="Index">List</a></li>
-                            <li><a asp-controller="Forms" asp-action="Create">Create</a></li>
+                            <li><a asp-controller="Forms" asp-action="Create">Create a new Form</a></li>
+                            @if (ViewBag.FormDictionary != null)
+                            {
+                                foreach (var item in ViewBag.FormDictionary)
+                                {
+                                    <li><a asp-controller="Forms" asp-action="Index" asp-route-id="@item.Key">@item.Value</a></li>
+                                }
+                            }
                         </ul>
                     </li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
@@ -64,19 +70,14 @@
                 <ul class="nav navbar-nav" style="float:right">
                     <li class="dropdown-toggle" style="display:@(ViewData["userDisplayName"] == null ? "none" : "inline")">
                         <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" asp-controller="Users" asp-action="Index">
-                            @ViewData["userDisplayName"]
+                            <img style="display:inline" class="img-responsive img-circle" src="~/images/default_user.png" alt="defaut_user" height="24" width="24" />
+                            &nbsp;@ViewData["userDisplayName"]
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a asp-controller="Users" asp-action="Details">Details</a></li>
-                            <li><a asp-controller="Users" asp-action="LogOut">Log Out</a></li>
+                            <li><a asp-controller="Home" asp-action="LogOut">Log Out</a></li>
                         </ul>
-                    </li>
-                    <li style="display:@(ViewData["userDisplayName"] == null ? "inline" : "none")">
-                        <a asp-area="" asp-controller="Users" asp-action="Create">Sign Up</a>
-                    </li>
-                    <li style="display:@(ViewData["userDisplayName"] == null ? "inline" : "none")">
-                        <a asp-area="" asp-controller="Users" asp-action="LogIn">Log In</a>
                     </li>
                 </ul>
             </div>

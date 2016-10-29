@@ -23,23 +23,36 @@ namespace FaaS.MVC.Controllers.Web
             _mapper = mapper;
         }
 
-        // GET: Forms
-        public async Task<ActionResult> Forms(string projectCodeName)
+        // GET: Forms/Index/id
+        public async Task<ActionResult> Index(string id)
         {
             string userCodeName = HttpContext.Session.GetString("userCodeName");
             if (userCodeName == null)
             {
-                RedirectToAction("Login", "Users");
+                RedirectToAction("Index", "Home");
             }
 
             var userDTO = await _faaSService.GetUserCodeName(userCodeName);
-            var projects = await _faaSService.GetAllProjects(userDTO);
-
             ViewData["userDisplayName"] = userDTO.DisplayName;
-            var project = await _faaSService.GetProject(projectCodeName);
-            var forms = (await _faaSService.GetAllForms(project)).ToList();
 
-            return View(_mapper.Map<IEnumerable<FormViewModel>>(forms));
+            var projectsDTO = await _faaSService.GetAllProjects(userDTO);
+            ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
+                    p => p.ProjectCodeName.ToString(),
+                    p => p.DisplayName.ToString());
+
+            string projectCodeName = HttpContext.Session.GetString("projectCodeName");
+
+            var projectDTO = await _faaSService.GetProject(projectCodeName);
+            ViewData["projectDisplayName"] = projectDTO.DisplayName;
+
+            var formsDTO = await _faaSService.GetAllForms(projectDTO);
+            ViewBag.FormDictionary = formsDTO.ToDictionary(
+                f => f.FormCodeName.ToString(),
+                f => f.DisplayName.ToString());
+
+            var formDTO = await _faaSService.GetForm(id);
+
+            return View(_mapper.Map<FormViewModel>(formDTO));
 
         }
 
@@ -49,7 +62,7 @@ namespace FaaS.MVC.Controllers.Web
             string userCodeName = HttpContext.Session.GetString("userCodeName");
             if (userCodeName == null)
             {
-                RedirectToAction("Login", "Users");
+                RedirectToAction("Index", "Home");
             }
 
             var existingUser = await _faaSService.GetUserCodeName(userCodeName);
@@ -65,7 +78,7 @@ namespace FaaS.MVC.Controllers.Web
             string userCodeName = HttpContext.Session.GetString("userCodeName");
             if (userCodeName == null)
             {
-                RedirectToAction("Login", "Users");
+                RedirectToAction("Index", "Home");
             }
 
             var userDTO = await _faaSService.GetUserCodeName(userCodeName);
@@ -113,7 +126,7 @@ namespace FaaS.MVC.Controllers.Web
             string userCodeName = HttpContext.Session.GetString("userCodeName");
             if (userCodeName == null)
             {
-                RedirectToAction("Login", "Users");
+                RedirectToAction("Index", "Home");
             }
             var userDTO = await _faaSService.GetUserCodeName(userCodeName);
             ViewData["userDisplayName"] = userDTO.DisplayName;
@@ -138,7 +151,7 @@ namespace FaaS.MVC.Controllers.Web
             string userCodeName = HttpContext.Session.GetString("userCodeName");
             if (userCodeName == null)
             {
-                RedirectToAction("Login", "Users");
+                RedirectToAction("Index", "Home");
             }
             var userDTO = await _faaSService.GetUserCodeName(userCodeName);
             ViewData["userDisplayName"] = userDTO.DisplayName;

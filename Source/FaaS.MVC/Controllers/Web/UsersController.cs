@@ -36,22 +36,6 @@ namespace FaaS.MVC.Controllers.Web
             return View(newUser);
         }
 
-        // GET: Users/LogIn
-        public IActionResult LogIn()
-        {
-            var existingUser = new LogInUserViewModel();
-
-            return View(existingUser); 
-        }
-
-        // GET: Users/LogOut
-        public IActionResult LogOut()
-        {
-            HttpContext.Session.Remove("userCodeName");
-
-            return RedirectToAction("Index", "Home");
-        }
-
         public async Task<IActionResult> Details()
         {
             var userCodeName = HttpContext.Session.GetString("userCodeName");
@@ -75,23 +59,6 @@ namespace FaaS.MVC.Controllers.Web
                 var addedUser = await _faaSService.AddUser(userDTO);
 
                 HttpContext.Session.SetString("userCodeName", addedUser.UserCodeName);
-                return RedirectToAction("Index", "Home");
-            }
-            return View(user);
-        }
-
-        // POST: Users/LogIn
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> LogIn([Bind("GoogleId")]LogInUserViewModel user)
-        {
-            if (ModelState.IsValid)
-            {
-                var existingUser = await _faaSService.GetUserGoogleId(user.GoogleId);
-
-                HttpContext.Session.SetString("userCodeName", existingUser.UserCodeName);
                 return RedirectToAction("Index", "Home");
             }
             return View(user);

@@ -23,7 +23,7 @@ namespace FaaS.MVC.Controllers.Web
 
         // GET: Projects
         [ActionName("Index")]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> Index(string id)
         {
             string userCodeName = HttpContext.Session.GetString("userCodeName");
             if (userCodeName != null)
@@ -32,9 +32,21 @@ namespace FaaS.MVC.Controllers.Web
                 ViewData["userDisplayName"] = userDTO.DisplayName;
 
                 var projectsDTO = await _faaSService.GetAllProjects(userDTO);
-                ViewBag.ProjectNames = projectsDTO.Select(p => p.DisplayName).ToList();
+                ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
+                    p => p.ProjectCodeName.ToString(),
+                    p => p.DisplayName.ToString());
 
-                return View(_mapper.Map<IEnumerable<ProjectViewModel>>(projectsDTO));
+                var projectDTO = await _faaSService.GetProject(id);
+                ViewData["projectDisplayName"] = projectDTO.DisplayName;
+
+                HttpContext.Session.SetString("projectCodeName", id);
+
+                var formsDTO = await _faaSService.GetAllForms(projectDTO);
+                ViewBag.FormDictionary = formsDTO.ToDictionary(
+                    f => f.FormCodeName.ToString(),
+                    f => f.DisplayName.ToString());
+
+                return View(_mapper.Map<ProjectViewModel>(projectDTO));
             }
             else
             {
@@ -55,7 +67,9 @@ namespace FaaS.MVC.Controllers.Web
                 ViewData["userDisplayName"] = userDTO.DisplayName;
 
                 var projectsDTO = await _faaSService.GetAllProjects(userDTO);
-                ViewBag.ProjectNames = projectsDTO.Select(p => p.DisplayName).ToList();
+                ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
+                    p => p.ProjectCodeName.ToString(),
+                    p => p.DisplayName.ToString());
 
                 return View(newProject);
             }
@@ -75,7 +89,9 @@ namespace FaaS.MVC.Controllers.Web
             ViewData["userDisplayName"] = existingUser.DisplayName;
 
             var projectsDTO = await _faaSService.GetAllProjects(existingUser);
-            ViewBag.ProjectNames = projectsDTO.Select(p => p.DisplayName).ToList();
+            ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
+                    p => p.ProjectCodeName.ToString(),
+                    p => p.DisplayName.ToString());
 
             var existingProject = await _faaSService.GetProject(id);
 
@@ -91,7 +107,9 @@ namespace FaaS.MVC.Controllers.Web
             ViewData["userDisplayName"] = existingUser.DisplayName;
 
             var projectsDTO = await _faaSService.GetAllProjects(existingUser);
-            ViewBag.ProjectNames = projectsDTO.Select(p => p.DisplayName).ToList();
+            ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
+                    p => p.ProjectCodeName.ToString(),
+                    p => p.DisplayName.ToString());
 
             var existingProject = await _faaSService.GetProject(id);
             HttpContext.Session.SetString("projectToDelete", id);
