@@ -28,7 +28,7 @@ namespace FaaS.MVC.Controllers.Web
             string userCodeName = HttpContext.Session.GetString("userCodeName");
             if (userCodeName != null)
             {
-                var userDTO = await _faaSService.GetUserCodeName(userCodeName);
+                var userDTO = await _faaSService.GetUserName(userCodeName);
                 ViewData["userDisplayName"] = userDTO.DisplayName;
 
                 var projectsDTO = await _faaSService.GetAllProjects(userDTO);
@@ -63,7 +63,7 @@ namespace FaaS.MVC.Controllers.Web
             string userCodeName = HttpContext.Session.GetString("userCodeName");
             if (userCodeName != null)
             {
-                var userDTO = await _faaSService.GetUserCodeName(userCodeName);
+                var userDTO = await _faaSService.GetUserName(userCodeName);
                 ViewData["userDisplayName"] = userDTO.DisplayName;
 
                 var projectsDTO = await _faaSService.GetAllProjects(userDTO);
@@ -84,7 +84,7 @@ namespace FaaS.MVC.Controllers.Web
         public async Task<IActionResult> Details(string id)
         {
             var userCodeName = HttpContext.Session.GetString("userCodeName");
-            var existingUser = await _faaSService.GetUserCodeName(userCodeName);
+            var existingUser = await _faaSService.GetUserName(userCodeName);
 
             ViewData["userDisplayName"] = existingUser.DisplayName;
 
@@ -102,7 +102,7 @@ namespace FaaS.MVC.Controllers.Web
         public async Task<IActionResult> Delete(string id)
         {
             var userCodeName = HttpContext.Session.GetString("userCodeName");
-            var existingUser = await _faaSService.GetUserCodeName(userCodeName);
+            var existingUser = await _faaSService.GetUserName(userCodeName);
 
             ViewData["userDisplayName"] = existingUser.DisplayName;
 
@@ -127,7 +127,7 @@ namespace FaaS.MVC.Controllers.Web
             {
                 var projectDTO = _mapper.Map<CreateProjectViewModel, Project>(project);
                 string userCodeName = HttpContext.Session.GetString("userCodeName");
-                var userDTO = await _faaSService.GetUserCodeName(userCodeName);
+                var userDTO = await _faaSService.GetUserName(userCodeName);
                 var addedProject = await _faaSService.AddProject(userDTO, projectDTO);
 
                 return RedirectToAction("Index");
@@ -145,7 +145,7 @@ namespace FaaS.MVC.Controllers.Web
             var projectCodeName = HttpContext.Session.GetString("projectToDelete");
 
             var userCodeName = HttpContext.Session.GetString("userCodeName");
-            var existingUser = await _faaSService.GetUserCodeName(userCodeName);
+            var existingUser = await _faaSService.GetUserName(userCodeName);
 
             ViewData["userDisplayName"] = existingUser.DisplayName;
 

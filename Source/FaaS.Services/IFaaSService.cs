@@ -7,7 +7,7 @@ namespace FaaS.Services
     {
         Task<User> AddUser(User user);
 
-        Task<User> GetUserCodeName(string codeName);
+        Task<User> GetUserName(string name);
 
         Task<User> GetUserGoogleId(string googleId);
 
@@ -19,7 +19,7 @@ namespace FaaS.Services
 
         Task<Project> AddProject(User user, Project project);
 
-        Task<Project> GetProject(string codeName);
+        Task<Project> GetProject(User u, string name);
 
         Task<Project[]> GetAllProjects(User user);
 
@@ -29,7 +29,7 @@ namespace FaaS.Services
 
         Task<Form> AddForm(Project project, Form form);
 
-        Task<Form> GetForm(string codeName);
+        Task<Form> GetForm(Project p, string codeName);
 
         Task<Form[]> GetAllForms();
 

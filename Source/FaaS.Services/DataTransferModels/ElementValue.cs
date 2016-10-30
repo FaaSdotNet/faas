@@ -7,9 +7,7 @@ namespace FaaS.Services.DataTransferModels
 {
     public class ElementValue
     {
-        public string ElementValueCodeName { get; set; }
-
-        public string DisplayName { get; set; }
+        public Guid Id { get; set; }
 
         public string Value { get; set; }
 

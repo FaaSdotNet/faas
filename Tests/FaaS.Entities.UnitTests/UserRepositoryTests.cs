@@ -193,20 +193,13 @@ namespace FaaS.Entities.UnitTests
         /// </summary>
         public UserRepositoryTests()// : base()
         {
-            // Mock users
-            User testUser1 = GetTestUserWithoutProjects(1);
-            User testUser2 = GetTestUserWithoutProjects(2);
-            User testUser3 = GetTestUserWithoutProjects(3);
+
             var usersData = new List<User>
             {
                 testUser1,
                 testUser2,
                 testUser3
             };
-
-            // Mock projects
-            Project testProject1 = GetTestProjectWithoutForms(1);
-            Project testProject2 = GetTestProjectWithoutForms(2);
 
             var projectsData = new List<Project>
             {

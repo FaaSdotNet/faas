@@ -4,8 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FaaS.Entities.DataAccessModels
 {
-    public class ElementValue : ModelBase
+    public class ElementValue
     {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; set; }
+
         [ForeignKey("Element")]
         public Guid ElementId { get; set; }
 

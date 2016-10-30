@@ -4,10 +4,9 @@ namespace FaaS.Services.DataTransferModels
 {
     public class Project
     {
+        public Guid Id { get; set; }
 
-        public string ProjectCodeName { get; set; }
-
-        public string DisplayName { get; set; }
+        public string Name{ get; set; }
 
         public DateTime Created { get; set; }
 

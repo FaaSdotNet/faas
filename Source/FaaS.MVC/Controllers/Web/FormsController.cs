@@ -32,7 +32,7 @@ namespace FaaS.MVC.Controllers.Web
                 RedirectToAction("Index", "Home");
             }
 
-            var userDTO = await _faaSService.GetUserCodeName(userCodeName);
+            var userDTO = await _faaSService.GetUserName(userCodeName);
             ViewData["userDisplayName"] = userDTO.DisplayName;
 
             var projectsDTO = await _faaSService.GetAllProjects(userDTO);
@@ -65,7 +65,7 @@ namespace FaaS.MVC.Controllers.Web
                 RedirectToAction("Index", "Home");
             }
 
-            var existingUser = await _faaSService.GetUserCodeName(userCodeName);
+            var existingUser = await _faaSService.GetUserName(userCodeName);
             ViewData["userDisplayName"] = existingUser.DisplayName;
             var form = await _faaSService.GetForm(formCodeName);
            
@@ -81,7 +81,7 @@ namespace FaaS.MVC.Controllers.Web
                 RedirectToAction("Index", "Home");
             }
 
-            var userDTO = await _faaSService.GetUserCodeName(userCodeName);
+            var userDTO = await _faaSService.GetUserName(userCodeName);
             ViewData["userDisplayName"] = userDTO.DisplayName;
             SelectList projects = new SelectList(await _faaSService.GetAllProjects(userDTO), "ProjectCodeName", "DisplayName");
 
@@ -128,7 +128,7 @@ namespace FaaS.MVC.Controllers.Web
             {
                 RedirectToAction("Index", "Home");
             }
-            var userDTO = await _faaSService.GetUserCodeName(userCodeName);
+            var userDTO = await _faaSService.GetUserName(userCodeName);
             ViewData["userDisplayName"] = userDTO.DisplayName;
 
             var existingForm = await _faaSService.GetForm(id);
@@ -153,7 +153,7 @@ namespace FaaS.MVC.Controllers.Web
             {
                 RedirectToAction("Index", "Home");
             }
-            var userDTO = await _faaSService.GetUserCodeName(userCodeName);
+            var userDTO = await _faaSService.GetUserName(userCodeName);
             ViewData["userDisplayName"] = userDTO.DisplayName;
 
             try

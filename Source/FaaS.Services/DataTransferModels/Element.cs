@@ -1,10 +1,11 @@
-﻿namespace FaaS.Services.DataTransferModels
+﻿using System;
+
+namespace FaaS.Services.DataTransferModels
 {
     public class Element
     {
-        public string ElementCodeName { get; set; }
-
-        public string DisplayName { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
 
         public string Description { get; set; }
 

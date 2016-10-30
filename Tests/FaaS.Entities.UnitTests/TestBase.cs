@@ -20,12 +20,25 @@ namespace FaaS.Entities.UnitTests
         protected ElementValueRepository _ElementValueRepository;
         protected SessionRepository _SessionRepository;
 
+        protected User testUser1;
+        protected User testUser2;
+        protected User testUser3;
+
+        protected Project testProject1;
+        protected Project testProject2;
+        protected Project testProject3;
+
+        protected Form testForm1;
+        protected Form testForm2;
+        protected Form testForm3;
+        
+
         public TestBase()
         {
             // Mock users
-            User testUser1 = GetTestUserWithoutProjects(1);
-            User testUser2 = GetTestUserWithoutProjects(2);
-            User testUser3 = GetTestUserWithoutProjects(3);
+            testUser1 = GetTestUserWithoutProjects(1);
+            testUser2 = GetTestUserWithoutProjects(2);
+            testUser3 = GetTestUserWithoutProjects(3);
 
             var usersData = new List<User>
             {
@@ -35,9 +48,9 @@ namespace FaaS.Entities.UnitTests
             };
 
             // Mock projects
-            Project testProject1 = GetTestProjectWithoutForms(1);
-            Project testProject2 = GetTestProjectWithoutForms(2);
-            Project testProject3 = GetTestProjectWithoutForms(3);
+            testProject1 = GetTestProjectWithoutForms(1, testUser1);
+            testProject2 = GetTestProjectWithoutForms(2, testUser2);
+            testProject3 = GetTestProjectWithoutForms(3, testUser3);
 
             var projectsData = new List<Project>
             {
@@ -47,9 +60,9 @@ namespace FaaS.Entities.UnitTests
             };
 
             // Mock forms
-            Form testForm1 = GetTestFormWithoutElements(1);
-            Form testForm2 = GetTestFormWithoutElements(2);
-            Form testForm3 = GetTestFormWithoutElements(3);
+            testForm1 = GetTestFormWithoutElements(1, testProject1);
+            testForm2 = GetTestFormWithoutElements(2, testProject2);
+            testForm3 = GetTestFormWithoutElements(3, testProject3);
 
             var formsData = new List<Form>
             {
@@ -96,11 +109,13 @@ namespace FaaS.Entities.UnitTests
             {
                 testProject1
             };
+
             testUser2.Projects = new List<Project>
             {
                 testProject2,
                 testProject3
             };
+
             testProject1.UserId = testUser1.Id;
             testProject2.UserId = testUser2.Id;
             testProject3.UserId = testUser2.Id;
@@ -109,11 +124,13 @@ namespace FaaS.Entities.UnitTests
             {
                 testForm1
             };
+
             testProject2.Forms = new List<Form>
             {
                 testForm2,
                 testForm3
             };
+
             testForm1.ProjectId = testProject1.Id;
             testForm2.ProjectId = testProject2.Id;
             testForm3.ProjectId = testProject2.Id;
@@ -188,8 +205,7 @@ namespace FaaS.Entities.UnitTests
         /// <typeparam name="TType">Type of data and <see cref="DbSet{TEntity}"/> to substitute</typeparam>
         /// <param name="data">Initial content of "database"</param>
         /// <returns>Queryable that can be used as <see cref="DbSet{TEntity}"/> substitute.</returns>
-        protected static IQueryable<TType> SubstituteQueryable<TType>(ICollection<TType> data)
-            where TType : ModelBase
+        protected static IQueryable<TType> SubstituteQueryable<TType>(ICollection<TType> data) where TType : class
         {
             var queryableData = data.AsQueryable();
             var queryableSubstitute = Substitute.For<IQueryable<TType>, IDbAsyncEnumerable<TType>, DbSet<TType>>();
@@ -217,11 +233,10 @@ namespace FaaS.Entities.UnitTests
         /// object the method was provided with.
         /// </summary>
         private static TType SimulateAddition<TType>(CallInfo callInfo, ICollection<TType> data)
-            where TType : ModelBase
         {
             TType entry = callInfo.Arg<TType>();
 
-            entry.Id = Guid.NewGuid();
+            //entry.Id = Guid.NewGuid();
             data.Add(callInfo.Arg<TType>());
 
             return entry;
@@ -233,7 +248,7 @@ namespace FaaS.Entities.UnitTests
         /// object the method was provided with.
         /// </summary>
         private static TType SimulateRemove<TType>(CallInfo callInfo, ICollection<TType> data)
-            where TType : ModelBase
+            
         {
             TType entry = callInfo.Arg<TType>();
 
@@ -266,14 +281,16 @@ namespace FaaS.Entities.UnitTests
         /// Creates new test <see cref="Project"/> object with no <see cref="Project.Forms"/>.
         /// Object name and identifier is accompanied with <paramref name="identifier"/>.
         /// </summary>
-        protected static Project GetTestProjectWithoutForms(int identifier)
+        protected static Project GetTestProjectWithoutForms(int identifier, User user = null)
         {
             return new Project
             {
-                CodeName = $"TestProject{identifier}",
+                Name = $"TestProject{identifier}",
                 Created = new DateTime(2000, 1, identifier, 1, 1, 0),
                 Description = $"TestDescription{identifier}",
-                Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(identifier)}}}")
+                Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(identifier)}}}"),
+                User = user,
+                UserId = (user != null) ? user.Id : Guid.Empty
             };
         }
 
@@ -281,14 +298,16 @@ namespace FaaS.Entities.UnitTests
         /// Creates new test <see cref="Form"/> object with no <see cref="Form.Elements"/>.
         /// Object name and identifier is accompanied with <paramref name="identifier"/>.
         /// </summary>
-        protected static Form GetTestFormWithoutElements(int identifier)
+        protected static Form GetTestFormWithoutElements(int identifier, Project project = null)
         {
             return new Form
             {
-                CodeName = $"TestForm{identifier}",
+                Name = $"TestForm{identifier}",
                 Created = new DateTime(2000, 1, identifier, 1, 1, 0),
                 Description = $"TestDescription{identifier}",
-                Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(identifier)}}}")
+                Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(identifier)}}}"),
+                Project = project,
+                ProjectId = (project != null) ? project.Id : Guid.Empty
             };
         }
 
@@ -296,16 +315,18 @@ namespace FaaS.Entities.UnitTests
         /// Creates new test <see cref="Element"/> object with no <see cref="Element.ElementValues"/> and <see cref="Element.Options"/> .
         /// Object name and identifier is accompanied with <paramref name="identifier"/>.
         /// </summary>
-        protected static Element GetTestElementWithoutElementValuesAndOptions(int identifier, bool mandatory)
+        protected static Element GetTestElementWithoutElementValuesAndOptions(int identifier, bool mandatory, Form form = null)
         {
             return new Element
             {
-                CodeName = $"TestElement{identifier}",
+                Name = $"TestElement{identifier}",
                 Description = $"TestDescription{identifier}",
                 Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(identifier)}}}"),
                 Options = $"TestOption{identifier}",
                 Type = 1,
-                Mandatory = mandatory
+                Mandatory = mandatory,
+                Form = form,
+                FormId = form?.Id ?? Guid.Empty
             };
         }
 

@@ -26,7 +26,7 @@ namespace FaaS.MVC.Controllers
             string userCodeName = HttpContext.Session.GetString("userCodeName");
             if (userCodeName != null)
             {
-                var userDTO = await _faaSService.GetUserCodeName(userCodeName);
+                var userDTO = await _faaSService.GetUserName(userCodeName);
                 ViewData["userDisplayName"] = userDTO.DisplayName;
                 
                 var projectsDTO = await _faaSService.GetAllProjects(userDTO);
@@ -50,7 +50,7 @@ namespace FaaS.MVC.Controllers
             string userCodeName = HttpContext.Session.GetString("userCodeName");
             if (userCodeName != null)
             {
-                var userDTO = await _faaSService.GetUserCodeName(userCodeName);
+                var userDTO = await _faaSService.GetUserName(userCodeName);
                 ViewData["userDisplayName"] = userDTO.DisplayName;
 
                 var projectsDTO = await _faaSService.GetAllProjects(userDTO);
@@ -74,7 +74,7 @@ namespace FaaS.MVC.Controllers
             string userCodeName = HttpContext.Session.GetString("userCodeName");
             if (userCodeName != null)
             {
-                var userDTO = await _faaSService.GetUserCodeName(userCodeName);
+                var userDTO = await _faaSService.GetUserName(userCodeName);
                 ViewData["userDisplayName"] = userDTO.DisplayName;
 
                 var projectsDTO = await _faaSService.GetAllProjects(userDTO);

@@ -53,7 +53,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(session));
             }
 
-            Session oldSession = _context.Sessions.Where(sessionToDelete => sessionToDelete.Id == session.Id).SingleOrDefault();
+            Session oldSession = _context.Sessions.SingleOrDefault(sessionToDelete => sessionToDelete.Id == session.Id);
             if (oldSession == null)
             {
                 throw new ArgumentException("Session not in db!");
@@ -76,7 +76,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedSession));
             }
 
-            Session oldSession = _context.Sessions.Where(session => session.Id == updatedSession.Id).SingleOrDefault();
+            Session oldSession = _context.Sessions.SingleOrDefault(session => session.Id == updatedSession.Id);
             if (oldSession == null)
             {
                 throw new ArgumentException("Session is not in db!");

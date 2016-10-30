@@ -39,7 +39,7 @@ namespace FaaS.MVC.Controllers.Web
         public async Task<IActionResult> Details()
         {
             var userCodeName = HttpContext.Session.GetString("userCodeName");
-            var existingUser = await _faaSService.GetUserCodeName(userCodeName);
+            var existingUser = await _faaSService.GetUserName(userCodeName);
 
             ViewData["userDisplayName"] = existingUser.DisplayName;
 
