@@ -60,7 +60,7 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            Form dataAccessFormModel = _mapper.Map<Form>(form);
+            Form dataAccessFormModel = _mapper.Map<Form>(existingForm);
             Element dataAccessElementModel = _mapper.Map<Element>(element);
             dataAccessElementModel = await _elementRepository.Add(dataAccessFormModel, dataAccessElementModel);
 
@@ -193,6 +193,15 @@ namespace FaaS.Services
             return _mapper.Map<DataTransferModels.User>(dataAccessUserModel);
         }
 
+        public async Task<DataTransferModels.Element[]> GetAllElements()
+        {
+            _logger.LogInformation("GetAllElements");
+
+            var dataAccessElementModel = await _elementRepository.GetAll();
+
+            return _mapper.Map<DataTransferModels.Element[]>(dataAccessElementModel);
+        }
+
         public async Task<DataTransferModels.Element[]> GetAllElements(DataTransferModels.Form form)
         {
             _logger.LogInformation("GetAllElements for form");
@@ -205,7 +214,7 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            Form dataAccessFormModel = _mapper.Map<Form>(form);
+            Form dataAccessFormModel = _mapper.Map<Form>(existingForm);
             var dataAccessElementModel = await _elementRepository.GetAll(dataAccessFormModel);
 
             return _mapper.Map<DataTransferModels.Element[]>(dataAccessElementModel);
@@ -308,19 +317,10 @@ namespace FaaS.Services
             return _mapper.Map<DataTransferModels.User[]>(dataAccessUserModel);
         }
 
-        public async Task<DataTransferModels.Element> GetElement(DataTransferModels.Form form, string codeName)
+        public async Task<DataTransferModels.Element> GetElement(string codeName)
         {
             _logger.LogInformation("GetElement");
-            /*
-            var existingForm = await _formRepository.Get(form.FormCodeName);
-            if (existingForm == null)
-            {
-                var message = $"Form with code name {form.FormCodeName} does not exist.";
-                _logger.LogError(message);
-                throw new InvalidOperationException(message);
-            }
-
-            Form dataAccessFormModel = _mapper.Map<Form>(form);*/
+            
             var dataAccessElementModel = await _elementRepository.Get(codeName);
 
             return _mapper.Map<DataTransferModels.Element>(dataAccessElementModel);

@@ -43,7 +43,20 @@
                             {
                                 foreach (var item in ViewBag.ProjectDictionary)
                                 {
-                                    <li><a asp-controller="Projects" asp-action="Index" asp-route-id="@item.Key">@item.Value</a></li>
+                                    if (ViewData["projectDisplayName"] == item.Value)
+                                    {
+                                        <li>
+                                            <a asp-controller="Projects" asp-action="Index" asp-route-id="@item.Key">
+                                                <span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;@item.Value
+                                            </a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <a asp-controller="Projects" asp-action="Index" asp-route-id="@item.Key">@item.Value</a>
+                                        </li>
+                                    }
                                 }
                             }
                         </ul>
@@ -59,7 +72,20 @@
                             {
                                 foreach (var item in ViewBag.FormDictionary)
                                 {
-                                    <li><a asp-controller="Forms" asp-action="Index" asp-route-id="@item.Key">@item.Value</a></li>
+                                    if (ViewData["formDisplayName"] == item.Value)
+                                    {
+                                        <li>
+                                            <a asp-controller="Forms" asp-action="Index" asp-route-id="@item.Key">
+                                                <span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;@item.Value
+                                            </a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <a asp-controller="Forms" asp-action="Index" asp-route-id="@item.Key">@item.Value</a>
+                                        </li>
+                                    }
                                 }
                             }
                         </ul>
@@ -95,6 +121,7 @@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
+        <script src="~/js/Element.js"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"

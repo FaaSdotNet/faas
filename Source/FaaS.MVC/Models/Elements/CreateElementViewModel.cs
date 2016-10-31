@@ -5,20 +5,34 @@ using System.Text.Encodings.Web;
 
 namespace FaaS.MVC.Models
 {
+    public enum InputType
+    {
+        CheckBox,
+        Date,
+        Radio,
+        Range,
+        Text
+    }
+
     public class CreateElementViewModel : IValidatableObject
     {
-        [Required]
+        public CreateElementViewModel()
+        {
+            ElementCodeName = "";
+        }
+
+        //[Required]
         [Display(Name = "Code name")]
         public string ElementCodeName;
 
-        [Required]
+        //[Required]
         public string DisplayName { get; set; }
 
         public string Description { get; set; }
 
         public string Options { get; set; }
 
-        public int Type { get; set; }
+        public InputType Type { get; set; }
 
         public bool Mandatory { get; set; }
 

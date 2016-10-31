@@ -1,4 +1,4 @@
-@model FaaS.MVC.Models.FormViewModel
+@model FormViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -54,6 +54,9 @@
     </div>
 </form>
 
+<div>
+    @Html.ActionLink("Back to Form", "Index", "Forms", new { id = Model.FormCodeName })
+</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -1,4 +1,4 @@
-@model FaaS.MVC.Models.ProjectViewModel
+@model FaaS.MVC.Models.FormViewModel
 
 @{
     ViewData["Title"] = "Delete";
@@ -9,14 +9,14 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>ProjectViewModel</h4>
+    <h4>FormViewModel</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.ProjectCodeName)
+            @Html.DisplayNameFor(model => model.FormCodeName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ProjectCodeName)
+            @Html.DisplayFor(model => model.FormCodeName)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.DisplayName)
@@ -25,23 +25,23 @@
             @Html.DisplayFor(model => model.DisplayName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.Created)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Created)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
         </dd>
     </dl>
     
     <form asp-action="Delete">
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to Project", "Index", "Projects", new { id = Model.ProjectCodeName })
+            @Html.ActionLink("Back to Form", "Index", "Forms", new { id = Model.FormCodeName })
         </div>
     </form>
 </div>

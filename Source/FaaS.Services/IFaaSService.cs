@@ -41,7 +41,9 @@ namespace FaaS.Services
 
         Task<Element> AddElement(Form form, Element element);
 
-        Task<Element> GetElement(Form form, string codeName);
+        Task<Element> GetElement(string codeName);
+
+        Task<Element[]> GetAllElements();
 
         Task<Element[]> GetAllElements(Form form);
 

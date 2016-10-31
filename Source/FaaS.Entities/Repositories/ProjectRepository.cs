@@ -65,15 +65,17 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedProject));
             }
 
-            Project oldProject = _context.Projects.Where(project => project.Id == updatedProject.Id).SingleOrDefault();
+            Project oldProject = _context.Projects.SingleOrDefault(project => project.CodeName == updatedProject.CodeName);
+            User projectUser = _context.Users.SingleOrDefault(user => user.Id == oldProject.UserId);
+            oldProject.User = projectUser;
             if (oldProject == null)
             {
                 throw new ArgumentException("Project not in DB");
             }
 
-            _context.Projects.Attach(updatedProject);
-            var entry = _context.Entry(updatedProject);
-            entry.State = EntityState.Modified;
+            oldProject.DisplayName = updatedProject.DisplayName;
+            oldProject.Description = updatedProject.Description;
+            _context.Entry(oldProject).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
 

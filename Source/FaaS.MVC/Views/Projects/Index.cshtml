@@ -11,9 +11,9 @@
 <p>@Model.Description</p>
 <h3>Created</h3>
 <p>@Model.Created</p>
-<a asp-action="Edit">Edit</a> |
-<a asp-action="Details">Details</a> |
-<a asp-action="Delete">Delete</a>
+@Html.ActionLink("Edit", "Edit", "Projects", new { id = Model.ProjectCodeName }) |
+@Html.ActionLink("Details", "Details", "Projects", new { id = Model.ProjectCodeName }) |
+@Html.ActionLink("Delete", "Delete", "Projects", new { id = Model.ProjectCodeName })
 <table class="table">
     <thead>
         <tr>
@@ -33,6 +33,6 @@
                     @Html.ActionLink("Details", "Index", "Forms", new { id = item.Key })
                 </td>
             </tr>
-}
+        }
     </tbody>
 </table>

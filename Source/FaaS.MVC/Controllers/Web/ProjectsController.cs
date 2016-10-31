@@ -4,9 +4,9 @@ using FaaS.Services;
 using FaaS.Services.DataTransferModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FaaS.MVC.Controllers.Web
 {
@@ -93,9 +93,75 @@ namespace FaaS.MVC.Controllers.Web
                     p => p.ProjectCodeName.ToString(),
                     p => p.DisplayName.ToString());
 
-            var existingProject = await _faaSService.GetProject(id);
+            var projectDTO = await _faaSService.GetProject(id);
+            ViewData["projectDisplayName"] = projectDTO.DisplayName;
 
-            return View(_mapper.Map<ProjectDetailsViewModel>(existingProject));
+            var formsDTO = await _faaSService.GetAllForms(projectDTO);
+            ViewBag.FormDictionary = formsDTO.ToDictionary(
+                f => f.FormCodeName.ToString(),
+                f => f.DisplayName.ToString());
+
+            return View(_mapper.Map<ProjectDetailsViewModel>(projectDTO));
+        }
+
+        // GET: Projects/Edit/5
+        public async Task<ActionResult> Edit(string id)
+        {
+            string userCodeName = HttpContext.Session.GetString("userCodeName");
+            if (userCodeName == null)
+            {
+                RedirectToAction("Index", "Home");
+            }
+            var userDTO = await _faaSService.GetUserCodeName(userCodeName);
+            ViewData["userDisplayName"] = userDTO.DisplayName;
+
+            var projectsDTO = await _faaSService.GetAllProjects(userDTO);
+            ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
+                    p => p.ProjectCodeName.ToString(),
+                    p => p.DisplayName.ToString());
+
+            var projectDTO = await _faaSService.GetProject(id);
+            if (projectDTO == null)
+            {
+                RedirectToAction("Index", "Home");
+            }
+            ViewData["projectDisplayName"] = projectDTO.DisplayName;
+
+            var formsDTO = await _faaSService.GetAllForms(projectDTO);
+            ViewBag.FormDictionary = formsDTO.ToDictionary(
+                f => f.FormCodeName.ToString(),
+                f => f.DisplayName.ToString());
+
+            HttpContext.Session.SetString("projectToEdit", id);
+            return View(_mapper.Map<ProjectViewModel>(projectDTO));
+        }
+
+        // POST: Projects/Edit/5
+        [HttpPost, ActionName("Edit")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(ProjectViewModel model)
+        {
+            var projectCodeName = HttpContext.Session.GetString("projectToEdit");
+
+            string userCodeName = HttpContext.Session.GetString("userCodeName");
+            if (userCodeName == null)
+            {
+                RedirectToAction("Index", "Home");
+            }
+            var userDTO = await _faaSService.GetUserCodeName(userCodeName);
+            ViewData["userDisplayName"] = userDTO.DisplayName;
+
+            try
+            {
+                var projectDTO = _mapper.Map<ProjectViewModel, Project>(model);
+                var updatedProject = await _faaSService.UpdateProject(projectDTO);
+
+                return RedirectToAction("Index", "Projects", new { id = projectCodeName });
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         // GET: Projects/Delete
@@ -112,6 +178,13 @@ namespace FaaS.MVC.Controllers.Web
                     p => p.DisplayName.ToString());
 
             var existingProject = await _faaSService.GetProject(id);
+            ViewData["projectDisplayName"] = existingProject.DisplayName;
+
+            var formsDTO = await _faaSService.GetAllForms(existingProject);
+            ViewBag.FormDictionary = formsDTO.ToDictionary(
+                f => f.FormCodeName.ToString(),
+                f => f.DisplayName.ToString());
+
             HttpContext.Session.SetString("projectToDelete", id);
             return View(_mapper.Map<ProjectViewModel>(existingProject));
         }
@@ -152,7 +225,7 @@ namespace FaaS.MVC.Controllers.Web
             var existingProject = await _faaSService.GetProject(projectCodeName);
             var deletedProject = await _faaSService.RemoveProject(existingProject);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

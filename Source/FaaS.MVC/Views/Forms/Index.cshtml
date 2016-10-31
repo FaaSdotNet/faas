@@ -1,54 +1,40 @@
-@model IEnumerable<FaaS.MVC.Models.FormViewModel>
+@model FormViewModel
 
 @{
     ViewData["Title"] = "Forms";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Forms</h2>
+<h2>Form - @Model.DisplayName</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h3>Description</h3>
+<p>@Model.Description</p>
+<h3>Created</h3>
+<p>@Model.Created</p>
+@Html.ActionLink("Edit", "Edit", "Forms", new { id = Model.FormCodeName }) |
+@Html.ActionLink("Details", "Details", "Forms", new { id = Model.FormCodeName }) |
+@Html.ActionLink("Delete", "Delete", "Forms", new { id = Model.FormCodeName })
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FormCodeName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DisplayName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Created)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Elements
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.FormCodeName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DisplayName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.FormCodeName }) |
-                @Html.ActionLink("Details", "Details", new { id = item.FormCodeName }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
+@foreach (var item in ViewBag.ElementDictionary)
+{
+    <tr>
+        <td>
+            @item.Value
+        </td>
+        <td>
+            @Html.ActionLink("Details", "Details", "Elements", new { id = item.Key })
+        </td>
+    </tr>
 }
     </tbody>
 </table>
+@Html.ActionLink("Add new Element", "Create", "Elements", new { id = Model.FormCodeName })

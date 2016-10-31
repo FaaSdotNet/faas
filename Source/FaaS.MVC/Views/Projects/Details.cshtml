@@ -44,9 +44,6 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("All forms","Forms", "Forms", new { projectCodeName = Model.ProjectCodeName } )
-</div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ProjectCodeName }) |
+    @Html.ActionLink("Back to Project", "Index", new { id = Model.ProjectCodeName })
 </div>
