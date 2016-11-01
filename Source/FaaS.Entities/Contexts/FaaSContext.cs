@@ -34,14 +34,7 @@ namespace FaaS.Entities.Contexts
         /// Method specifies specific database details related to the used models
         /// </summary>
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {/*
-            // Solve M:N relation
-            modelBuilder
-                .Entity<Award>()
-                .HasMany(award => award.Games)
-                .WithMany(game => game.Awards)
-                .Map(map => map.ToTable("GameAwards"));*/
-
+        {
             // Solve 1:N relation
             modelBuilder
                 .Entity<User>()

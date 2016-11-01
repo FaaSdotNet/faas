@@ -7,25 +7,10 @@
 
 <h2>Edit</h2>
 
-<form asp-action="Edit">
+<form id="coolForm" asp-action="Edit">
     <div class="form-horizontal">
-        <h4>ElementViewModel</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="ElementCodeName" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="ElementCodeName" class="form-control" />
-                <span asp-validation-for="ElementCodeName" class="text-danger" />
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="DisplayName" class="col-md-2 control-label"></label>
-            <div class="col-md-10">
-                <input asp-for="DisplayName" class="form-control" />
-                <span asp-validation-for="DisplayName" class="text-danger" />
-            </div>
-        </div>
         <div class="form-group">
             <label asp-for="Description" class="col-md-2 control-label"></label>
             <div class="col-md-10">
@@ -36,22 +21,29 @@
         <div class="form-group">
             <label asp-for="Options" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Options" class="form-control" />
+                <input asp-for="Options" class="form-control" style="display:none;"/>
+                <a id="add" href="#">
+                    <i class="glyphicon glyphicon-plus-sign"></i>
+                </a>
+                <a id="delete" href="#">
+                    <i class="glyphicon glyphicon-remove-sign"></i>
+                </a>
+                <span id="na" class="glyphicon glyphicon-minus-sign"></span>
                 <span asp-validation-for="Options" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
             <label asp-for="Type" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="Type" class="form-control" />
+                <select asp-for="Type" asp-items="@Html.GetEnumSelectList(Model.Type.GetType())" class="form-control"></select>
                 <span asp-validation-for="Type" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <div class="checkbox">
-                    <input asp-for="Mandatory" />
-                    <label asp-for="Mandatory"></label>
+                    <input asp-for="Required" />
+                    <label asp-for="Required"></label>
                 </div>
             </div>
         </div>
@@ -64,7 +56,7 @@
 </form>
 
 <div>
-    @Html.ActionLink("Back to Form", "Index", "Forms", new { id = ViewData["formCodeName"] })
+    @Html.ActionLink("Back to Form", "Index", "Forms", new { id = ViewData["formId"] })
 </div>
 
 @section Scripts {

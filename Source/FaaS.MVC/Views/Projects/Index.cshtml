@@ -5,15 +5,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Project - @Model.DisplayName</h2>
+<h2>Project - @Model.ProjectName</h2>
 
 <h3>Description</h3>
 <p>@Model.Description</p>
 <h3>Created</h3>
 <p>@Model.Created</p>
-@Html.ActionLink("Edit", "Edit", "Projects", new { id = Model.ProjectCodeName }) |
-@Html.ActionLink("Details", "Details", "Projects", new { id = Model.ProjectCodeName }) |
-@Html.ActionLink("Delete", "Delete", "Projects", new { id = Model.ProjectCodeName })
+@Html.ActionLink("Edit", "Edit", "Projects", new { id = Model.Id }) |
+@Html.ActionLink("Details", "Details", "Projects", new { id = Model.Id }) |
+@Html.ActionLink("Delete", "Delete", "Projects", new { id = Model.Id })
 <table class="table">
     <thead>
         <tr>

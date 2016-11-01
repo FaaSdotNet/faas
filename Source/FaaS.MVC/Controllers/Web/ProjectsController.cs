@@ -25,32 +25,32 @@ namespace FaaS.MVC.Controllers.Web
         [ActionName("Index")]
         public async Task<IActionResult> Index(string id)
         {
-            string userCodeName = HttpContext.Session.GetString("userCodeName");
-            if (userCodeName != null)
+            string userId = HttpContext.Session.GetString("userId");
+            if (userId != null)
             {
-                var userDTO = await _faaSService.GetUserCodeName(userCodeName);
-                ViewData["userDisplayName"] = userDTO.DisplayName;
+                var userDTO = await _faaSService.GetUser(new Guid(userId));
+                ViewData["userName"] = userDTO.UserName;
 
                 var projectsDTO = await _faaSService.GetAllProjects(userDTO);
                 ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
-                    p => p.ProjectCodeName.ToString(),
-                    p => p.DisplayName.ToString());
+                    p => p.Id.ToString(),
+                    p => p.ProjectName.ToString());
 
-                var projectDTO = await _faaSService.GetProject(id);
-                ViewData["projectDisplayName"] = projectDTO.DisplayName;
+                var projectDTO = await _faaSService.GetProject(new Guid(id));
+                ViewData["projectName"] = projectDTO.ProjectName;
 
-                HttpContext.Session.SetString("projectCodeName", id);
+                HttpContext.Session.SetString("projectId", id);
 
                 var formsDTO = await _faaSService.GetAllForms(projectDTO);
                 ViewBag.FormDictionary = formsDTO.ToDictionary(
-                    f => f.FormCodeName.ToString(),
-                    f => f.DisplayName.ToString());
+                    f => f.Id.ToString(),
+                    f => f.FormName.ToString());
 
                 return View(_mapper.Map<ProjectViewModel>(projectDTO));
             }
             else
             {
-                ViewData["userDisplayName"] = null;
+                ViewData["userName"] = null;
                 return View();
             }
         }
@@ -60,22 +60,22 @@ namespace FaaS.MVC.Controllers.Web
         {
             var newProject = new CreateProjectViewModel();
 
-            string userCodeName = HttpContext.Session.GetString("userCodeName");
-            if (userCodeName != null)
+            string userId = HttpContext.Session.GetString("userId");
+            if (userId != null)
             {
-                var userDTO = await _faaSService.GetUserCodeName(userCodeName);
-                ViewData["userDisplayName"] = userDTO.DisplayName;
+                var userDTO = await _faaSService.GetUser(new Guid(userId));
+                ViewData["userName"] = userDTO.UserName;
 
                 var projectsDTO = await _faaSService.GetAllProjects(userDTO);
                 ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
-                    p => p.ProjectCodeName.ToString(),
-                    p => p.DisplayName.ToString());
+                    p => p.Id.ToString(),
+                    p => p.ProjectName.ToString());
 
                 return View(newProject);
             }
             else
             {
-                ViewData["userDisplayName"] = null;
+                ViewData["userName"] = null;
                 return View(newProject);
             }
         }
@@ -83,80 +83,80 @@ namespace FaaS.MVC.Controllers.Web
         // GET: Project/Details
         public async Task<IActionResult> Details(string id)
         {
-            var userCodeName = HttpContext.Session.GetString("userCodeName");
-            var existingUser = await _faaSService.GetUserCodeName(userCodeName);
+            var userId = HttpContext.Session.GetString("userId");
+            var existingUser = await _faaSService.GetUser(new Guid(userId));
 
-            ViewData["userDisplayName"] = existingUser.DisplayName;
+            ViewData["userName"] = existingUser.UserName;
 
             var projectsDTO = await _faaSService.GetAllProjects(existingUser);
             ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
-                    p => p.ProjectCodeName.ToString(),
-                    p => p.DisplayName.ToString());
+                    p => p.Id.ToString(),
+                    p => p.ProjectName.ToString());
 
-            var projectDTO = await _faaSService.GetProject(id);
-            ViewData["projectDisplayName"] = projectDTO.DisplayName;
+            var projectDTO = await _faaSService.GetProject(new Guid(id));
+            ViewData["projectName"] = projectDTO.ProjectName;
 
             var formsDTO = await _faaSService.GetAllForms(projectDTO);
             ViewBag.FormDictionary = formsDTO.ToDictionary(
-                f => f.FormCodeName.ToString(),
-                f => f.DisplayName.ToString());
+                f => f.Id.ToString(),
+                f => f.FormName.ToString());
 
             return View(_mapper.Map<ProjectDetailsViewModel>(projectDTO));
         }
 
-        // GET: Projects/Edit/5
+        // GET: Projects/Edit/Id
         public async Task<ActionResult> Edit(string id)
         {
-            string userCodeName = HttpContext.Session.GetString("userCodeName");
-            if (userCodeName == null)
+            string userId = HttpContext.Session.GetString("userId");
+            if (userId == null)
             {
                 RedirectToAction("Index", "Home");
             }
-            var userDTO = await _faaSService.GetUserCodeName(userCodeName);
-            ViewData["userDisplayName"] = userDTO.DisplayName;
+            var userDTO = await _faaSService.GetUser(new Guid(userId));
+            ViewData["userName"] = userDTO.UserName;
 
             var projectsDTO = await _faaSService.GetAllProjects(userDTO);
             ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
-                    p => p.ProjectCodeName.ToString(),
-                    p => p.DisplayName.ToString());
+                    p => p.Id.ToString(),
+                    p => p.ProjectName.ToString());
 
-            var projectDTO = await _faaSService.GetProject(id);
+            var projectDTO = await _faaSService.GetProject(new Guid(id));
             if (projectDTO == null)
             {
                 RedirectToAction("Index", "Home");
             }
-            ViewData["projectDisplayName"] = projectDTO.DisplayName;
+            ViewData["projectName"] = projectDTO.ProjectName;
 
             var formsDTO = await _faaSService.GetAllForms(projectDTO);
             ViewBag.FormDictionary = formsDTO.ToDictionary(
-                f => f.FormCodeName.ToString(),
-                f => f.DisplayName.ToString());
+                f => f.Id.ToString(),
+                f => f.FormName.ToString());
 
             HttpContext.Session.SetString("projectToEdit", id);
             return View(_mapper.Map<ProjectViewModel>(projectDTO));
         }
 
-        // POST: Projects/Edit/5
+        // POST: Projects/Edit/Id
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(ProjectViewModel model)
         {
-            var projectCodeName = HttpContext.Session.GetString("projectToEdit");
+            var projectId = HttpContext.Session.GetString("projectToEdit");
 
-            string userCodeName = HttpContext.Session.GetString("userCodeName");
-            if (userCodeName == null)
+            string userId = HttpContext.Session.GetString("userId");
+            if (userId == null)
             {
                 RedirectToAction("Index", "Home");
             }
-            var userDTO = await _faaSService.GetUserCodeName(userCodeName);
-            ViewData["userDisplayName"] = userDTO.DisplayName;
+            var userDTO = await _faaSService.GetUser(new Guid(userId));
+            ViewData["userName"] = userDTO.UserName;
 
             try
             {
                 var projectDTO = _mapper.Map<ProjectViewModel, Project>(model);
                 var updatedProject = await _faaSService.UpdateProject(projectDTO);
 
-                return RedirectToAction("Index", "Projects", new { id = projectCodeName });
+                return RedirectToAction("Index", "Projects", new { id = projectId });
             }
             catch (Exception ex)
             {
@@ -167,23 +167,23 @@ namespace FaaS.MVC.Controllers.Web
         // GET: Projects/Delete
         public async Task<IActionResult> Delete(string id)
         {
-            var userCodeName = HttpContext.Session.GetString("userCodeName");
-            var existingUser = await _faaSService.GetUserCodeName(userCodeName);
+            var userId = HttpContext.Session.GetString("userId");
+            var existingUser = await _faaSService.GetUser(new Guid(userId));
 
-            ViewData["userDisplayName"] = existingUser.DisplayName;
+            ViewData["userName"] = existingUser.UserName;
 
             var projectsDTO = await _faaSService.GetAllProjects(existingUser);
             ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
-                    p => p.ProjectCodeName.ToString(),
-                    p => p.DisplayName.ToString());
+                    p => p.Id.ToString(),
+                    p => p.ProjectName.ToString());
 
-            var existingProject = await _faaSService.GetProject(id);
-            ViewData["projectDisplayName"] = existingProject.DisplayName;
+            var existingProject = await _faaSService.GetProject(new Guid(id));
+            ViewData["projectName"] = existingProject.ProjectName;
 
             var formsDTO = await _faaSService.GetAllForms(existingProject);
             ViewBag.FormDictionary = formsDTO.ToDictionary(
-                f => f.FormCodeName.ToString(),
-                f => f.DisplayName.ToString());
+                f => f.Id.ToString(),
+                f => f.FormName.ToString());
 
             HttpContext.Session.SetString("projectToDelete", id);
             return View(_mapper.Map<ProjectViewModel>(existingProject));
@@ -194,16 +194,16 @@ namespace FaaS.MVC.Controllers.Web
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProjectCodeName", "DisplayName", "Description", "Created")]CreateProjectViewModel project)
+        public async Task<IActionResult> Create([Bind("ProjectName", "Description", "Created")]CreateProjectViewModel project)
         {
             if (ModelState.IsValid)
             {
                 var projectDTO = _mapper.Map<CreateProjectViewModel, Project>(project);
-                string userCodeName = HttpContext.Session.GetString("userCodeName");
-                var userDTO = await _faaSService.GetUserCodeName(userCodeName);
+                string userId = HttpContext.Session.GetString("userId");
+                var userDTO = await _faaSService.GetUser(new Guid(userId));
                 var addedProject = await _faaSService.AddProject(userDTO, projectDTO);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "Home");
             }
             return View(project);
         }
@@ -215,14 +215,14 @@ namespace FaaS.MVC.Controllers.Web
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed()
         {
-            var projectCodeName = HttpContext.Session.GetString("projectToDelete");
+            var projectId = HttpContext.Session.GetString("projectToDelete");
 
-            var userCodeName = HttpContext.Session.GetString("userCodeName");
-            var existingUser = await _faaSService.GetUserCodeName(userCodeName);
+            var userId = HttpContext.Session.GetString("userId");
+            var existingUser = await _faaSService.GetUser(new Guid(userId));
 
-            ViewData["userDisplayName"] = existingUser.DisplayName;
+            ViewData["userDisplayName"] = existingUser.UserName;
 
-            var existingProject = await _faaSService.GetProject(projectCodeName);
+            var existingProject = await _faaSService.GetProject(new Guid(projectId));
             var deletedProject = await _faaSService.RemoveProject(existingProject);
 
             return RedirectToAction("Index", "Home");

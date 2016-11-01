@@ -68,9 +68,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FaaSContextMigrations\FaaSContextConfiguration.cs" />
-    <Compile Include="FaaSContextMigrations\Migrations\201610251050580_Initial.cs" />
-    <Compile Include="FaaSContextMigrations\Migrations\201610251050580_Initial.Designer.cs">
-      <DependentUpon>201610251050580_Initial.cs</DependentUpon>
+    <Compile Include="FaaSContextMigrations\Migrations\201611011828102_Initial.cs" />
+    <Compile Include="FaaSContextMigrations\Migrations\201611011828102_Initial.Designer.cs">
+      <DependentUpon>201611011828102_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -99,9 +99,10 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="FaaSContextMigrations\Migrations\201610251050580_Initial.resx">
-      <DependentUpon>201610251050580_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="FaaSContextMigrations\Migrations\201611011828102_Initial.resx">
+      <DependentUpon>201611011828102_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

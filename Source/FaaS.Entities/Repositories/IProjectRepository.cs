@@ -7,7 +7,6 @@ namespace FaaS.Entities.Repositories
 {
     public interface IProjectRepository
     {
-        Task<Project> Get(string name);
         Task<Project> Get(Guid id);
     
         Task<IEnumerable<Project>> List();
@@ -15,6 +14,7 @@ namespace FaaS.Entities.Repositories
         Task<IEnumerable<Project>> List(User user);
 
         Task<Project> Add(User user, Project project);
+
         Task<Project> Update(Project project);
 
         Task<Project> Delete(Project project);

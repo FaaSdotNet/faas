@@ -44,7 +44,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(form));
             }
 
-            Project actualProject = _context.Projects.SingleOrDefault(projectForForm => projectForForm.CodeName == project.CodeName);
+            Project actualProject = _context.Projects.SingleOrDefault(projectForForm => projectForForm.Id == project.Id);
             if (actualProject == null)
             {
                 return null;
@@ -84,7 +84,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedForm));
             }
 
-            Form oldForm = _context.Forms.SingleOrDefault(form => form.CodeName == updatedForm.CodeName);
+            Form oldForm = _context.Forms.SingleOrDefault(form => form.Id == updatedForm.Id);
             Project formProject = _context.Projects.SingleOrDefault(project => project.Id == oldForm.ProjectId);
             oldForm.Project = formProject;
             if (oldForm == null)
@@ -92,7 +92,7 @@ namespace FaaS.Entities.Repositories
                 return null;
             }
 
-            oldForm.DisplayName = updatedForm.DisplayName;
+            oldForm.Name = updatedForm.Name;
             oldForm.Description = updatedForm.Description;
             
             _context.Entry(oldForm).State = EntityState.Modified;
@@ -114,11 +114,5 @@ namespace FaaS.Entities.Repositories
             .Forms
             .Where(form => form.ProjectId == project.Id)
             .ToArrayAsync();
-
-        public async Task<Form> Get(string name)
-            => await _context
-            .Forms
-            .Where(form => form.CodeName == name)
-            .SingleOrDefaultAsync();
     }
 }

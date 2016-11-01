@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FaaS.Entities.DataAccessModels
 {
     public class User : ModelBase
     {
+        [Required, MaxLength(254)]
+        public string Name { get; set; }
+
         [Required]
         public string GoogleId { get; set; }
 

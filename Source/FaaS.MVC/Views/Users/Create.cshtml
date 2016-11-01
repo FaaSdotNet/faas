@@ -1,4 +1,4 @@
-@model FaaS.MVC.Models.CreateUserViewModel
+@model CreateUserViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -12,18 +12,19 @@
         <h4>New user registration</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <!--
         <div class="form-group">
-            <label asp-for="UserCodeName" class="col-md-2 control-label"></label>
+            <label asp-for="Id" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="UserCodeName" class="form-control" />
-                <span asp-validation-for="UserCodeName" class="text-danger" />
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger" />
             </div>
-        </div>
+        </div>-->
         <div class="form-group">
-            <label asp-for="DisplayName" class="col-md-2 control-label"></label>
+            <label asp-for="UserName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="DisplayName" class="form-control" />
-                <span asp-validation-for="DisplayName" class="text-danger" />
+                <input asp-for="UserName" class="form-control" />
+                <span asp-validation-for="UserName" class="text-danger" />
             </div>
         </div>
         <div class="form-group">

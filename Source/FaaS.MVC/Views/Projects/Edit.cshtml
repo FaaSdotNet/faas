@@ -1,4 +1,4 @@
-@model FaaS.MVC.Models.ProjectViewModel
+@model ProjectViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,18 +12,18 @@
         <h4>ProjectViewModel</h4>
         <hr />
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="ProjectCodeName" class="col-md-2 control-label"></label>
+        <!--<div class="form-group">
+            <label asp-for="Id" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="ProjectCodeName" class="form-control" />
-                <span asp-validation-for="ProjectCodeName" class="text-danger" />
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger" />
             </div>
-        </div>
+        </div>-->
         <div class="form-group">
-            <label asp-for="DisplayName" class="col-md-2 control-label"></label>
+            <label asp-for="ProjectName" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                <input asp-for="DisplayName" class="form-control" />
-                <span asp-validation-for="DisplayName" class="text-danger" />
+                <input asp-for="ProjectName" class="form-control" />
+                <span asp-validation-for="ProjectName" class="text-danger" />
             </div>
         </div>
         <div class="form-group">
@@ -49,7 +49,7 @@
 </form>
 
 <div>
-    @Html.ActionLink("Back to Project", "Index", "Projects", new { id = Model.ProjectCodeName })
+    @Html.ActionLink("Back to Project", "Index", "Projects", new { id = Model.Id })
 </div>
 
 @section Scripts {

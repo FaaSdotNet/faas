@@ -16,14 +16,11 @@ namespace FaaS.Migrations.FaaSContextMigrations
                         Description = c.String(),
                         Options = c.String(),
                         Type = c.Int(nullable: false),
-                        Mandatory = c.Boolean(nullable: false),
-                        DisplayName = c.String(nullable: false),
-                        CodeName = c.String(nullable: false, maxLength: 254),
+                        Required = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Forms", t => t.FormId, cascadeDelete: true)
-                .Index(t => t.FormId)
-                .Index(t => t.CodeName, unique: true);
+                .Index(t => t.FormId);
             
             CreateTable(
                 "dbo.ElementValues",
@@ -33,15 +30,12 @@ namespace FaaS.Migrations.FaaSContextMigrations
                         ElementId = c.Guid(nullable: false),
                         SessionId = c.Guid(nullable: false),
                         Value = c.String(),
-                        DisplayName = c.String(nullable: false),
-                        CodeName = c.String(nullable: false, maxLength: 254),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Sessions", t => t.SessionId, cascadeDelete: true)
                 .ForeignKey("dbo.Elements", t => t.ElementId, cascadeDelete: true)
                 .Index(t => t.ElementId)
-                .Index(t => t.SessionId)
-                .Index(t => t.CodeName, unique: true);
+                .Index(t => t.SessionId);
             
             CreateTable(
                 "dbo.Sessions",
@@ -49,56 +43,47 @@ namespace FaaS.Migrations.FaaSContextMigrations
                     {
                         Id = c.Guid(nullable: false, identity: true),
                         Filled = c.DateTime(nullable: false),
-                        DisplayName = c.String(nullable: false),
-                        CodeName = c.String(nullable: false, maxLength: 254),
                     })
-                .PrimaryKey(t => t.Id)
-                .Index(t => t.CodeName, unique: true);
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
                 "dbo.Forms",
                 c => new
                     {
                         Id = c.Guid(nullable: false, identity: true),
+                        Name = c.String(nullable: false, maxLength: 254),
                         ProjectId = c.Guid(nullable: false),
                         Created = c.DateTime(nullable: false),
                         Description = c.String(),
-                        DisplayName = c.String(nullable: false),
-                        CodeName = c.String(nullable: false, maxLength: 254),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Projects", t => t.ProjectId, cascadeDelete: true)
-                .Index(t => t.ProjectId)
-                .Index(t => t.CodeName, unique: true);
+                .Index(t => t.ProjectId);
             
             CreateTable(
                 "dbo.Projects",
                 c => new
                     {
                         Id = c.Guid(nullable: false, identity: true),
+                        Name = c.String(nullable: false, maxLength: 254),
                         UserId = c.Guid(nullable: false),
                         Created = c.DateTime(nullable: false),
                         Description = c.String(),
-                        DisplayName = c.String(nullable: false),
-                        CodeName = c.String(nullable: false, maxLength: 254),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
-                .Index(t => t.UserId)
-                .Index(t => t.CodeName, unique: true);
+                .Index(t => t.UserId);
             
             CreateTable(
                 "dbo.Users",
                 c => new
                     {
                         Id = c.Guid(nullable: false, identity: true),
+                        Name = c.String(nullable: false, maxLength: 254),
                         GoogleId = c.String(nullable: false),
                         Registered = c.DateTime(nullable: false),
-                        DisplayName = c.String(nullable: false),
-                        CodeName = c.String(nullable: false, maxLength: 254),
                     })
-                .PrimaryKey(t => t.Id)
-                .Index(t => t.CodeName, unique: true);
+                .PrimaryKey(t => t.Id);
             
         }
         
@@ -109,16 +94,10 @@ namespace FaaS.Migrations.FaaSContextMigrations
             DropForeignKey("dbo.Elements", "FormId", "dbo.Forms");
             DropForeignKey("dbo.ElementValues", "ElementId", "dbo.Elements");
             DropForeignKey("dbo.ElementValues", "SessionId", "dbo.Sessions");
-            DropIndex("dbo.Users", new[] { "CodeName" });
-            DropIndex("dbo.Projects", new[] { "CodeName" });
             DropIndex("dbo.Projects", new[] { "UserId" });
-            DropIndex("dbo.Forms", new[] { "CodeName" });
             DropIndex("dbo.Forms", new[] { "ProjectId" });
-            DropIndex("dbo.Sessions", new[] { "CodeName" });
-            DropIndex("dbo.ElementValues", new[] { "CodeName" });
             DropIndex("dbo.ElementValues", new[] { "SessionId" });
             DropIndex("dbo.ElementValues", new[] { "ElementId" });
-            DropIndex("dbo.Elements", new[] { "CodeName" });
             DropIndex("dbo.Elements", new[] { "FormId" });
             DropTable("dbo.Users");
             DropTable("dbo.Projects");

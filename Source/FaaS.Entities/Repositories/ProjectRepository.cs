@@ -44,7 +44,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(project));
             }
 
-            User actualUser = _context.Users.SingleOrDefault(userForProject => userForProject.CodeName == user.CodeName);
+            User actualUser = _context.Users.SingleOrDefault(userForProject => userForProject.Id == user.Id);
             if (actualUser == null)
             {
                 return null;
@@ -65,7 +65,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedProject));
             }
 
-            Project oldProject = _context.Projects.SingleOrDefault(project => project.CodeName == updatedProject.CodeName);
+            Project oldProject = _context.Projects.SingleOrDefault(project => project.Id == updatedProject.Id);
             User projectUser = _context.Users.SingleOrDefault(user => user.Id == oldProject.UserId);
             oldProject.User = projectUser;
             if (oldProject == null)
@@ -73,7 +73,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentException("Project not in DB");
             }
 
-            oldProject.DisplayName = updatedProject.DisplayName;
+            oldProject.Name = updatedProject.Name;
             oldProject.Description = updatedProject.Description;
             _context.Entry(oldProject).State = EntityState.Modified;
 
@@ -89,8 +89,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(project));
             }
 
-            Project oldProject = _context.Projects.Where(projectToDelete => projectToDelete.CodeName == project.CodeName)
-                                                    .SingleOrDefault();
+            Project oldProject = _context.Projects.SingleOrDefault(projectToDelete => projectToDelete.Id == project.Id);
             if (oldProject == null)
             {
                 return null;
@@ -107,7 +106,7 @@ namespace FaaS.Entities.Repositories
 
         public async Task<IEnumerable<Project>> List(User user)
         {
-            User actualUser = _context.Users.SingleOrDefault(userForProject => userForProject.CodeName == user.CodeName);
+            User actualUser = _context.Users.SingleOrDefault(userForProject => userForProject.Id == user.Id);
             if (actualUser == null)
             {
                 return null;
@@ -118,11 +117,6 @@ namespace FaaS.Entities.Repositories
             .ToArrayAsync();
         }
 
-        public async Task<Project> Get(string name)
-            => await _context
-            .Projects
-            .Where(project => project.CodeName == name)
-            .SingleOrDefaultAsync();
         public async Task<Project> Get(Guid id)
           => await _context.Projects.SingleOrDefaultAsync(e => e.Id == id);
     }

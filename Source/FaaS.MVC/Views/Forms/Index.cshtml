@@ -5,15 +5,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Form - @Model.DisplayName</h2>
+<h2>Form - @Model.FormName</h2>
 
 <h3>Description</h3>
 <p>@Model.Description</p>
 <h3>Created</h3>
 <p>@Model.Created</p>
-@Html.ActionLink("Edit", "Edit", "Forms", new { id = Model.FormCodeName }) |
-@Html.ActionLink("Details", "Details", "Forms", new { id = Model.FormCodeName }) |
-@Html.ActionLink("Delete", "Delete", "Forms", new { id = Model.FormCodeName })
+@Html.ActionLink("Edit", "Edit", "Forms", new { id = Model.Id }) |
+@Html.ActionLink("Details", "Details", "Forms", new { id = Model.Id }) |
+@Html.ActionLink("Delete", "Delete", "Forms", new { id = Model.Id })
 <table class="table">
     <thead>
         <tr>
@@ -31,10 +31,12 @@
             @item.Value
         </td>
         <td>
-            @Html.ActionLink("Details", "Details", "Elements", new { id = item.Key })
+            @Html.ActionLink("Details", "Details", "Elements", new { id = item.Key }) |
+            @Html.ActionLink("Edit", "Edit", "Elements", new { id = item.Key }) |
+            @Html.ActionLink("Delete", "Delete", "Elements", new { id = item.Key })
         </td>
     </tr>
 }
     </tbody>
 </table>
-@Html.ActionLink("Add new Element", "Create", "Elements", new { id = Model.FormCodeName })
+@Html.ActionLink("Add new Element", "Create", "Elements", new { id = Model.Id.ToString() })

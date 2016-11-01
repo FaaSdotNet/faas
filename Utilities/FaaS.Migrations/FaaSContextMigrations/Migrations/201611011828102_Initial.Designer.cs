@@ -13,7 +13,7 @@ namespace FaaS.Migrations.FaaSContextMigrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201610251050580_Initial"; }
+            get { return "201611011828102_Initial"; }
         }
         
         string IMigrationMetadata.Source

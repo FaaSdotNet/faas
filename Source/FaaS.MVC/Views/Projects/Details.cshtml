@@ -12,22 +12,22 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.UserName)
+            @Html.DisplayNameFor(model => model.UserId)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.UserName)
+            @Html.DisplayFor(model => model.UserId)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.ProjectCodeName)
+            @Html.DisplayNameFor(model => model.Id)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ProjectCodeName)
+            @Html.DisplayFor(model => model.Id)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.DisplayName)
+            @Html.DisplayNameFor(model => model.ProjectName)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.DisplayName)
+            @Html.DisplayFor(model => model.ProjectName)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Description)
@@ -44,6 +44,6 @@
     </dl>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ProjectCodeName }) |
-    @Html.ActionLink("Back to Project", "Index", new { id = Model.ProjectCodeName })
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to Project", "Index", new { id = Model.Id })
 </div>

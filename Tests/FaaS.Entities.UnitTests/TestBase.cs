@@ -270,7 +270,7 @@ namespace FaaS.Entities.UnitTests
         {
             return new Project
             {
-                CodeName = $"TestProject{identifier}",
+                Name = $"TestProject{identifier}",
                 Created = new DateTime(2000, 1, identifier, 1, 1, 0),
                 Description = $"TestDescription{identifier}",
                 Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(identifier)}}}")
@@ -285,7 +285,7 @@ namespace FaaS.Entities.UnitTests
         {
             return new Form
             {
-                CodeName = $"TestForm{identifier}",
+                Name = $"TestForm{identifier}",
                 Created = new DateTime(2000, 1, identifier, 1, 1, 0),
                 Description = $"TestDescription{identifier}",
                 Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(identifier)}}}")
@@ -300,12 +300,11 @@ namespace FaaS.Entities.UnitTests
         {
             return new Element
             {
-                CodeName = $"TestElement{identifier}",
                 Description = $"TestDescription{identifier}",
                 Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(identifier)}}}"),
                 Options = $"TestOption{identifier}",
                 Type = 1,
-                Mandatory = mandatory
+                Required = mandatory
             };
         }
 

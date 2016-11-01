@@ -7,8 +7,7 @@ namespace FaaS.MVC.Models.Mapping
         public SessionMappingProfile()
         {
             CreateMap<Services.DataTransferModels.Session, SessionViewModel>()
-               .ForMember(dst => dst.SessionCodeName, opt => opt.MapFrom(src => src.SessionCodeName))
-               .ForMember(dst => dst.DisplayName, opt => opt.MapFrom(src => src.DisplayName))
+               .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
                .ForMember(dst => dst.ElementValueList, opt => opt.Ignore())
                .ForMember(dst => dst.Filled, opt => opt.MapFrom(src => src.Filled));
         }

@@ -7,12 +7,8 @@ namespace FaaS.MVC.Models
     public class SessionViewModel
     {
         [Required]
-        [Display(Name = "Code name")]
-        public string SessionCodeName { get; set; }
-
-        [Required]
-        [Display(Name = "Display name")]
-        public string DisplayName { get; set; }
+        [Display(Name = "ID")]
+        public Guid Id { get; set; }
 
         [Required]
         public DateTime Filled { get; set; }

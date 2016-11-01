@@ -14,14 +14,11 @@ namespace FaaS.Entities.Repositories
         Task<IEnumerable<ElementValue>> List(Session session);
 
         Task<ElementValue> Add(Element element, Session session, ElementValue elementValue);
-        Task<ElementValue> Update(ElementValue elementValue);
 
+        Task<ElementValue> Update(ElementValue elementValue);
 
         Task<ElementValue> Delete(ElementValue elementValue);
 
         Task<ElementValue> Get(Guid id);
-
-        Task<ElementValue> Get(string codeName);
-
     }
 }

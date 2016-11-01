@@ -22,14 +22,12 @@ namespace FaaS.Services.UnitTests
             // Ensures mapping from DTO user to DAO user is present
             var dataTransportUserModel = new DataTransferModels.User
             {
-                DisplayName = "Display Name",
-                UserCodeName = "CodeName",
+                UserName = "Display Name",
                 GoogleId = "TestGoogleId"
             };
             var expectedDataAccessUserModel = new User
             {
-                DisplayName = "Display Name",
-                CodeName = "CodeName",
+                Name = "Display Name",
                 GoogleId = "TestGoogleId"
             };
 
@@ -44,14 +42,12 @@ namespace FaaS.Services.UnitTests
             // Ensures mapping from DAO user to DTO usr is present
             var dataAccessUserModel = new User
             {
-                DisplayName = "Display Name",
-                CodeName = "CodeName",
+                Name = "Display Name",
                 GoogleId = "TestGoogleId"
             };
             var expectedDataTransportUserModel = new DataTransferModels.User
             {
-                DisplayName = "Display Name",
-                UserCodeName = "CodeName",
+                UserName = "Display Name",
                 GoogleId = "TestGoogleId"
             };
 
@@ -66,14 +62,12 @@ namespace FaaS.Services.UnitTests
             // Ensures mapping from DTO project to DAO project is present
             var dataTransportProjectModel = new DataTransferModels.Project
             {
-                DisplayName = "Display Name",
-                ProjectCodeName = "CodeName",
+                ProjectName = "Display Name",
                 Description = "TestDescription"
             };
             var expectedDataAccessProjectModel = new Project
             {
-                DisplayName = "Display Name",
-                CodeName = "CodeName",
+                Name = "Display Name",
                 Description = "TestDescription"
             };
 
@@ -88,14 +82,12 @@ namespace FaaS.Services.UnitTests
             // Ensures mapping from DAO project to DTO project is present
             var dataAccessProjectModel = new Project
             {
-                DisplayName = "Display Name",
-                CodeName = "CodeName",
+                Name = "Display Name",
                 Description = "TestDescription"
             };
             var expectedDataTransportProjectModel = new DataTransferModels.Project
             {
-                DisplayName = "Display Name",
-                ProjectCodeName = "CodeName",
+                ProjectName = "Display Name",
                 Description = "TestDescription"
             };
 
@@ -110,14 +102,12 @@ namespace FaaS.Services.UnitTests
             // Ensures mapping from DTO form to DAO form is present
             var dataTransportFormModel = new DataTransferModels.Form
             {
-                DisplayName = "Display Name",
-                FormCodeName = "CodeName",
+                FormName = "Display Name",
                 Description = "TestDescription"
             };
             var expectedDataAccessFormModel = new Form
             {
-                DisplayName = "Display Name",
-                CodeName = "CodeName",
+                Name = "Display Name",
                 Description = "TestDescription"
             };
 
@@ -132,14 +122,12 @@ namespace FaaS.Services.UnitTests
             // Ensures mapping from DAO form to DTO form is present
             var dataAccessFormModel = new Form
             {
-                DisplayName = "Display Name",
-                CodeName = "CodeName",
+                Name = "Display Name",
                 Description = "TestDescription"
             };
             var expectedDataTransportFormModel = new DataTransferModels.Form
             {
-                DisplayName = "Display Name",
-                FormCodeName = "CodeName",
+                FormName = "Display Name",
                 Description = "TestDescription"
             };
 
@@ -154,14 +142,10 @@ namespace FaaS.Services.UnitTests
             // Ensures mapping from DTO element to DAO element is present
             var dataTransportElementModel = new DataTransferModels.Element
             {
-                DisplayName = "Display Name",
-                ElementCodeName = "CodeName",
                 Description = "TestDescription"
             };
             var expectedDataAccessElementModel = new Element
             {
-                DisplayName = "Display Name",
-                CodeName = "CodeName",
                 Description = "TestDescription"
             };
 
@@ -176,14 +160,10 @@ namespace FaaS.Services.UnitTests
             // Ensures mapping from DAO element to DTO element is present
             var dataAccessElementModel = new Element
             {
-                DisplayName = "Display Name",
-                CodeName = "CodeName",
                 Description = "TestDescription"
             };
             var expectedDataTransportElementModel = new DataTransferModels.Element
             {
-                DisplayName = "Display Name",
-                ElementCodeName = "CodeName",
                 Description = "TestDescription"
             };
 
@@ -198,14 +178,10 @@ namespace FaaS.Services.UnitTests
             // Ensures mapping from DTO elementValue to DAO elementValue is present
             var dataTransportElementValueModel = new DataTransferModels.ElementValue
             {
-                DisplayName = "Display Name",
-                ElementValueCodeName = "CodeName",
                 Value = "TestValue"
             };
             var expectedDataAccessElementValueModel = new ElementValue
             {
-                DisplayName = "Display Name",
-                CodeName = "CodeName",
                 Value = "TestValue"
             };
 
@@ -220,14 +196,10 @@ namespace FaaS.Services.UnitTests
             // Ensures mapping from DAO elementValue to DTO elementValue is present
             var dataAccessElementValueModel = new ElementValue
             {
-                DisplayName = "Display Name",
-                CodeName = "CodeName",
                 Value = "TestValue"
             };
             var expectedDataTransportElementValueModel = new DataTransferModels.ElementValue
             {
-                DisplayName = "Display Name",
-                ElementValueCodeName = "CodeName",
                 Value = "TestValue"
             };
 
@@ -242,14 +214,10 @@ namespace FaaS.Services.UnitTests
             // Ensures mapping from DTO session to DAO session is present
             var dataTransportSessionModel = new DataTransferModels.Session
             {
-                DisplayName = "Display Name",
-                SessionCodeName = "CodeName",
                 Filled = new DateTime(1992, 5, 19, 3, 15, 0)
             };
             var expectedDataAccessSessionModel = new Session
             {
-                DisplayName = "Display Name",
-                CodeName = "CodeName",
                 Filled = new DateTime(1992, 5, 19, 3, 15, 0)
             };
 
@@ -264,14 +232,10 @@ namespace FaaS.Services.UnitTests
             // Ensures mapping from DAO session to DTO session is present
             var dataAccessSessionModel = new Session
             {
-                DisplayName = "Display Name",
-                CodeName = "CodeName",
                 Filled = new DateTime(1992, 5, 19, 3, 15, 0)
             };
             var expectedDataTransportSessionModel = new DataTransferModels.Session
             {
-                DisplayName = "Display Name",
-                SessionCodeName = "CodeName",
                 Filled = new DateTime(1992, 5, 19, 3, 15, 0)
             };
 

@@ -7,6 +7,9 @@ namespace FaaS.Entities.DataAccessModels
 {
     public class Project : ModelBase
     {
+        [Required, MaxLength(254)]
+        public string Name { get; set; }
+
         [ForeignKey("User")]
         public Guid UserId { get; set; }
         

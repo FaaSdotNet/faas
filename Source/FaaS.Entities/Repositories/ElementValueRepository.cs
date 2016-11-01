@@ -128,11 +128,5 @@ namespace FaaS.Entities.Repositories
             .ElementValues
             .Where(elementValue => elementValue.ElementId == element.Id)
             .ToArrayAsync();
-
-        public async Task<ElementValue> Get(string codeName)
-            => await _context
-            .ElementValues
-            .Where(elementValue => elementValue.CodeName == codeName)
-            .SingleOrDefaultAsync();
     }
 }

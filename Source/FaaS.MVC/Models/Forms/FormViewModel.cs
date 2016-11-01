@@ -5,11 +5,11 @@ namespace FaaS.MVC.Models
 {
     public class FormViewModel
     {
-        [Display(Name = "Code name")]
-        public string FormCodeName { get; set; }
+        [Display(Name = "ID")]
+        public Guid Id { get; set; }
 
-        [Display(Name = "Display name")]
-        public string DisplayName { get; set; }
+        [Display(Name = "Form name")]
+        public string FormName { get; set; }
 
         public DateTime Created { get; set; }
 

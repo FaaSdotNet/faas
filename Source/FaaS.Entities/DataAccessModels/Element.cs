@@ -21,7 +21,7 @@ namespace FaaS.Entities.DataAccessModels
         public int Type { get; set; }
 
         [Required]
-        public bool Mandatory { get; set; }
+        public bool Required { get; set; }
 
         /// <summary>
         /// Collection of all values for an element. Effectively creating 1:N relation.

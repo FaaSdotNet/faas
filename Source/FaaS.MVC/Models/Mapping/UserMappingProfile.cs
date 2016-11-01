@@ -7,8 +7,8 @@ namespace FaaS.MVC.Models.Mapping
         public UserMappingProfile()
         {
             CreateMap<Services.DataTransferModels.User, UserViewModel>()
-               .ForMember(dst => dst.UserCodeName, opt => opt.MapFrom(src => src.UserCodeName))
-               .ForMember(dst => dst.DisplayName, opt => opt.MapFrom(src => src.DisplayName))
+               .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
+               .ForMember(dst => dst.UserName, opt => opt.MapFrom(src => src.UserName))
                .ForMember(dst => dst.GoogleId, opt => opt.MapFrom(src => src.GoogleId))
                .ForMember(dst => dst.Registered, opt => opt.MapFrom(src => src.Registered));
 
@@ -16,8 +16,8 @@ namespace FaaS.MVC.Models.Mapping
                 .IncludeBase<Services.DataTransferModels.User, UserViewModel>();
 
             CreateMap<CreateUserViewModel, Services.DataTransferModels.User>()
-                .ForMember(dst => dst.UserCodeName, opt => opt.MapFrom(src => src.UserCodeName))
-                .ForMember(dst => dst.DisplayName, opt => opt.MapFrom(src => src.DisplayName))
+                .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dst => dst.UserName, opt => opt.MapFrom(src => src.UserName))
                 .ForMember(dst => dst.GoogleId, opt => opt.MapFrom(src => src.GoogleId))
                 .ForMember(dst => dst.Registered, opt => opt.MapFrom(src => src.Registered));
         }

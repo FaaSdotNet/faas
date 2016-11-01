@@ -60,8 +60,20 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedElement));
             }
 
-            _context.Elements.Attach(updatedElement);
-            _context.Entry(updatedElement).State = EntityState.Modified;
+            Element oldElement = _context.Elements.SingleOrDefault(element => element.Id == updatedElement.Id);
+            Form elementForm = _context.Forms.SingleOrDefault(form => form.Id == oldElement.FormId);
+            oldElement.Form = elementForm;
+            if (oldElement == null)
+            {
+                return null;
+            }
+
+            oldElement.Description = updatedElement.Description;
+            oldElement.Required = updatedElement.Required;
+            oldElement.Options = updatedElement.Options;
+            oldElement.Type = updatedElement.Type;
+
+            _context.Entry(oldElement).State = EntityState.Modified;
          
             await _context.SaveChangesAsync();
 
@@ -75,7 +87,13 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(element));
             }
 
-            var deletedElement = _context.Elements.Remove(element);
+            Element oldElement = _context.Elements.SingleOrDefault(elementToDelete => elementToDelete.Id == element.Id);
+            if (oldElement == null)
+            {
+                return null;
+            }
+
+            var deletedElement = _context.Elements.Remove(oldElement);
             await _context.SaveChangesAsync();
 
             return deletedElement;
@@ -92,11 +110,5 @@ namespace FaaS.Entities.Repositories
             .Elements
             .Where(element => element.FormId == form.Id)
             .ToArrayAsync();
-
-        public async Task<Element> Get(string name)
-            => await _context
-            .Elements
-            .Where(element => element.CodeName == name)
-            .SingleOrDefaultAsync();
     }
 }

@@ -4,9 +4,9 @@ namespace FaaS.Services.DataTransferModels
 {
     public class Form
     {
-        public string FormCodeName { get; set; }
+        public Guid Id { get; set; }
 
-        public string DisplayName { get; set; }
+        public string FormName { get; set; }
 
         public DateTime Created { get; set; }
 

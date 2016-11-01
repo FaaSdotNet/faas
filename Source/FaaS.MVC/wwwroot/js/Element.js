@@ -86,4 +86,41 @@ $(document).ready(function () {
 
     $("#na").hide();
     $("#delete").hide();
+
+    if ($("#Options").val() != "")
+    {
+        $("#delete").show();
+        var optionsDictionary = JSON.parse($("#Options").val());
+        optionsCount = Object.keys(optionsDictionary).length;
+        for (var i = 1; i <= optionsCount; i++)
+        {
+            var optionHtml = '<div id="option' + i + '"><span>Option ' + i + ": </span>";
+            optionHtml += '<input id="input' + i + '" type="text" disabled>&nbsp;&nbsp;';
+            optionHtml += '<a id="edit' + i + '" href="#"><i class="glyphicon glyphicon-pencil"></i></a></div>';
+
+            if (i == 1) {
+                $("#Options").after(optionHtml);
+            }
+            else {
+                $("#option" + (i - 1)).after(optionHtml);
+            }
+
+            $("#input" + i).val(optionsDictionary[i]);
+
+            $("#edit" + i).click(function () {
+                var id = $(this).attr("id");
+                id = id.substr(4);
+                if ($("#input" + id).attr("disabled")) {
+                    $("#input" + id).attr('disabled', false);
+                    $(this).children().first().toggleClass("glyphicon glyphicon-ok");
+                    $(this).children().first().toggleClass("glyphicon glyphicon-pencil");
+                }
+                else {
+                    $("#input" + id).attr('disabled', true);
+                    $(this).children().first().toggleClass("glyphicon glyphicon-ok");
+                    $(this).children().first().toggleClass("glyphicon glyphicon-pencil");
+                }
+            });
+        }
+    }
 });

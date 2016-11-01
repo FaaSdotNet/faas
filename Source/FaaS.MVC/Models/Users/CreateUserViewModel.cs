@@ -9,11 +9,11 @@ namespace FaaS.MVC.Models
     public class CreateUserViewModel : IValidatableObject
     {
         [Required]
-        [Display(Name = "Code name")]
-        public string UserCodeName { get; set; }
+        [Display(Name = "ID")]
+        public Guid Id { get; set; }
 
-        [Display(Name = "Display name")]
-        public string DisplayName { get; set; }
+        [Display(Name = "User name")]
+        public string UserName { get; set; }
 
         [Required]
         public string GoogleId { get; set; }
@@ -28,7 +28,7 @@ namespace FaaS.MVC.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (UserCodeName != UrlEncoder.Default.Encode(UserCodeName))
+            if (Id.ToString() != UrlEncoder.Default.Encode(Id.ToString()))
             {
                 yield return new ValidationResult("Invalid code name");
             }

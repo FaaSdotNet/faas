@@ -4,6 +4,7 @@ using FaaS.Services;
 using FaaS.Services.DataTransferModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -38,10 +39,10 @@ namespace FaaS.MVC.Controllers.Web
 
         public async Task<IActionResult> Details()
         {
-            var userCodeName = HttpContext.Session.GetString("userCodeName");
-            var existingUser = await _faaSService.GetUserCodeName(userCodeName);
+            var userId = HttpContext.Session.GetString("userId");
+            var existingUser = await _faaSService.GetUser(new Guid(userId));
 
-            ViewData["userDisplayName"] = existingUser.DisplayName;
+            ViewData["userName"] = existingUser.UserName;
 
             return View(_mapper.Map<UserDetailsViewModel>(existingUser));
         }
@@ -51,14 +52,14 @@ namespace FaaS.MVC.Controllers.Web
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserCodeName", "DisplayName", "GoogleId", "Registered")]CreateUserViewModel user)
+        public async Task<IActionResult> Create([Bind("UserName", "GoogleId", "Registered")]CreateUserViewModel user)
         {
             if (ModelState.IsValid)
             {
                 var userDTO = _mapper.Map<CreateUserViewModel, User>(user);
                 var addedUser = await _faaSService.AddUser(userDTO);
 
-                HttpContext.Session.SetString("userCodeName", addedUser.UserCodeName);
+                HttpContext.Session.SetString("userId", addedUser.Id.ToString());
                 return RedirectToAction("Index", "Home");
             }
             return View(user);

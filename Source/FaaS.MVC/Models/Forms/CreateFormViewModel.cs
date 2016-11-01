@@ -10,11 +10,11 @@ namespace FaaS.MVC.Models
     {
         /*[Required]    // user (probably) doesn't set codename
         [Display(Name = "Code name")]*/ 
-        public string FormCodeName { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
         [Display(Name ="Form name")]
-        public string DisplayName { get; set; }
+        public string FormName { get; set; }
 
         public DateTime Created { get; set; }
 
@@ -24,11 +24,11 @@ namespace FaaS.MVC.Models
         
         public SelectList ProjectList { get; set; }
 
-        public string SelectedProjectCodeName { get; set; }
+        public Guid SelectedProjectId { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (FormCodeName != UrlEncoder.Default.Encode(DisplayName))
+            if (Id.ToString() != UrlEncoder.Default.Encode(Id.ToString()))
             {
                 yield return new ValidationResult("Invalid code name");
             }

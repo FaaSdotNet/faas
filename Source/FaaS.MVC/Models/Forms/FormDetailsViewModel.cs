@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace FaaS.MVC.Models
 {
     public class FormDetailsViewModel : FormViewModel
     {
         [Display(Name = "Project")]
-        public string ProjectName { get; set; }
+        public Guid ProjectId { get; set; }
     }
 }

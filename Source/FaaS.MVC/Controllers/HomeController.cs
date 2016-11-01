@@ -23,22 +23,22 @@ namespace FaaS.MVC.Controllers
         [ActionName("Index")]
         public async Task<IActionResult> Index()
         {
-            string userCodeName = HttpContext.Session.GetString("userCodeName");
-            if (userCodeName != null)
+            string userId = HttpContext.Session.GetString("userId");
+            if (userId != null)
             {
-                var userDTO = await _faaSService.GetUserCodeName(userCodeName);
-                ViewData["userDisplayName"] = userDTO.DisplayName;
+                var userDTO = await _faaSService.GetUser(new System.Guid(userId));
+                ViewData["userName"] = userDTO.UserName;
                 
                 var projectsDTO = await _faaSService.GetAllProjects(userDTO);
                 ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
-                    p => p.ProjectCodeName.ToString(),
-                    p => p.DisplayName.ToString());
+                    p => p.Id.ToString(),
+                    p => p.ProjectName.ToString());
 
                 return View(_mapper.Map<UserViewModel>(userDTO));
             }
             else
             {
-                ViewData["userDisplayName"] = null;
+                ViewData["userName"] = null;
                 return View();
             }
         }
@@ -47,22 +47,22 @@ namespace FaaS.MVC.Controllers
         {
             ViewData["Message"] = "Your application description page.";
 
-            string userCodeName = HttpContext.Session.GetString("userCodeName");
-            if (userCodeName != null)
+            string userId = HttpContext.Session.GetString("userId");
+            if (userId != null)
             {
-                var userDTO = await _faaSService.GetUserCodeName(userCodeName);
-                ViewData["userDisplayName"] = userDTO.DisplayName;
+                var userDTO = await _faaSService.GetUser(new System.Guid(userId));
+                ViewData["userName"] = userDTO.UserName;
 
                 var projectsDTO = await _faaSService.GetAllProjects(userDTO);
                 ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
-                    p => p.ProjectCodeName.ToString(),
-                    p => p.DisplayName.ToString());
+                    p => p.Id.ToString(),
+                    p => p.ProjectName.ToString());
 
                 return View(_mapper.Map<UserViewModel>(userDTO));
             }
             else
             {
-                ViewData["userDisplayName"] = null;
+                ViewData["userName"] = null;
                 return View();
             }
         }
@@ -71,22 +71,22 @@ namespace FaaS.MVC.Controllers
         {
             ViewData["Message"] = "Your contact page.";
 
-            string userCodeName = HttpContext.Session.GetString("userCodeName");
-            if (userCodeName != null)
+            string userId = HttpContext.Session.GetString("userId");
+            if (userId != null)
             {
-                var userDTO = await _faaSService.GetUserCodeName(userCodeName);
-                ViewData["userDisplayName"] = userDTO.DisplayName;
+                var userDTO = await _faaSService.GetUser(new System.Guid(userId));
+                ViewData["userName"] = userDTO.UserName;
 
                 var projectsDTO = await _faaSService.GetAllProjects(userDTO);
                 ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
-                    p => p.ProjectCodeName.ToString(),
-                    p => p.DisplayName.ToString());
+                    p => p.Id.ToString(),
+                    p => p.ProjectName.ToString());
 
                 return View(_mapper.Map<UserViewModel>(userDTO));
             }
             else
             {
-                ViewData["userDisplayName"] = null;
+                ViewData["userName"] = null;
                 return View();
             }
         }
@@ -105,9 +105,9 @@ namespace FaaS.MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                var existingUser = await _faaSService.GetUserGoogleId(user.GoogleId);
+                var existingUser = await _faaSService.GetUser(user.GoogleId);
 
-                HttpContext.Session.SetString("userCodeName", existingUser.UserCodeName);
+                HttpContext.Session.SetString("userId", existingUser.Id.ToString());
                 return RedirectToAction("Index", "Home");
             }
             return View(user);
@@ -116,7 +116,7 @@ namespace FaaS.MVC.Controllers
         // GET: Home/LogOut
         public IActionResult LogOut()
         {
-            HttpContext.Session.Remove("userCodeName");
+            HttpContext.Session.Remove("userId");
 
             return RedirectToAction("Index", "Home");
         }

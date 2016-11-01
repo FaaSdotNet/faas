@@ -5,11 +5,11 @@ namespace FaaS.MVC.Models
 {
     public class ProjectViewModel
     {
-        [Display(Name = "Code name")]
-        public string ProjectCodeName { get; set; }
+        [Display(Name = "ID")]
+        public Guid Id { get; set; }
 
-        [Display(Name = "Display name")]
-        public string DisplayName { get; set; }
+        [Display(Name = "Project name")]
+        public string ProjectName { get; set; }
 
         public string Description { get; set; }
 

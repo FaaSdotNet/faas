@@ -17,7 +17,8 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void GetSingleProject_Existing_ReturnsProject()
         {
-            var actualProject = await _ProjectRepository.Get("TestProject1");
+            var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
+            var actualProject = await _ProjectRepository.Get(id);
 
             Assert.NotNull(actualProject);
             Assert.IsType<Project>(actualProject);
@@ -26,9 +27,9 @@ namespace FaaS.Entities.UnitTests
         [Theory]
         [InlineData(null)]
         [InlineData("")]
-        public async void GetSingleProject_NullOrEmpty_ReturnsProject(string projectName)
+        public async void GetSingleProject_NullOrEmpty_ReturnsProject(Guid id)
         {
-            var actualProject = await _ProjectRepository.Get(projectName);
+            var actualProject = await _ProjectRepository.Get(id);
 
             Assert.Null(actualProject);
         }
@@ -60,7 +61,7 @@ namespace FaaS.Entities.UnitTests
             User user = null;
             Project project = new Project
             {
-                CodeName = "TestProjectNotInDb",
+                Name = "TestProjectNotInDb",
                 Created = DateTime.Now,
                 Description = "TestDescriptionNotInDb"
             };
@@ -74,7 +75,8 @@ namespace FaaS.Entities.UnitTests
 
             var newProject = new Project
             {
-                CodeName = "TestProject01",
+                Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"),
+                Name = "TestProject01",
                 Created = DateTime.Now,
                 Description = "TestDescription01",
                 Forms = new List<Form>()
@@ -84,13 +86,13 @@ namespace FaaS.Entities.UnitTests
 
             // Checks returned value
             Assert.NotNull(actualProject);
-            Assert.Equal(newProject.CodeName, actualProject.CodeName);
+            Assert.Equal(newProject.Name, actualProject.Name);
             Assert.Equal(newProject.Created, actualProject.Created);
             Assert.Equal(newProject.Description, actualProject.Description);
             Assert.NotEqual(Guid.Empty, actualProject.Id);
 
             // Check storage is persistant
-            Assert.NotNull(_ProjectRepository.Get(newProject.CodeName));
+            Assert.NotNull(_ProjectRepository.Get(newProject.Id));
         }
 
         [Fact]
@@ -104,7 +106,7 @@ namespace FaaS.Entities.UnitTests
         {
             var newProject = new Project
             {
-               CodeName = "NotInDbName",
+               Name = "NotInDbName",
                Description = "NotInDbDescription",
                Created = DateTime.Now
             };
@@ -115,16 +117,17 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void UpdateProject_NotNull_InDB()
         {
-            var actualProject = await _ProjectRepository.Get("TestProject1");
+            var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
+            var actualProject = await _ProjectRepository.Get(id);
 
-            actualProject.CodeName = "NotHisPreviousName";
+            actualProject.Name = "NotHisPreviousName";
 
             actualProject = await _ProjectRepository.Update(actualProject);
-            actualProject = await _ProjectRepository.Get("NotHisPreviousName");
+            actualProject = await _ProjectRepository.Get(id);
 
             // Checks returned value
             Assert.NotNull(actualProject);
-            Assert.Equal("NotHisPreviousName", actualProject.CodeName);
+            Assert.Equal("NotHisPreviousName", actualProject.Name);
             Assert.NotEqual(Guid.Empty, actualProject.Id);
         }
 
@@ -142,7 +145,7 @@ namespace FaaS.Entities.UnitTests
 
             var newProject = new Project
             {
-                CodeName = "TestProject03",
+                Name = "TestProject03",
                 Created = DateTime.Now,
                 Description = "TestDescription03",
                 Forms = forms
@@ -152,14 +155,14 @@ namespace FaaS.Entities.UnitTests
 
             // Checks returned value
             Assert.NotNull(actualProject);
-            Assert.Equal(newProject.CodeName, actualProject.CodeName);
+            Assert.Equal(newProject.Name, actualProject.Name);
             Assert.Equal(newProject.Created, actualProject.Created);
             Assert.Equal(newProject.Description, actualProject.Description);
             Assert.NotEqual(Guid.Empty, actualProject.Id);
             Assert.Equal(3, actualProject.Forms.Count);
 
             // Checks storage is persistant
-            Assert.NotNull(_ProjectRepository.Get(newProject.CodeName));
+            Assert.NotNull(_ProjectRepository.Get(newProject.Id));
         }
 
         [Fact]
@@ -173,7 +176,7 @@ namespace FaaS.Entities.UnitTests
         {
             var newProject = new Project
             {
-                CodeName = "TestProjectNotInDb",
+                Name = "TestProjectNotInDb",
                 Created = DateTime.Now,
                 Description = "TestDescriptionNotInDb",
                 Forms = new List<Form>()
@@ -189,7 +192,7 @@ namespace FaaS.Entities.UnitTests
 
             var newProject = new Project
             {
-                CodeName = "TestProject01",
+                Name = "TestProject01",
                 Created = DateTime.Now,
                 Description = "TestDescription01",
                 Forms = new List<Form>()
@@ -208,7 +211,7 @@ namespace FaaS.Entities.UnitTests
             //Assert.Equal(numProjects - 1, numProjectsAfter);
             Assert.NotNull(deletedProject);
             Assert.Null(deletedProject2);
-            Assert.Equal(actualProject.CodeName, deletedProject.CodeName);
+            Assert.Equal(actualProject.Name, deletedProject.Name);
             Assert.Equal(actualProject.Created, deletedProject.Created);
             Assert.Equal(actualProject.Description, deletedProject.Description);
         }

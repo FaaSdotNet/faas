@@ -1,4 +1,5 @@
 ﻿using FaaS.Services.DataTransferModels;
+using System;
 using System.Threading.Tasks;
 
 namespace FaaS.Services
@@ -7,9 +8,9 @@ namespace FaaS.Services
     {
         Task<User> AddUser(User user);
 
-        Task<User> GetUserCodeName(string codeName);
+        Task<User> GetUser(Guid id);
 
-        Task<User> GetUserGoogleId(string googleId);
+        Task<User> GetUser(string googleId);
 
         Task<User[]> GetAllUsers();
 
@@ -19,7 +20,7 @@ namespace FaaS.Services
 
         Task<Project> AddProject(User user, Project project);
 
-        Task<Project> GetProject(string codeName);
+        Task<Project> GetProject(Guid id);
 
         Task<Project[]> GetAllProjects(User user);
 
@@ -29,7 +30,7 @@ namespace FaaS.Services
 
         Task<Form> AddForm(Project project, Form form);
 
-        Task<Form> GetForm(string codeName);
+        Task<Form> GetForm(Guid id);
 
         Task<Form[]> GetAllForms();
 
@@ -41,7 +42,7 @@ namespace FaaS.Services
 
         Task<Element> AddElement(Form form, Element element);
 
-        Task<Element> GetElement(string codeName);
+        Task<Element> GetElement(Guid id);
 
         Task<Element[]> GetAllElements();
 
@@ -53,7 +54,7 @@ namespace FaaS.Services
 
         Task<ElementValue> AddElementValue(Element element, Session session, ElementValue elementValue);
 
-        Task<ElementValue> GetElementValue(Element element, Session session, string codeName);
+        Task<ElementValue> GetElementValue(Guid id);
 
         Task<ElementValue[]> GetAllElementValues(Element element);
 
@@ -65,7 +66,7 @@ namespace FaaS.Services
 
         Task<Session> AddSession(Session session);
 
-        Task<Session> GetSession(string codeName);
+        Task<Session> GetSession(Guid id);
 
         Task<Session[]> GetAllSessions();
 

@@ -44,18 +44,18 @@ namespace FaaS.Services
         {
             _logger.LogInformation("AddElement");
 
-            var existingForm = await _formRepository.Get(form.FormCodeName);
+            var existingForm = await _formRepository.Get(form.Id);
             if (existingForm == null)
             {
-                var message = $"Form with code name {form.FormCodeName} does not exist.";
+                var message = $"Form with id {form.Id} does not exist.";
                 _logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
 
-            var existingElement = await _elementRepository.Get(element.ElementCodeName);
+            var existingElement = await _elementRepository.Get(element.Id);
             if (existingElement != null)
             {
-                var message = $"Element with code name {element.ElementCodeName} already exists.";
+                var message = $"Element with id {element.Id} already exists.";
                 _logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
@@ -71,26 +71,26 @@ namespace FaaS.Services
         {
             _logger.LogInformation("AddElementValue");
 
-            var existingElement = await _elementRepository.Get(element.ElementCodeName);
+            var existingElement = await _elementRepository.Get(element.Id);
             if (existingElement == null)
             {
-                var message = $"Element with code name {element.ElementCodeName} does not exist.";
+                var message = $"Element with id {element.Id} does not exist.";
                 _logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
 
-            var existingSession = await _sessionRepository.Get(session.SessionCodeName);
+            var existingSession = await _sessionRepository.Get(session.Id);
             if (existingSession == null)
             {
-                var message = $"Session with code name {session.SessionCodeName} does not exist.";
+                var message = $"Session with id {session.Id} does not exist.";
                 _logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
 
-            var existingElementValue = await _elementValueRepository.Get(elementValue.ElementValueCodeName);
+            var existingElementValue = await _elementValueRepository.Get(elementValue.Id);
             if (existingElementValue != null)
             {
-                var message = $"Element value with code name {elementValue.ElementValueCodeName} already exists.";
+                var message = $"Element value with id {elementValue.Id} already exists.";
                 _logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
@@ -107,18 +107,18 @@ namespace FaaS.Services
         {
             _logger.LogInformation("AddForm");
 
-            var existingProject = await _projectRepository.Get(project.ProjectCodeName);
+            var existingProject = await _projectRepository.Get(project.Id);
             if (existingProject == null)
             {
-                var message = $"Project with code name {project.ProjectCodeName} does not exist.";
+                var message = $"Project with id {project.Id} does not exist.";
                 _logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
 
-            var existingForm = await _formRepository.Get(form.FormCodeName);
+            var existingForm = await _formRepository.Get(form.Id);
             if (existingForm != null)
             {
-                var message = $"Form with code name {form.FormCodeName} already exists.";
+                var message = $"Form with id {form.Id} already exists.";
                 _logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
@@ -134,7 +134,7 @@ namespace FaaS.Services
         {
             _logger.LogInformation("AddProject");
 
-            var existingUser = await _userRepository.GetGoogle(user.GoogleId);
+            var existingUser = await _userRepository.Get(user.GoogleId);
             if (existingUser == null)
             {
                 var message = $"User with Google ID {user.GoogleId} does not exist.";
@@ -142,10 +142,10 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            var existingProject = await _projectRepository.Get(project.ProjectCodeName);
+            var existingProject = await _projectRepository.Get(project.Id);
             if (existingProject != null)
             {
-                var message = $"Project with code name {project.ProjectCodeName} already exists.";
+                var message = $"Project with id {project.Id} already exists.";
                 _logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
@@ -161,10 +161,10 @@ namespace FaaS.Services
         {
             _logger.LogInformation("AddSession");
 
-            var existingSession = await _sessionRepository.Get(session.SessionCodeName);
+            var existingSession = await _sessionRepository.Get(session.Id);
             if (existingSession != null)
             {
-                var message = $"Session with code name {session.SessionCodeName} already exists.";
+                var message = $"Session with id {session.Id} already exists.";
                 _logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
@@ -206,10 +206,10 @@ namespace FaaS.Services
         {
             _logger.LogInformation("GetAllElements for form");
 
-            var existingForm = await _formRepository.Get(form.FormCodeName);
+            var existingForm = await _formRepository.Get(form.Id);
             if (existingForm == null)
             {
-                var message = $"Form with code name {form.FormCodeName} does not exist.";
+                var message = $"Form with id {form.Id} does not exist.";
                 _logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
@@ -224,10 +224,10 @@ namespace FaaS.Services
         {
             _logger.LogInformation("GetAllElementValues for session");
 
-            var existingSession = await _sessionRepository.Get(session.SessionCodeName);
+            var existingSession = await _sessionRepository.Get(session.Id);
             if (existingSession == null)
             {
-                var message = $"Session with code name {session.SessionCodeName} does not exist.";
+                var message = $"Session with id {session.Id} does not exist.";
                 _logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
@@ -242,10 +242,10 @@ namespace FaaS.Services
         {
             _logger.LogInformation("GetAllElementValues for element");
 
-            var existingElement = await _elementRepository.Get(element.ElementCodeName);
+            var existingElement = await _elementRepository.Get(element.Id);
             if (existingElement == null)
             {
-                var message = $"Element with code name {element.ElementCodeName} does not exist.";
+                var message = $"Element with id {element.Id} does not exist.";
                 _logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
@@ -269,10 +269,10 @@ namespace FaaS.Services
         {
             _logger.LogInformation("GetAllForms for project");
 
-            var existingProject = await _projectRepository.Get(project.ProjectCodeName);
+            var existingProject = await _projectRepository.Get(project.Id);
             if (existingProject == null)
             {
-                var message = $"Project with code name {project.ProjectCodeName} does not exist.";
+                var message = $"Project with id {project.Id} does not exist.";
                 _logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
@@ -287,7 +287,7 @@ namespace FaaS.Services
         {
             _logger.LogInformation("GetAllProjects for user");
 
-            var existingUser = await _userRepository.GetGoogle(user.GoogleId);
+            var existingUser = await _userRepository.Get(user.GoogleId);
             if (existingUser == null)
             {
                 var message = $"User with Google ID {user.GoogleId} does not exist.";
@@ -317,83 +317,65 @@ namespace FaaS.Services
             return _mapper.Map<DataTransferModels.User[]>(dataAccessUserModel);
         }
 
-        public async Task<DataTransferModels.Element> GetElement(string codeName)
+        public async Task<DataTransferModels.Element> GetElement(Guid id)
         {
             _logger.LogInformation("GetElement");
             
-            var dataAccessElementModel = await _elementRepository.Get(codeName);
+            var dataAccessElementModel = await _elementRepository.Get(id);
 
             return _mapper.Map<DataTransferModels.Element>(dataAccessElementModel);
         }
 
-        public async Task<DataTransferModels.ElementValue> GetElementValue(DataTransferModels.Element element, DataTransferModels.Session session, string codeName)
+        public async Task<DataTransferModels.ElementValue> GetElementValue(Guid id)
         {
             _logger.LogInformation("GetElementValue");
 
-            /*
-            var existingElement = await _elementRepository.Get(element.ElementCodeName);
-            if (existingElement == null)
-            {
-                var message = $"Element with code name {element.ElementCodeName} does not exist.";
-                _logger.LogError(message);
-                throw new InvalidOperationException(message);
-            }
-
-            var existingSession = await _sessionRepository.Get(session.SessionCodeName);
-            if (existingSession == null)
-            {
-                var message = $"Session with code name {session.SessionCodeName} does not exist.";
-                _logger.LogError(message);
-                throw new InvalidOperationException(message);
-            }
-             */
-
-            var dataAccessElementValueModel = await _elementValueRepository.Get(codeName);
+            var dataAccessElementValueModel = await _elementValueRepository.Get(id);
 
             return _mapper.Map<DataTransferModels.ElementValue>(dataAccessElementValueModel);
         }
 
-        public async Task<DataTransferModels.Form> GetForm(string codeName)
+        public async Task<DataTransferModels.Form> GetForm(Guid id)
         {
             _logger.LogInformation("GetForm");
 
-            var dataAccessFormModel = await _formRepository.Get(codeName);
+            var dataAccessFormModel = await _formRepository.Get(id);
 
             return _mapper.Map<DataTransferModels.Form>(dataAccessFormModel);
         }
 
-        public async Task<DataTransferModels.Project> GetProject(string codeName)
+        public async Task<DataTransferModels.Project> GetProject(Guid id)
         {
             _logger.LogInformation("GetProject");
 
-            var dataAccessProjectModel = await _projectRepository.Get(codeName);
+            var dataAccessProjectModel = await _projectRepository.Get(id);
 
             return _mapper.Map<DataTransferModels.Project>(dataAccessProjectModel);
         }
 
-        public async Task<DataTransferModels.Session> GetSession(string codeName)
+        public async Task<DataTransferModels.Session> GetSession(Guid id)
         {
             _logger.LogInformation("GetSession");
 
-            Session dataAccessSessionModel = await _sessionRepository.Get(codeName);
+            Session dataAccessSessionModel = await _sessionRepository.Get(id);
 
             return _mapper.Map<DataTransferModels.Session>(dataAccessSessionModel);
         }
 
-        public async Task<DataTransferModels.User> GetUserCodeName(string codeName)
+        public async Task<DataTransferModels.User> GetUser(Guid id)
         {
             _logger.LogInformation("GetUser");
 
-            User dataAccessUserModel = await _userRepository.Get(codeName);
+            User dataAccessUserModel = await _userRepository.Get(id);
 
             return _mapper.Map<DataTransferModels.User>(dataAccessUserModel);
         }
 
-        public async Task<DataTransferModels.User> GetUserGoogleId(string googleId)
+        public async Task<DataTransferModels.User> GetUser(string googleId)
         {
-            _logger.LogInformation("GetUserGoogleId");
+            _logger.LogInformation("GetUser with Google ID");
 
-            User dataAccessUserModel = await _userRepository.GetGoogle(googleId);
+            User dataAccessUserModel = await _userRepository.Get(googleId);
 
             return _mapper.Map<DataTransferModels.User>(dataAccessUserModel);
         }

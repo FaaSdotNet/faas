@@ -23,7 +23,8 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void GetAllElementElementValues_ReturnsAllElementValueInstancesForElement()
         {
-            Element actualElement = await _ElementRepository.Get("TestElement1");
+            var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
+            Element actualElement = await _ElementRepository.Get(id);
             var actualElementValues = await _ElementValueRepository.List(actualElement);
 
             Assert.NotNull(actualElementValues);
@@ -52,7 +53,8 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void AddElementValue_Null_Throws()
         {
-            Element actualElement = await _ElementRepository.Get("TestElement1");
+            var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
+            Element actualElement = await _ElementRepository.Get(id);
             Session actualSession = await _SessionRepository.Get(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"));
             await Assert.ThrowsAsync<ArgumentNullException>(() => _ElementValueRepository.Add(actualElement, actualSession, null));
         }
@@ -75,7 +77,8 @@ namespace FaaS.Entities.UnitTests
             {
                 Value = "NotInDbValue"
             };
-            Element actualElement = await _ElementRepository.Get("TestElement1");
+            var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
+            Element actualElement = await _ElementRepository.Get(id);
             await Assert.ThrowsAsync<ArgumentNullException>(() => _ElementValueRepository.Add(actualElement, null, newElementValue));
         }
 
@@ -88,11 +91,10 @@ namespace FaaS.Entities.UnitTests
             };
             Element newElement = new Element()
             {
-                CodeName = "TestElementNotInDb",
                 Type = 2,
                 Description = "TestDescriptionNotInDb",
                 ElementValues = new List<ElementValue>(),
-                Mandatory = true,
+                Required = true,
                 Options = "TestOption"
             };
             Session actualSession = await _SessionRepository.Get(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"));
@@ -107,7 +109,8 @@ namespace FaaS.Entities.UnitTests
             {
                 Value = "NotInDbValue"
             };
-            Element actualElement = await _ElementRepository.Get("TestElement1");
+            var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
+            Element actualElement = await _ElementRepository.Get(id);
             Session newSession = new Session()
             {
                 Filled = DateTime.Now,
@@ -119,7 +122,8 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void AddElementValue_NotNull_ReturnsElementValueWithId()
         {
-            Element actualElement = await _ElementRepository.Get("TestElement1");
+            var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
+            Element actualElement = await _ElementRepository.Get(id);
 
             var newElementValue = new ElementValue
             {
@@ -174,7 +178,8 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void AddElementValue_CorrectParts_ReturnsElementValueWithId()
         {
-            Element actualElement = await _ElementRepository.Get("TestElement1");
+            var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
+            Element actualElement = await _ElementRepository.Get(id);
             Session actualSession = await _SessionRepository.Get(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"));
             var newElementValue = new ElementValue
             {

@@ -7,7 +7,6 @@ namespace FaaS.Entities.Repositories
 {
     public interface IElementRepository
     {
-        Task<Element> Get(string name);
         Task<Element> Get(Guid id);
 
         Task<IEnumerable<Element>> GetAll();

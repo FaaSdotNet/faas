@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
@@ -16,17 +17,8 @@ namespace FaaS.MVC.Models
 
     public class CreateElementViewModel : IValidatableObject
     {
-        public CreateElementViewModel()
-        {
-            ElementCodeName = "";
-        }
-
-        //[Required]
-        [Display(Name = "Code name")]
-        public string ElementCodeName;
-
-        //[Required]
-        public string DisplayName { get; set; }
+        [Display(Name = "ID")]
+        public Guid Id;
 
         public string Description { get; set; }
 
@@ -34,15 +26,15 @@ namespace FaaS.MVC.Models
 
         public InputType Type { get; set; }
 
-        public bool Mandatory { get; set; }
+        public bool Required { get; set; }
 
         public SelectList ElementValueList { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (ElementCodeName != UrlEncoder.Default.Encode(ElementCodeName))
+            if (Id.ToString() != UrlEncoder.Default.Encode(Id.ToString()))
             {
-                yield return new ValidationResult("Invalid code name");
+                yield return new ValidationResult("Invalid ID.");
             }
         }
     }

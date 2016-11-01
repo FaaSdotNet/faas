@@ -9,11 +9,11 @@ namespace FaaS.MVC.Models
     public class CreateProjectViewModel : IValidatableObject
     {
         [Required]
-        [Display(Name = "Code name")]
-        public string ProjectCodeName { get; set; }
+        [Display(Name = "ID")]
+        public Guid Id { get; set; }
 
         [Required]
-        public string DisplayName { get; set; }
+        public string ProjectName { get; set; }
 
         public string Description { get; set; }
 
@@ -27,7 +27,7 @@ namespace FaaS.MVC.Models
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (ProjectCodeName != UrlEncoder.Default.Encode(ProjectCodeName))
+            if (Id.ToString() != UrlEncoder.Default.Encode(Id.ToString()))
             {
                 yield return new ValidationResult("Invalid code name");
             }

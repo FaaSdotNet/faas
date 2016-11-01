@@ -5,11 +5,11 @@ namespace FaaS.MVC.Models
 {
     public class UserViewModel
     {
-        [Display(Name = "Code name")]
-        public string UserCodeName { get; set; }
+        [Display(Name = "ID")]
+        public Guid Id { get; set; }
 
-        [Display(Name = "Display name")]
-        public string DisplayName { get; set; }
+        [Display(Name = "User name")]
+        public string UserName { get; set; }
 
         public string GoogleId { get; set; }
 

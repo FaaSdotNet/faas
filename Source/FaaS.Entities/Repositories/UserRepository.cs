@@ -82,7 +82,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(updatedUser));
             }
 
-            User oldUser = _context.Users.Where(user => user.Id == updatedUser.Id).SingleOrDefault();
+            User oldUser = _context.Users.SingleOrDefault(user => user.Id == updatedUser.Id);
             if (oldUser == null)
             {
                 throw new ArgumentException("User not in db!");
@@ -104,7 +104,7 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(user));
             }
 
-            User oldUser = _context.Users.Where(userToDelete => userToDelete.Id == user.Id).SingleOrDefault();
+            User oldUser = _context.Users.SingleOrDefault(userToDelete => userToDelete.Id == user.Id);
             if (oldUser == null)
             {
                 throw new ArgumentException("User not in db!");
@@ -120,19 +120,13 @@ namespace FaaS.Entities.Repositories
         public async Task<User> Get(Guid id)
             => await _context.Users.SingleOrDefaultAsync(e => e.Id == id);
 
-        public async Task<IEnumerable<User>> List()
-            => await _context.Users.ToArrayAsync();
-
-        public async Task<User> Get(string codeName)
-            => await _context
-            .Users
-            .Where(user => user.CodeName == codeName)
-            .SingleOrDefaultAsync();
-
-        public async Task<User> GetGoogle(string googleId)
+        public async Task<User> Get(string googleId)
             => await _context
             .Users
             .Where(user => user.GoogleId == googleId)
             .SingleOrDefaultAsync();
+
+        public async Task<IEnumerable<User>> List()
+            => await _context.Users.ToArrayAsync();
     }
 }

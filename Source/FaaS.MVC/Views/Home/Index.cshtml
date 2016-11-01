@@ -6,19 +6,19 @@
 
 <div class="row">
     <div class="col-sm-6">
-        @if (ViewData["userDisplayName"] == null)
+        @if (ViewData["userName"] == null)
         {
             <h2>Welcome to Form as a Service!</h2>
             <p>Here will be a totally awesome description. Or whatever.</p>
         }
         else
         {
-            <h2>Hi @ViewData["userDisplayName"]!</h2>
+            <h2>Hi @ViewData["userName"]!</h2>
             <p>Choose a project or create a new one to start.</p>
         }
     </div>
     <br /><br />
-    <div class="col-sm-6" style="display:@(ViewData["userDisplayName"] == null ? "inline" : "none")">
+    <div class="col-sm-6" style="display:@(ViewData["userName"] == null ? "inline" : "none")">
         <form asp-action="LogIn">
             <div class="form-horizontal">
                 <h4 class="text-center">Sign in with your Google Account</h4>
