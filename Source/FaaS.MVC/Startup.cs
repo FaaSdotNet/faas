@@ -2,7 +2,6 @@
 using FaaS.Entities.Configuration;
 using FaaS.Entities.Repositories;
 using FaaS.MVC.Configuration;
-using FaaS.MVC.Middleware;
 using FaaS.Services;
 using FaaS.Services.Configuration;
 using FaaS.Services.RandomId;
@@ -100,9 +99,6 @@ namespace FaaS.MVC
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                // Custom middlerare example
-                app.UseMiddleware<GuardianMiddleware>();
             }
             else
             {
