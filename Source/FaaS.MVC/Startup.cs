@@ -16,8 +16,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using NLog.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
-using FaaS.MVC.Models;
 
 namespace FaaS.MVC
 {
@@ -111,19 +109,22 @@ namespace FaaS.MVC
             app.UseSession();
 
             app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "home",
-                    template: "Home",
-                    defaults: new { controller = "Home", action = "Index" });
+                {
 
-                routes.MapRoute(
-                    name: "id",
-                    template: "{controller=Forms}/{action=Index}/{id}");
+                  
+                    routes.MapRoute(
+                        name: "home",
+                        template: "Home",
+                        defaults: new {controller = "Home", action = "Index"});
 
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{codename?}");
+                    routes.MapRoute(
+                        name: "id",
+                        template: "{controller=Forms}/{action=Index}/{id}");
+
+                    routes.MapRoute(
+                        name: "default",
+                        template: "{controller=Application}/{action=Index}");
+
             });
         }
     }
