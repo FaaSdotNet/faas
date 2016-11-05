@@ -100,18 +100,18 @@
     <Compile Include="DataAccessModels\User.cs" />
     <Compile Include="DataAccessModels\ElementValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\ElementRepository.cs" />
-    <Compile Include="Repositories\ElementValueRepository.cs" />
-    <Compile Include="Repositories\FormRepository.cs" />
+    <Compile Include="Repositories\Impl\ElementRepository.cs" />
+    <Compile Include="Repositories\Impl\ElementValueRepository.cs" />
+    <Compile Include="Repositories\Impl\FormRepository.cs" />
     <Compile Include="Repositories\IElementRepository.cs" />
     <Compile Include="Repositories\IElementValueRepository.cs" />
     <Compile Include="Repositories\IFormRepository.cs" />
     <Compile Include="Repositories\IProjectRepository.cs" />
     <Compile Include="Repositories\ISessionRepository.cs" />
     <Compile Include="Repositories\IUserRepository.cs" />
-    <Compile Include="Repositories\ProjectRepository.cs" />
-    <Compile Include="Repositories\SessionRepository.cs" />
-    <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Repositories\Impl\ProjectRepository.cs" />
+    <Compile Include="Repositories\Impl\SessionRepository.cs" />
+    <Compile Include="Repositories\Impl\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
