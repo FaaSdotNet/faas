@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -16,29 +15,19 @@ using Microsoft.Extensions.Logging;
 namespace FaaS.MVC.Controllers.Api
 {
     [Route(RoutePrefix+RouteController)]
-    public class ProjectsContoller: Controller
+    public class ProjectsContoller: DefaultController
     {
-        public const string RoutePrefix = "api/v1.0/";
         public const string RouteController = "projects";
 
         private readonly IFaaSService service;
-        private readonly IRandomIdService randomId;
-        private readonly IActionContextAccessor actionContextAccessor;
-        private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly IUrlHelperFactory urlHelperFactory;
         private readonly ILogger<ProjectsContoller> logger;
-        private IMapper mapper;
-        public ProjectsContoller(IFaaSService service, IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, ILogger<ProjectsContoller> logger, IMapper mapper)
+
+
+        public ProjectsContoller(IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, IMapper mapper, IFaaSService service, ILogger<ProjectsContoller> logger) : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
         {
             this.service = service;
-            this.randomId = randomId;
-            this.actionContextAccessor = actionContextAccessor;
-            this.httpContextAccessor = httpContextAccessor;
-            this.urlHelperFactory = urlHelperFactory;
             this.logger = logger;
-            this.mapper = mapper;
         }
-
 
 
         // GET projects
@@ -119,26 +108,36 @@ namespace FaaS.MVC.Controllers.Api
         {
             try
             {
-                var userId = HttpContext.Session.GetString("userId");
+                var stringGuid = HttpContext.Session.GetString("userId");
+                
 
-                if (string.IsNullOrEmpty(userId))
+                if (string.IsNullOrEmpty(stringGuid))
                 {
                     Response.StatusCode = 401;
                     return Unauthorized();
                 }
-                var userDto = await service.GetUser(userId);
 
-                logger.LogInformation("Creating new project: {} with \"{}\" ", project.ProjectName, project.Description);
+                var userId = new Guid(stringGuid);
+
+                var userDto = await service.GetUser(userId);
+                project.Created = DateTime.Now;
+               
+
+                logger.LogInformation("Creating new project: \"{}\" with \"{}\" ", project.ProjectName, project.Description);
 
                 var projectDto = mapper.Map<CreateProjectViewModel, Project>(project);
+
                 if (projectDto == null)
                 {
                     logger.LogError("Mapping problem!!!!");
+                    return BadRequest();
                 }
+
 
                 var result = await service.AddProject(userDto, projectDto);
 
                 var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
+
                 var newUrl = new Uri(urlHelper.Action("GetProject", "Projects", new
                 {
                     id = project.Id,

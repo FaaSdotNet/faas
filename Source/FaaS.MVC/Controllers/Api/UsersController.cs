@@ -17,28 +17,18 @@ namespace FaaS.MVC.Controllers.Api
 {
     [Route(RoutePrefix + RouteController)]
 
-    public class UsersController : Controller
+    public class UsersController : DefaultController
     {
-        public const string RoutePrefix = "api/v1.0/";
         public const string RouteController = "users";
 
         private readonly IFaaSService service;
-        private readonly IRandomIdService randomId;
-        private readonly IActionContextAccessor actionContextAccessor;
-        private readonly IHttpContextAccessor httpContextAccessor;
-        private readonly IUrlHelperFactory urlHelperFactory;
         private readonly ILogger<UsersController> logger;
-        private readonly IMapper mapper;
 
-        public UsersController(IFaaSService service, IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, ILogger<UsersController> logger, IMapper mapper)
+
+        public UsersController(IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, IMapper mapper, IFaaSService service, ILogger<UsersController> logger) : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
         {
             this.service = service;
-            this.randomId = randomId;
-            this.actionContextAccessor = actionContextAccessor;
-            this.httpContextAccessor = httpContextAccessor;
-            this.urlHelperFactory = urlHelperFactory;
             this.logger = logger;
-            this.mapper = mapper;
         }
 
 
@@ -113,11 +103,12 @@ namespace FaaS.MVC.Controllers.Api
 
         // POST projects
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]UserViewModel user)
+        public async Task<IActionResult> Post([FromBody]CreateUserViewModel user)
         {
             try
             {
-                var userDto = mapper.Map<UserViewModel, User>(user);
+                user.Registered = DateTime.Now;
+                var userDto = mapper.Map<CreateUserViewModel, User>(user);
                 var result = await service.AddUser(userDto);
 
                 var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
@@ -150,7 +141,7 @@ namespace FaaS.MVC.Controllers.Api
                 }
 
                 var userDto = mapper.Map<UserViewModel, User>(user);
-                var result = await service.AddUser(userDto);
+                var result = await service.UpdateUser(userDto);
 
                 return Ok(result);
             }
