@@ -5,6 +5,7 @@ using FaaS.MVC.Configuration;
 using FaaS.MVC.Middleware;
 using FaaS.Services;
 using FaaS.Services.Configuration;
+using FaaS.Services.Interfaces;
 using FaaS.Services.RandomId;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -73,7 +74,12 @@ namespace FaaS.MVC
             // Scoped - For every request within an implicitly or explicitly defined scope.
             services
                 .Configure<ConnectionOptions>(options => options.ConnectionString = Configuration.GetConnectionString("FaaSConnection"))
-                .AddScoped<IFaaSService, FaaSService>();
+                .AddScoped<IElementService, ElementService>()
+                .AddScoped<IElementValueService, ElementValueService>()
+                .AddScoped<IFormService, FormService>()
+                .AddScoped<IProjectService, ProjectService>()
+                .AddScoped<ISessionService, SessionService>()
+                .AddScoped<IUserService, UserService>();
 
             // Transient - A new instance of the service type will be created each time the service is requested from the container.
             // If multiple consumers depend on the service within the same graph, each consumer will get its own new instance of the given service.

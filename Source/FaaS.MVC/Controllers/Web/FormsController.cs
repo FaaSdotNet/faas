@@ -14,13 +14,19 @@ namespace FaaS.MVC.Controllers.Web
 {
     public class FormsController : Controller
     {
-        private readonly IFaaSService _faaSService;
-        private IMapper _mapper;
+        private readonly IFormService formService;
+        private readonly IElementService elementService;
+        private readonly IProjectService projectService;
+        private readonly IUserService userService;
+        private IMapper mapper;
 
-        public FormsController(IFaaSService faaSService, IMapper mapper)
+        public FormsController(IFormService formService, IElementService elementService, IProjectService projectService, IUserService userService, IMapper mapper)
         {
-            _faaSService = faaSService;
-            _mapper = mapper;
+            this.formService = formService;
+            this.elementService = elementService;
+            this.projectService = projectService;
+            this.userService = userService;
+            this.mapper = mapper;
         }
 
         // GET: Forms/Index/id
@@ -32,35 +38,35 @@ namespace FaaS.MVC.Controllers.Web
                 RedirectToAction("Index", "Home");
             }
 
-            var userDTO = await _faaSService.GetUser(new Guid(userId));
+            var userDTO = await userService.Get(new Guid(userId));
             ViewData["userName"] = userDTO.UserName;
 
-            var projectsDTO = await _faaSService.GetAllProjects(userDTO);
+            var projectsDTO = await projectService.GetAllForUser(userDTO);
             ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
                     p => p.Id.ToString(),
                     p => p.ProjectName.ToString());
 
             string projectId = HttpContext.Session.GetString("projectId");
 
-            var projectDTO = await _faaSService.GetProject(new Guid(projectId));
+            var projectDTO = await projectService.Get(new Guid(projectId));
             ViewData["projectName"] = projectDTO.ProjectName;
 
-            var formsDTO = await _faaSService.GetAllForms(projectDTO);
+            var formsDTO = await formService.GetAllForProject(projectDTO);
             ViewBag.FormDictionary = formsDTO.ToDictionary(
                 f => f.Id.ToString(),
                 f => f.FormName.ToString());
 
-            var formDTO = await _faaSService.GetForm(new Guid(id));
+            var formDTO = await formService.Get(new Guid(id));
             ViewData["formName"] = formDTO.FormName;
 
             HttpContext.Session.SetString("formId", id);
 
-            var elementsDTO = await _faaSService.GetAllElements(formDTO);
+            var elementsDTO = await elementService.GetAllForForm(formDTO);
             ViewBag.ElementDictionary = elementsDTO.ToDictionary(
                 e => e.Id.ToString(),
                 e => e.Description.ToString());
 
-            return View(_mapper.Map<FormViewModel>(formDTO));
+            return View(mapper.Map<FormViewModel>(formDTO));
         }
 
         // GET: Forms/Details/Id
@@ -72,28 +78,28 @@ namespace FaaS.MVC.Controllers.Web
                 RedirectToAction("Index", "Home");
             }
 
-            var userDTO = await _faaSService.GetUser(new Guid(userId));
+            var userDTO = await userService.Get(new Guid(userId));
             ViewData["userName"] = userDTO.UserName;
 
-            var projectsDTO = await _faaSService.GetAllProjects(userDTO);
+            var projectsDTO = await projectService.GetAllForUser(userDTO);
             ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
                     p => p.Id.ToString(),
                     p => p.ProjectName.ToString());
 
             string projectId = HttpContext.Session.GetString("projectId");
 
-            var projectDTO = await _faaSService.GetProject(new Guid(projectId));
+            var projectDTO = await projectService.Get(new Guid(projectId));
             ViewData["projectName"] = projectDTO.ProjectName;
 
-            var formsDTO = await _faaSService.GetAllForms(projectDTO);
+            var formsDTO = await formService.GetAllForProject(projectDTO);
             ViewBag.FormDictionary = formsDTO.ToDictionary(
                 f => f.Id.ToString(),
                 f => f.FormName.ToString());
 
-            var formDTO = await _faaSService.GetForm(new Guid(id));
+            var formDTO = await formService.Get(new Guid(id));
             ViewData["formName"] = formDTO.FormName;
 
-            return View(_mapper.Map<FormDetailsViewModel>(formDTO));
+            return View(mapper.Map<FormDetailsViewModel>(formDTO));
         }
 
         // GET: Forms/Create
@@ -105,9 +111,9 @@ namespace FaaS.MVC.Controllers.Web
                 RedirectToAction("Index", "Home");
             }
 
-            var userDTO = await _faaSService.GetUser(new Guid(userId));
+            var userDTO = await userService.Get(new Guid(userId));
             ViewData["userName"] = userDTO.UserName;
-            SelectList projects = new SelectList(await _faaSService.GetAllProjects(userDTO), "Id", "ProjectName");
+            SelectList projects = new SelectList(await projectService.GetAllForUser(userDTO), "Id", "ProjectName");
 
             CreateFormViewModel model = new CreateFormViewModel
             {
@@ -126,13 +132,13 @@ namespace FaaS.MVC.Controllers.Web
             {
                 try
                 {
-                    var allForms = await _faaSService.GetAllForms();
-                    var formDTO = _mapper.Map<CreateFormViewModel, Form>(form);
+                    var allForms = await formService.GetAll();
+                    var formDTO = mapper.Map<CreateFormViewModel, Form>(form);
 
                     formDTO.Created = DateTime.Now;
 
-                    var projectDTO = await _faaSService.GetProject(form.SelectedProjectId);
-                    await _faaSService.AddForm(projectDTO, formDTO);
+                    var projectDTO = await projectService.Get(form.SelectedProjectId);
+                    await formService.Add(projectDTO, formDTO);
                     return RedirectToAction("Index", "Projects", new { id = form.SelectedProjectId.ToString() });
                 }
                 catch
@@ -151,25 +157,25 @@ namespace FaaS.MVC.Controllers.Web
             {
                 RedirectToAction("Index", "Home");
             }
-            var userDTO = await _faaSService.GetUser(new Guid(userId));
+            var userDTO = await userService.Get(new Guid(userId));
             ViewData["userName"] = userDTO.UserName;
 
-            var projectsDTO = await _faaSService.GetAllProjects(userDTO);
+            var projectsDTO = await projectService.GetAllForUser(userDTO);
             ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
                     p => p.Id.ToString(),
                     p => p.ProjectName.ToString());
 
             string projectId = HttpContext.Session.GetString("projectId");
 
-            var projectDTO = await _faaSService.GetProject(new Guid(projectId));
+            var projectDTO = await projectService.Get(new Guid(projectId));
             ViewData["projectName"] = projectDTO.ProjectName;
 
-            var formsDTO = await _faaSService.GetAllForms(projectDTO);
+            var formsDTO = await formService.GetAllForProject(projectDTO);
             ViewBag.FormDictionary = formsDTO.ToDictionary(
                 f => f.Id.ToString(),
                 f => f.FormName.ToString());
 
-            var existingForm = await _faaSService.GetForm(new Guid(id));
+            var existingForm = await formService.Get(new Guid(id));
             if (existingForm == null)
             {
                 RedirectToAction("Index", "Projects");
@@ -177,7 +183,7 @@ namespace FaaS.MVC.Controllers.Web
             ViewData["formName"] = existingForm.FormName;
 
             HttpContext.Session.SetString("formToEdit", id);
-            return View(_mapper.Map<FormViewModel>(existingForm));
+            return View(mapper.Map<FormViewModel>(existingForm));
         }
 
         // POST: Forms/Edit/5
@@ -192,17 +198,17 @@ namespace FaaS.MVC.Controllers.Web
             {
                 RedirectToAction("Index", "Home");
             }
-            var userDTO = await _faaSService.GetUser(new Guid(userId));
+            var userDTO = await userService.Get(new Guid(userId));
             ViewData["userDisplayName"] = userDTO.UserName;
 
             try
             {
-                var formDTO = _mapper.Map<FormViewModel, Form>(model);
-                var updatedForm = await _faaSService.UpdateForm(formDTO);
+                var formDTO = mapper.Map<FormViewModel, Form>(model);
+                var updatedForm = await formService.Update(formDTO);
 
                 return RedirectToAction("Index", "Forms", new { id = updatedForm.Id });
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return RedirectToAction("Index", "Projects");
             }
@@ -212,29 +218,29 @@ namespace FaaS.MVC.Controllers.Web
         public async Task<IActionResult> Delete(string id)
         {
             var userId = HttpContext.Session.GetString("userId");
-            var existingUser = await _faaSService.GetUser(new Guid(userId));
+            var existingUser = await userService.Get(new Guid(userId));
 
             ViewData["userName"] = existingUser.UserName;
 
-            var projectsDTO = await _faaSService.GetAllProjects(existingUser);
+            var projectsDTO = await projectService.GetAllForUser(existingUser);
             ViewBag.ProjectDictionary = projectsDTO.ToDictionary(
                     p => p.Id.ToString(),
                     p => p.ProjectName.ToString());
 
             var projectId = HttpContext.Session.GetString("projectId");
-            var projectDTO = await _faaSService.GetProject(new Guid(projectId));
+            var projectDTO = await projectService.Get(new Guid(projectId));
             ViewData["projectName"] = projectDTO.ProjectName;
 
-            var formsDTO = await _faaSService.GetAllForms(projectDTO);
+            var formsDTO = await formService.GetAllForProject(projectDTO);
             ViewBag.FormDictionary = formsDTO.ToDictionary(
                 f => f.Id.ToString(),
                 f => f.FormName.ToString());
 
-            var formDTO = await _faaSService.GetForm(new Guid(id));
+            var formDTO = await formService.Get(new Guid(id));
             ViewData["formName"] = formDTO.FormName;
 
             HttpContext.Session.SetString("formToDelete", id);
-            return View(_mapper.Map<FormViewModel>(formDTO));
+            return View(mapper.Map<FormViewModel>(formDTO));
         }
 
         // POST: Forms/Delete
@@ -248,8 +254,8 @@ namespace FaaS.MVC.Controllers.Web
 
             var projectId = HttpContext.Session.GetString("projectId");
 
-            var existingForm = await _faaSService.GetForm(new Guid(formId));
-            var deletedForm = await _faaSService.RemoveForm(existingForm);
+            var existingForm = await formService.Get(new Guid(formId));
+            var deletedForm = await formService.Remove(existingForm);
 
             return RedirectToAction("Index", "Projects", new { id = projectId});
         }
