@@ -2,8 +2,7 @@ const path = require("path");
 
 module.exports = {
     entry: {
-        login:  "./src/login.js",
-        dashboard: "./src/dashboard.js",
+        app: "./src/app.js",
         form: "./src/form.js"
     },
     output: {
@@ -13,6 +12,7 @@ module.exports = {
     module: {
         loaders: [
             { test: /\.css$/, loader: "style!css" },
+            { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' },
             {
                 test: /\.jsx?$/,
                 exclude: /(node_modules|bower_components)/,
