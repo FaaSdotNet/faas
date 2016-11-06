@@ -10,6 +10,9 @@
   "frameworks": {
     "net462": {
       "dependencies": {
+        "FaaS.DataTransferModels": {
+          "target": "project"
+        },
         "FaaS.Entities": {
           "target": "project"
         }

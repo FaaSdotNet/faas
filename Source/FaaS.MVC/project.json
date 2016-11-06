@@ -41,7 +41,13 @@
   },
 
   "frameworks": {
-   "net462": { }
+    "net462": {
+      "dependencies": {
+        "FaaS.DataTransferModels": {
+          "target": "project"
+        }
+      }
+    }
   },
 
   "buildOptions": {

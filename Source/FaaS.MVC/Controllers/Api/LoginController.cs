@@ -42,7 +42,8 @@ namespace FaaS.MVC.Controllers.Api
                     }
 
                     HttpContext.Session.SetString("userId", existingUser.Id.ToString());
-                    return Ok(HttpContext.Session);
+
+                    return Ok(existingUser);
                 }
             }
             catch (Exception ex)

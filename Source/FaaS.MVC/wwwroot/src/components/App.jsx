@@ -15,11 +15,7 @@ class AppComponent extends Component {
                 <Header lock={this.lock}></Header>
                 <Grid>
                     <Row>
-                        <Col xs={12} md={3}>
-                        </Col>
-                        <Col xs={12} md={9}>
-                            {this.props.children}
-                        </Col>
+                       {this.props.children}
                     </Row>
                 </Grid>
             </div>

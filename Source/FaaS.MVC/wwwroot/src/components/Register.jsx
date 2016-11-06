@@ -23,7 +23,19 @@ class RegisterComponent extends Component {
                 UserName: userName
             })
         });
-        result.then( (res) =>  console.log(res));
+        result.then( (res) =>  {
+            console.log(res);
+                
+            if (res.ok) {
+
+                res.json()
+                    .then((js) => {
+                        console.log(js);
+                        console.info("UserID: ", js.id);
+                        document.location.href ="/#/login";
+                    });
+            }
+        });
     }
 
     render() {
