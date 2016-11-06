@@ -23,29 +23,33 @@ class HeaderComponent extends Component {
                 alert(err);
                 return;
             }
-            this.setState({authenticated: true});
+            this.setState({ authenticated: true });
         });
     }
 
     logout() {
         // AuthActions.logUserOut();
-        this.setState({authenticated: false});
+        this.setState({ authenticated: false });
     }
 
     render() {
         return (
-          <Navbar>
-            <Navbar.Header>
-              <Navbar.Brand>
-                <a href="#">React Contacts</a>
-              </Navbar.Brand>
-            </Navbar.Header>
-            <Nav>
-              <NavItem onClick={this.login}>Login</NavItem>
-              <NavItem onClick={this.logout}>Logout</NavItem>
-            </Nav>
+            <Navbar>
+              <Navbar.Header>
+                  <Navbar.Brand>
+                      <a href="#">React Contacts</a>
+                  </Navbar.Brand>
+              </Navbar.Header>
+              <Nav>
+                  <NavItem href="/#/login">
+                          Login
+                  </NavItem>
+                  <NavItem href="/#/register">
+                          Register
+                  </NavItem>
+              </Nav>
           </Navbar>
-      );
+        );
     }
 }
 
