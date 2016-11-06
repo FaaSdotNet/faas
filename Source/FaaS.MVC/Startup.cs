@@ -16,6 +16,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using NLog.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using FaaS.MVC.Models;
 
 namespace FaaS.MVC
 {
