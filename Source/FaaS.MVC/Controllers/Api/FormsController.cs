@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using FaaS.MVC.Models;
 using FaaS.Services;
-using FaaS.Services.DataTransferModels;
+using FaaS.DataTransferModels;
 using FaaS.Services.RandomId;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

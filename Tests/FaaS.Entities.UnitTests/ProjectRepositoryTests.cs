@@ -21,12 +21,11 @@ namespace FaaS.Entities.UnitTests
             var actualProject = await _ProjectRepository.Get(id);
 
             Assert.NotNull(actualProject);
-            Assert.IsType<Project>(actualProject);
+            Assert.IsType<DataTransferModels.Project>(actualProject);
         }
 
         [Theory]
         [InlineData(null)]
-        [InlineData("")]
         public async void GetSingleProject_NullOrEmpty_ReturnsProject(Guid id)
         {
             var actualProject = await _ProjectRepository.Get(id);
@@ -44,7 +43,7 @@ namespace FaaS.Entities.UnitTests
             Assert.Equal(2, actualProjects.Count());
             foreach (var actualProject in actualProjects)
             {
-                Assert.IsType<Project>(actualProject);
+                Assert.IsType<DataTransferModels.Project>(actualProject);
             }
         }
 
@@ -58,10 +57,10 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void AddProject_NullUser_Throws()
         {
-            User user = null;
-            Project project = new Project
+            DataTransferModels.User user = null;
+            DataTransferModels.Project project = new DataTransferModels.Project
             {
-                Name = "TestProjectNotInDb",
+                ProjectName = "TestProjectNotInDb",
                 Created = DateTime.Now,
                 Description = "TestDescriptionNotInDb"
             };
@@ -73,20 +72,19 @@ namespace FaaS.Entities.UnitTests
         {
             var user = await _UserRepository.Get("TestGoogleId1");
 
-            var newProject = new Project
+            var newProject = new DataTransferModels.Project
             {
                 Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"),
-                Name = "TestProject01",
+                ProjectName = "TestProject01",
                 Created = DateTime.Now,
-                Description = "TestDescription01",
-                Forms = new List<Form>()
+                Description = "TestDescription01"
                 
             };
-            Project actualProject = await _ProjectRepository.Add(user, newProject);
+            DataTransferModels.Project actualProject = await _ProjectRepository.Add(user, newProject);
 
             // Checks returned value
             Assert.NotNull(actualProject);
-            Assert.Equal(newProject.Name, actualProject.Name);
+            Assert.Equal(newProject.ProjectName, actualProject.ProjectName);
             Assert.Equal(newProject.Created, actualProject.Created);
             Assert.Equal(newProject.Description, actualProject.Description);
             Assert.NotEqual(Guid.Empty, actualProject.Id);
@@ -104,9 +102,9 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void UpdateProject_NotNull_NotInDB()
         {
-            var newProject = new Project
+            var newProject = new DataTransferModels.Project
             {
-               Name = "NotInDbName",
+               ProjectName = "NotInDbName",
                Description = "NotInDbDescription",
                Created = DateTime.Now
             };
@@ -120,14 +118,14 @@ namespace FaaS.Entities.UnitTests
             var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
             var actualProject = await _ProjectRepository.Get(id);
 
-            actualProject.Name = "NotHisPreviousName";
+            actualProject.ProjectName = "NotHisPreviousName";
 
             actualProject = await _ProjectRepository.Update(actualProject);
             actualProject = await _ProjectRepository.Get(id);
 
             // Checks returned value
             Assert.NotNull(actualProject);
-            Assert.Equal("NotHisPreviousName", actualProject.Name);
+            Assert.Equal("NotHisPreviousName", actualProject.ProjectName);
             Assert.NotEqual(Guid.Empty, actualProject.Id);
         }
 
@@ -143,23 +141,22 @@ namespace FaaS.Entities.UnitTests
                     GetTestFormWithoutElements(6),
             };
 
-            var newProject = new Project
+            var newProject = new DataTransferModels.Project
             {
-                Name = "TestProject03",
+                ProjectName = "TestProject03",
                 Created = DateTime.Now,
-                Description = "TestDescription03",
-                Forms = forms
+                Description = "TestDescription03"
             };
 
             var actualProject = await _ProjectRepository.Add(actualUser, newProject);
 
             // Checks returned value
             Assert.NotNull(actualProject);
-            Assert.Equal(newProject.Name, actualProject.Name);
+            Assert.Equal(newProject.ProjectName, actualProject.ProjectName);
             Assert.Equal(newProject.Created, actualProject.Created);
             Assert.Equal(newProject.Description, actualProject.Description);
             Assert.NotEqual(Guid.Empty, actualProject.Id);
-            Assert.Equal(3, actualProject.Forms.Count);
+            //Assert.Equal(3, actualProject.Forms.Count);
 
             // Checks storage is persistant
             Assert.NotNull(_ProjectRepository.Get(newProject.Id));
@@ -174,12 +171,11 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void DeleteProject_NotNull_NotInDb()
         {
-            var newProject = new Project
+            var newProject = new DataTransferModels.Project
             {
-                Name = "TestProjectNotInDb",
+                ProjectName = "TestProjectNotInDb",
                 Created = DateTime.Now,
-                Description = "TestDescriptionNotInDb",
-                Forms = new List<Form>()
+                Description = "TestDescriptionNotInDb"
             };
             var actualProject = await _ProjectRepository.Delete(newProject);
             Assert.Null(actualProject);
@@ -190,15 +186,14 @@ namespace FaaS.Entities.UnitTests
         {
             var user = await _UserRepository.Get("TestGoogleId1");
 
-            var newProject = new Project
+            var newProject = new DataTransferModels.Project
             {
-                Name = "TestProject01",
+                ProjectName = "TestProject01",
                 Created = DateTime.Now,
-                Description = "TestDescription01",
-                Forms = new List<Form>()
+                Description = "TestDescription01"
             };
 
-            Project actualProject = await _ProjectRepository.Add(user, newProject);
+            DataTransferModels.Project actualProject = await _ProjectRepository.Add(user, newProject);
             //var allProjects = await _ProjectRepository.List();
             //int numProjects = allProjects.Count();
             //var actualProject = await _ProjectRepository.Get("TestProject1");
@@ -211,7 +206,7 @@ namespace FaaS.Entities.UnitTests
             //Assert.Equal(numProjects - 1, numProjectsAfter);
             Assert.NotNull(deletedProject);
             Assert.Null(deletedProject2);
-            Assert.Equal(actualProject.Name, deletedProject.Name);
+            Assert.Equal(actualProject.ProjectName, deletedProject.ProjectName);
             Assert.Equal(actualProject.Created, deletedProject.Created);
             Assert.Equal(actualProject.Description, deletedProject.Description);
         }

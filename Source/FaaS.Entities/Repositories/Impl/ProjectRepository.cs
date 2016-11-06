@@ -1,6 +1,8 @@
-﻿using FaaS.Entities.Configuration;
+﻿using AutoMapper;
+using FaaS.Entities.Configuration;
 using FaaS.Entities.Contexts;
 using FaaS.Entities.DataAccessModels;
+using FaaS.Entities.DataAccessModels.Mapping;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -13,7 +15,8 @@ namespace FaaS.Entities.Repositories
     public class ProjectRepository : IProjectRepository
     {
         private readonly FaaSContext _context;
-        
+        private IMapper _mapper;
+
         /// <summary>
         /// Constructor indended for tests' purposes only.
         /// </summary>
@@ -26,14 +29,17 @@ namespace FaaS.Entities.Repositories
             }
 
             _context = faaSContext;
+            var config = new MapperConfiguration(cfg => EntitiesMapperConfiguration.InitializeMappings(cfg));
+            _mapper = config.CreateMapper();
         }
 
-        public ProjectRepository(IOptions<ConnectionOptions> connectionOptions)
+        public ProjectRepository(IOptions<ConnectionOptions> connectionOptions, IMapper mapper)
         {
             _context = new FaaSContext(connectionOptions.Value.ConnectionString);
+            _mapper = mapper;
         }
 
-        public async Task<Project> Add(User user, Project project)
+        public async Task<DataTransferModels.Project> Add(DataTransferModels.User user, DataTransferModels.Project project)
         {
             if (user == null)
             {
@@ -44,21 +50,23 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(project));
             }
 
+            var dataAccessProjectModel = _mapper.Map<Project>(project);
+
             User actualUser = _context.Users.SingleOrDefault(userForProject => userForProject.Id == user.Id);
             if (actualUser == null)
             {
                 return null;
             }
-            project.User = _context.Users.Find(actualUser.Id);
-            project.UserId = actualUser.Id;
+            dataAccessProjectModel.User = _context.Users.Find(actualUser.Id);
+            dataAccessProjectModel.UserId = actualUser.Id;
 
-            var addedProject = _context.Projects.Add(project);
+            var addedProject = _context.Projects.Add(dataAccessProjectModel);
             await _context.SaveChangesAsync();
 
-            return addedProject;
+            return _mapper.Map<DataTransferModels.Project>(addedProject);
         }
 
-        public async Task<Project> Update(Project updatedProject)
+        public async Task<DataTransferModels.Project> Update(DataTransferModels.Project updatedProject)
         {
             if (updatedProject == null)
             {
@@ -66,23 +74,24 @@ namespace FaaS.Entities.Repositories
             }
 
             Project oldProject = _context.Projects.SingleOrDefault(project => project.Id == updatedProject.Id);
-            User projectUser = _context.Users.SingleOrDefault(user => user.Id == oldProject.UserId);
-            oldProject.User = projectUser;
             if (oldProject == null)
             {
                 throw new ArgumentException("Project not in DB");
             }
 
-            oldProject.Name = updatedProject.Name;
+            User projectUser = _context.Users.SingleOrDefault(user => user.Id == oldProject.UserId);
+            oldProject.User = projectUser;
+
+            oldProject.Name = updatedProject.ProjectName;
             oldProject.Description = updatedProject.Description;
             _context.Entry(oldProject).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
 
-            return updatedProject;
+            return _mapper.Map<DataTransferModels.Project>(oldProject);
         }
 
-        public async Task<Project> Delete(Project project)
+        public async Task<DataTransferModels.Project> Delete(DataTransferModels.Project project)
         {
             if (project == null)
             {
@@ -98,26 +107,36 @@ namespace FaaS.Entities.Repositories
             var deletedProject = _context.Projects.Remove(oldProject);
             await _context.SaveChangesAsync();
 
-            return deletedProject;
+            return _mapper.Map<DataTransferModels.Project>(deletedProject);
         }
-       
-        public async Task<IEnumerable<Project>> List()
-            => await _context.Projects.ToArrayAsync();
 
-        public async Task<IEnumerable<Project>> List(User user)
+        public async Task<IEnumerable<DataTransferModels.Project>> List()
+        {
+            var projects = await _context.Projects.ToArrayAsync();
+
+            return _mapper.Map<IEnumerable<DataTransferModels.Project>>(projects);
+        }
+
+        public async Task<IEnumerable<DataTransferModels.Project>> List(DataTransferModels.User user)
         {
             User actualUser = _context.Users.SingleOrDefault(userForProject => userForProject.Id == user.Id);
             if (actualUser == null)
             {
                 return null;
             }
+            
+            var projects = await _context.Projects
+                                .Where(project => project.UserId == actualUser.Id)
+                                .ToArrayAsync();
 
-            return await _context.Projects
-            .Where(project => project.UserId == actualUser.Id)
-            .ToArrayAsync();
+            return _mapper.Map<IEnumerable<DataTransferModels.Project>>(projects);
         }
 
-        public async Task<Project> Get(Guid id)
-          => await _context.Projects.SingleOrDefaultAsync(e => e.Id == id);
+        public async Task<DataTransferModels.Project> Get(Guid id)
+        {
+            Project project = await _context.Projects.SingleOrDefaultAsync(e => e.Id == id);
+
+            return _mapper.Map<DataTransferModels.Project>(project);
+        }
     }
 }

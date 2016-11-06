@@ -1,6 +1,8 @@
-﻿using FaaS.Entities.Configuration;
+﻿using AutoMapper;
+using FaaS.Entities.Configuration;
 using FaaS.Entities.Contexts;
 using FaaS.Entities.DataAccessModels;
+using FaaS.Entities.DataAccessModels.Mapping;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -13,10 +15,12 @@ namespace FaaS.Entities.Repositories
     public class FormRepository : IFormRepository
     {
         private readonly FaaSContext _context;
+        private IMapper _mapper;
 
-        public FormRepository(IOptions<ConnectionOptions> connectionOptions)
+        public FormRepository(IOptions<ConnectionOptions> connectionOptions, IMapper mapper)
         {
             _context = new FaaSContext(connectionOptions.Value.ConnectionString);
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -31,9 +35,11 @@ namespace FaaS.Entities.Repositories
             }
 
             _context = faaSContext;
+            var config = new MapperConfiguration(cfg => EntitiesMapperConfiguration.InitializeMappings(cfg));
+            _mapper = config.CreateMapper();
         }
 
-        public async Task<Form> Add(Project project, Form form)
+        public async Task<DataTransferModels.Form> Add(DataTransferModels.Project project, DataTransferModels.Form form)
         {
             if (project == null)
             {
@@ -44,21 +50,23 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(form));
             }
 
+            Form dataAccessFormModel = _mapper.Map<Form>(form);
+
             Project actualProject = _context.Projects.SingleOrDefault(projectForForm => projectForForm.Id == project.Id);
             if (actualProject == null)
             {
                 return null;
             }
-            form.Project = _context.Projects.Find(actualProject.Id);
-            form.ProjectId = actualProject.Id;
+            dataAccessFormModel.Project = _context.Projects.Find(actualProject.Id);
+            dataAccessFormModel.ProjectId = actualProject.Id;
 
-            var addedForm = _context.Forms.Add(form);
+            var addedForm = _context.Forms.Add(dataAccessFormModel);
             await _context.SaveChangesAsync();
 
-            return addedForm;
+            return _mapper.Map<DataTransferModels.Form>(addedForm);
         }
 
-        public async Task<Form> Delete(Form form)
+        public async Task<DataTransferModels.Form> Delete(DataTransferModels.Form form)
         {
             if (form == null)
             {
@@ -74,10 +82,10 @@ namespace FaaS.Entities.Repositories
             var deletedForm = _context.Forms.Remove(oldForm);
             await _context.SaveChangesAsync();
 
-            return deletedForm;
+            return _mapper.Map<DataTransferModels.Form>(deletedForm);
         }
 
-        public async Task<Form> Update(Form updatedForm)
+        public async Task<DataTransferModels.Form> Update(DataTransferModels.Form updatedForm)
         {
             if (updatedForm == null)
             {
@@ -85,34 +93,46 @@ namespace FaaS.Entities.Repositories
             }
 
             Form oldForm = _context.Forms.SingleOrDefault(form => form.Id == updatedForm.Id);
-            Project formProject = _context.Projects.SingleOrDefault(project => project.Id == oldForm.ProjectId);
-            oldForm.Project = formProject;
             if (oldForm == null)
             {
                 return null;
             }
+            Project formProject = _context.Projects.SingleOrDefault(project => project.Id == oldForm.ProjectId);
+            oldForm.Project = formProject;
 
-            oldForm.Name = updatedForm.Name;
+            oldForm.Name = updatedForm.FormName;
             oldForm.Description = updatedForm.Description;
             
             _context.Entry(oldForm).State = EntityState.Modified;
             
             await _context.SaveChangesAsync();
 
-            return oldForm;
+            return _mapper.Map<DataTransferModels.Form>(oldForm);
         }
 
-        public async Task<Form> Get(Guid id)
-            => await _context.Forms.SingleOrDefaultAsync(e => e.Id == id);
+        public async Task<DataTransferModels.Form> Get(Guid id)
+        {
+            Form form = await _context.Forms.SingleOrDefaultAsync(e => e.Id == id);
+
+            return _mapper.Map<DataTransferModels.Form>(form);
+        }
 
 
-        public async Task<IEnumerable<Form>> List()
-            => await _context.Forms.ToArrayAsync();
+        public async Task<IEnumerable<DataTransferModels.Form>> List()
+        {
+            var forms = await _context.Forms.ToArrayAsync();
 
-        public async Task<IEnumerable<Form>> List(Project project)
-            => await _context
-            .Forms
-            .Where(form => form.ProjectId == project.Id)
-            .ToArrayAsync();
+            return _mapper.Map<IEnumerable<DataTransferModels.Form>>(forms);
+        }
+
+        public async Task<IEnumerable<DataTransferModels.Form>> List(DataTransferModels.Project project)
+        {
+            var forms = await _context
+                        .Forms
+                        .Where(form => form.ProjectId == project.Id)
+                        .ToArrayAsync();
+
+            return _mapper.Map<IEnumerable<DataTransferModels.Form>>(forms);
+        }
     }
 }

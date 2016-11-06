@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using FaaS.Entities.Configuration;
 using FaaS.Entities.DataAccessModels;
-using FaaS.Services.Configuration;
 using System;
 using System.Reflection;
 using Xunit;
@@ -20,7 +20,7 @@ namespace FaaS.Services.UnitTests
         public void Map_ServiceUser_DatabaseUser()
         {
             // Ensures mapping from DTO user to DAO user is present
-            var dataTransportUserModel = new DataTransferModels.User
+            var dataTransportUserModel = new FaaS.DataTransferModels.User
             {
                 UserName = "Display Name",
                 GoogleId = "TestGoogleId"
@@ -31,7 +31,7 @@ namespace FaaS.Services.UnitTests
                 GoogleId = "TestGoogleId"
             };
 
-            var actualDataAccessUserModel = GetMapper().Map<DataTransferModels.User, User>(dataTransportUserModel);
+            var actualDataAccessUserModel = GetMapper().Map<FaaS.DataTransferModels.User, User>(dataTransportUserModel);
 
             AssertPropertyEquals(expectedDataAccessUserModel, actualDataAccessUserModel);
         }
@@ -45,13 +45,13 @@ namespace FaaS.Services.UnitTests
                 Name = "Display Name",
                 GoogleId = "TestGoogleId"
             };
-            var expectedDataTransportUserModel = new DataTransferModels.User
+            var expectedDataTransportUserModel = new FaaS.DataTransferModels.User
             {
                 UserName = "Display Name",
                 GoogleId = "TestGoogleId"
             };
 
-            var actualDataTransportUserModel = GetMapper().Map<User, DataTransferModels.User>(dataAccessUserModel);
+            var actualDataTransportUserModel = GetMapper().Map<User, FaaS.DataTransferModels.User>(dataAccessUserModel);
 
             AssertPropertyEquals(expectedDataTransportUserModel, actualDataTransportUserModel);
         }
@@ -60,7 +60,7 @@ namespace FaaS.Services.UnitTests
         public void Map_ServiceProject_DatabaseProject()
         {
             // Ensures mapping from DTO project to DAO project is present
-            var dataTransportProjectModel = new DataTransferModels.Project
+            var dataTransportProjectModel = new FaaS.DataTransferModels.Project
             {
                 ProjectName = "Display Name",
                 Description = "TestDescription"
@@ -71,7 +71,7 @@ namespace FaaS.Services.UnitTests
                 Description = "TestDescription"
             };
 
-            var actualDataAccessProjectModel = GetMapper().Map<DataTransferModels.Project, Project>(dataTransportProjectModel);
+            var actualDataAccessProjectModel = GetMapper().Map<FaaS.DataTransferModels.Project, Project>(dataTransportProjectModel);
 
             AssertPropertyEquals(expectedDataAccessProjectModel, actualDataAccessProjectModel);
         }
@@ -85,13 +85,13 @@ namespace FaaS.Services.UnitTests
                 Name = "Display Name",
                 Description = "TestDescription"
             };
-            var expectedDataTransportProjectModel = new DataTransferModels.Project
+            var expectedDataTransportProjectModel = new FaaS.DataTransferModels.Project
             {
                 ProjectName = "Display Name",
                 Description = "TestDescription"
             };
 
-            var actualDataTransportProjectModel = GetMapper().Map<Project, DataTransferModels.Project>(dataAccessProjectModel);
+            var actualDataTransportProjectModel = GetMapper().Map<Project, FaaS.DataTransferModels.Project>(dataAccessProjectModel);
 
             AssertPropertyEquals(expectedDataTransportProjectModel, actualDataTransportProjectModel);
         }
@@ -100,7 +100,7 @@ namespace FaaS.Services.UnitTests
         public void Map_ServiceForm_DatabaseForm()
         {
             // Ensures mapping from DTO form to DAO form is present
-            var dataTransportFormModel = new DataTransferModels.Form
+            var dataTransportFormModel = new FaaS.DataTransferModels.Form
             {
                 FormName = "Display Name",
                 Description = "TestDescription"
@@ -111,7 +111,7 @@ namespace FaaS.Services.UnitTests
                 Description = "TestDescription"
             };
 
-            var actualDataAccessFormModel = GetMapper().Map<DataTransferModels.Form, Form>(dataTransportFormModel);
+            var actualDataAccessFormModel = GetMapper().Map<FaaS.DataTransferModels.Form, Form>(dataTransportFormModel);
 
             AssertPropertyEquals(expectedDataAccessFormModel, actualDataAccessFormModel);
         }
@@ -125,13 +125,13 @@ namespace FaaS.Services.UnitTests
                 Name = "Display Name",
                 Description = "TestDescription"
             };
-            var expectedDataTransportFormModel = new DataTransferModels.Form
+            var expectedDataTransportFormModel = new FaaS.DataTransferModels.Form
             {
                 FormName = "Display Name",
                 Description = "TestDescription"
             };
 
-            var actualDataTransportFormModel = GetMapper().Map<Form, DataTransferModels.Form>(dataAccessFormModel);
+            var actualDataTransportFormModel = GetMapper().Map<Form, FaaS.DataTransferModels.Form>(dataAccessFormModel);
 
             AssertPropertyEquals(expectedDataTransportFormModel, actualDataTransportFormModel);
         }
@@ -140,7 +140,7 @@ namespace FaaS.Services.UnitTests
         public void Map_ServiceElement_DatabaseElement()
         {
             // Ensures mapping from DTO element to DAO element is present
-            var dataTransportElementModel = new DataTransferModels.Element
+            var dataTransportElementModel = new FaaS.DataTransferModels.Element
             {
                 Description = "TestDescription"
             };
@@ -149,7 +149,7 @@ namespace FaaS.Services.UnitTests
                 Description = "TestDescription"
             };
 
-            var actualDataAccessElementModel = GetMapper().Map<DataTransferModels.Element, Element>(dataTransportElementModel);
+            var actualDataAccessElementModel = GetMapper().Map<FaaS.DataTransferModels.Element, Element>(dataTransportElementModel);
 
             AssertPropertyEquals(expectedDataAccessElementModel, actualDataAccessElementModel);
         }
@@ -162,12 +162,12 @@ namespace FaaS.Services.UnitTests
             {
                 Description = "TestDescription"
             };
-            var expectedDataTransportElementModel = new DataTransferModels.Element
+            var expectedDataTransportElementModel = new FaaS.DataTransferModels.Element
             {
                 Description = "TestDescription"
             };
 
-            var actualDataTransportElementModel = GetMapper().Map<Element, DataTransferModels.Element>(dataAccessElementModel);
+            var actualDataTransportElementModel = GetMapper().Map<Element, FaaS.DataTransferModels.Element>(dataAccessElementModel);
 
             AssertPropertyEquals(expectedDataTransportElementModel, actualDataTransportElementModel);
         }
@@ -176,7 +176,7 @@ namespace FaaS.Services.UnitTests
         public void Map_ServiceElementValue_DatabaseElementValue()
         {
             // Ensures mapping from DTO elementValue to DAO elementValue is present
-            var dataTransportElementValueModel = new DataTransferModels.ElementValue
+            var dataTransportElementValueModel = new FaaS.DataTransferModels.ElementValue
             {
                 Value = "TestValue"
             };
@@ -185,7 +185,7 @@ namespace FaaS.Services.UnitTests
                 Value = "TestValue"
             };
 
-            var actualDataAccessElementValueModel = GetMapper().Map<DataTransferModels.ElementValue, ElementValue>(dataTransportElementValueModel);
+            var actualDataAccessElementValueModel = GetMapper().Map<FaaS.DataTransferModels.ElementValue, ElementValue>(dataTransportElementValueModel);
 
             AssertPropertyEquals(expectedDataAccessElementValueModel, actualDataAccessElementValueModel);
         }
@@ -198,12 +198,12 @@ namespace FaaS.Services.UnitTests
             {
                 Value = "TestValue"
             };
-            var expectedDataTransportElementValueModel = new DataTransferModels.ElementValue
+            var expectedDataTransportElementValueModel = new FaaS.DataTransferModels.ElementValue
             {
                 Value = "TestValue"
             };
 
-            var actualDataTransportElementValueModel = GetMapper().Map<ElementValue, DataTransferModels.ElementValue>(dataAccessElementValueModel);
+            var actualDataTransportElementValueModel = GetMapper().Map<ElementValue, FaaS.DataTransferModels.ElementValue>(dataAccessElementValueModel);
 
             AssertPropertyEquals(expectedDataTransportElementValueModel, actualDataTransportElementValueModel);
         }
@@ -212,7 +212,7 @@ namespace FaaS.Services.UnitTests
         public void Map_ServiceSession_DatabaseSession()
         {
             // Ensures mapping from DTO session to DAO session is present
-            var dataTransportSessionModel = new DataTransferModels.Session
+            var dataTransportSessionModel = new FaaS.DataTransferModels.Session
             {
                 Filled = new DateTime(1992, 5, 19, 3, 15, 0)
             };
@@ -221,7 +221,7 @@ namespace FaaS.Services.UnitTests
                 Filled = new DateTime(1992, 5, 19, 3, 15, 0)
             };
 
-            var actualDataAccessSessionModel = GetMapper().Map<DataTransferModels.Session, Session>(dataTransportSessionModel);
+            var actualDataAccessSessionModel = GetMapper().Map<FaaS.DataTransferModels.Session, Session>(dataTransportSessionModel);
 
             AssertPropertyEquals(expectedDataAccessSessionModel, actualDataAccessSessionModel);
         }
@@ -234,12 +234,12 @@ namespace FaaS.Services.UnitTests
             {
                 Filled = new DateTime(1992, 5, 19, 3, 15, 0)
             };
-            var expectedDataTransportSessionModel = new DataTransferModels.Session
+            var expectedDataTransportSessionModel = new FaaS.DataTransferModels.Session
             {
                 Filled = new DateTime(1992, 5, 19, 3, 15, 0)
             };
 
-            var actualDataTransportSessionModel = GetMapper().Map<Session, DataTransferModels.Session>(dataAccessSessionModel);
+            var actualDataTransportSessionModel = GetMapper().Map<Session, FaaS.DataTransferModels.Session>(dataAccessSessionModel);
 
             AssertPropertyEquals(expectedDataTransportSessionModel, actualDataTransportSessionModel);
         }
@@ -255,7 +255,7 @@ namespace FaaS.Services.UnitTests
             }
         }
 
-        private static MapperConfiguration GetMapperConfiguration() => new MapperConfiguration(ServicesMapperConfiguration.InitializeMappings);
+        private static MapperConfiguration GetMapperConfiguration() => new MapperConfiguration(EntitiesMapperConfiguration.InitializeMappings);
 
         private static IMapper GetMapper() => GetMapperConfiguration().CreateMapper();
     }

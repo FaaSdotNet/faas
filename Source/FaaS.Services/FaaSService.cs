@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Threading.Tasks;
-using FaaS.Entities.DataAccessModels;
 using Microsoft.Extensions.Logging;
 using FaaS.Entities.Repositories;
-using AutoMapper;
+using FaaS.DataTransferModels;
+using System.Linq;
 
 namespace FaaS.Services
 {
     public class FaaSService : IFaaSService
     {
         private readonly ILogger<IFaaSService> _logger;
-        private IMapper _mapper;
 
         private readonly IUserRepository _userRepository;
         private readonly IProjectRepository _projectRepository;
@@ -26,8 +25,7 @@ namespace FaaS.Services
             IElementRepository elementRepository,
             IElementValueRepository elementValueRepository,
             ISessionRepository sessionRepository,
-            ILogger<IFaaSService> logger,
-            IMapper mapper)
+            ILogger<IFaaSService> logger)
         {
             _userRepository = userRepository;
             _projectRepository = projectRepository;
@@ -37,10 +35,9 @@ namespace FaaS.Services
             _sessionRepository = sessionRepository;
 
             _logger = logger;
-            _mapper = mapper;
         }
 
-        public async Task<DataTransferModels.Element> AddElement(DataTransferModels.Form form, DataTransferModels.Element element)
+        public async Task<Element> AddElement(Form form, Element element)
         {
             _logger.LogInformation("AddElement");
 
@@ -60,14 +57,12 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            Form dataAccessFormModel = _mapper.Map<Form>(existingForm);
-            Element dataAccessElementModel = _mapper.Map<Element>(element);
-            dataAccessElementModel = await _elementRepository.Add(dataAccessFormModel, dataAccessElementModel);
+            var dataTransferElementModel = await _elementRepository.Add(existingForm, element);
 
-            return _mapper.Map<DataTransferModels.Element>(dataAccessElementModel);
+            return dataTransferElementModel;
         }
 
-        public async Task<DataTransferModels.ElementValue> AddElementValue(DataTransferModels.Element element, DataTransferModels.Session session, DataTransferModels.ElementValue elementValue)
+        public async Task<ElementValue> AddElementValue(Element element, Session session, ElementValue elementValue)
         {
             _logger.LogInformation("AddElementValue");
 
@@ -95,15 +90,12 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            Element dataAccessElementModel = _mapper.Map<Element>(element);
-            Session dataAccessSessionModel = _mapper.Map<Session>(session);
-            ElementValue dataAccessElementValueModel = _mapper.Map<ElementValue>(elementValue);
-            dataAccessElementValueModel = await _elementValueRepository.Add(dataAccessElementModel, dataAccessSessionModel, dataAccessElementValueModel);
+            var dataTransferElementValueModel = await _elementValueRepository.Add(existingElement, existingSession, elementValue);
 
-            return _mapper.Map<DataTransferModels.ElementValue>(dataAccessElementValueModel);
+            return dataTransferElementValueModel;
         }
 
-        public async Task<DataTransferModels.Form> AddForm(DataTransferModels.Project project, DataTransferModels.Form form)
+        public async Task<Form> AddForm(Project project, Form form)
         {
             _logger.LogInformation("AddForm");
 
@@ -123,14 +115,12 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            Project dataAccessProjectModel = _mapper.Map<Project>(project);
-            Form dataAccessFormModel = _mapper.Map<Form>(form);
-            dataAccessFormModel = await _formRepository.Add(dataAccessProjectModel, dataAccessFormModel);
+            var dataTransferFormModel = await _formRepository.Add(existingProject, form);
 
-            return _mapper.Map<DataTransferModels.Form>(dataAccessFormModel);
+            return dataTransferFormModel;
         }
 
-        public async Task<DataTransferModels.Project> AddProject(DataTransferModels.User user, DataTransferModels.Project project)
+        public async Task<Project> AddProject(User user, Project project)
         {
             _logger.LogInformation("AddProject");
 
@@ -150,14 +140,12 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            User dataAccessUserModel = _mapper.Map<User>(user);
-            Project dataAccessProjectModel = _mapper.Map<Project>(project);
-            dataAccessProjectModel = await _projectRepository.Add(dataAccessUserModel, dataAccessProjectModel);
+            var dataTransferProjectModel = await _projectRepository.Add(existingUser, project);
 
-            return _mapper.Map<DataTransferModels.Project>(dataAccessProjectModel);
+            return dataTransferProjectModel;
         }
 
-        public async Task<DataTransferModels.Session> AddSession(DataTransferModels.Session session)
+        public async Task<Session> AddSession(Session session)
         {
             _logger.LogInformation("AddSession");
 
@@ -169,13 +157,12 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            Session dataAccessSessionModel = _mapper.Map<Session>(session);
-            dataAccessSessionModel = await _sessionRepository.Add(dataAccessSessionModel);
+            var dataTransferSessionModel = await _sessionRepository.Add(session);
 
-            return _mapper.Map<DataTransferModels.Session>(dataAccessSessionModel);
+            return dataTransferSessionModel;
         }
 
-        public async Task<DataTransferModels.User> AddUser(DataTransferModels.User user)
+        public async Task<User> AddUser(User user)
         {
             _logger.LogInformation("AddUser");
 
@@ -187,22 +174,21 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            User dataAccessUserModel = _mapper.Map<User>(user);
-            dataAccessUserModel = await _userRepository.Add(dataAccessUserModel);
+            var dataTransferUserModel = await _userRepository.Add(user);
 
-            return _mapper.Map<DataTransferModels.User>(dataAccessUserModel);
+            return dataTransferUserModel;
         }
 
-        public async Task<DataTransferModels.Element[]> GetAllElements()
+        public async Task<Element[]> GetAllElements()
         {
             _logger.LogInformation("GetAllElements");
 
-            var dataAccessElementModel = await _elementRepository.GetAll();
+            var dataTransferElementModel = await _elementRepository.GetAll();
 
-            return _mapper.Map<DataTransferModels.Element[]>(dataAccessElementModel);
+            return dataTransferElementModel.ToArray();
         }
 
-        public async Task<DataTransferModels.Element[]> GetAllElements(DataTransferModels.Form form)
+        public async Task<Element[]> GetAllElements(Form form)
         {
             _logger.LogInformation("GetAllElements for form");
 
@@ -214,13 +200,12 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            Form dataAccessFormModel = _mapper.Map<Form>(existingForm);
-            var dataAccessElementModel = await _elementRepository.GetAll(dataAccessFormModel);
+            var dataTransferElementModel = await _elementRepository.GetAll(existingForm);
 
-            return _mapper.Map<DataTransferModels.Element[]>(dataAccessElementModel);
+            return dataTransferElementModel.ToArray();
         }
 
-        public async Task<DataTransferModels.ElementValue[]> GetAllElementValues(DataTransferModels.Session session)
+        public async Task<ElementValue[]> GetAllElementValues(Session session)
         {
             _logger.LogInformation("GetAllElementValues for session");
 
@@ -232,13 +217,12 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            Session dataAccessSessionModel = _mapper.Map<Session>(session);
-            var dataAccessElementValueModel = await _elementValueRepository.List(dataAccessSessionModel);
+            var dataTransferElementValueModel = await _elementValueRepository.List(existingSession);
 
-            return _mapper.Map<DataTransferModels.ElementValue[]>(dataAccessElementValueModel);
+            return dataTransferElementValueModel.ToArray();
         }
 
-        public async Task<DataTransferModels.ElementValue[]> GetAllElementValues(DataTransferModels.Element element)
+        public async Task<ElementValue[]> GetAllElementValues(Element element)
         {
             _logger.LogInformation("GetAllElementValues for element");
 
@@ -250,22 +234,21 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            Element dataAccessElementModel = _mapper.Map<Element>(element);
-            var dataAccessElementValueModel = await _elementValueRepository.List(dataAccessElementModel);
+            var dataTransferElementValueModel = await _elementValueRepository.List(existingElement);
 
-            return _mapper.Map<DataTransferModels.ElementValue[]>(dataAccessElementValueModel);
+            return dataTransferElementValueModel.ToArray();
         }
 
-        public async Task<DataTransferModels.Form[]> GetAllForms()
+        public async Task<Form[]> GetAllForms()
         {
             _logger.LogInformation("GetAllForms");
 
-            var dataAccessFormModel = await _formRepository.List();
+            var dataTransferFormModel = await _formRepository.List();
 
-            return _mapper.Map<DataTransferModels.Form[]>(dataAccessFormModel);
+            return dataTransferFormModel.ToArray();
         }
 
-        public async Task<DataTransferModels.Form[]> GetAllForms(DataTransferModels.Project project)
+        public async Task<Form[]> GetAllForms(Project project)
         {
             _logger.LogInformation("GetAllForms for project");
 
@@ -277,13 +260,12 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            //Project dataAccessProjectModel = _mapper.Map<Project>(project);
-            var dataAccessFormModel = await _formRepository.List(/*dataAccessProjectModel*/existingProject);
+            var dataTransferFormModel = await _formRepository.List(existingProject);
 
-            return _mapper.Map<DataTransferModels.Form[]>(dataAccessFormModel);
+            return dataTransferFormModel.ToArray();
         }
 
-        public async Task<DataTransferModels.Project[]> GetAllProjects(DataTransferModels.User user)
+        public async Task<Project[]> GetAllProjects(User user)
         {
             _logger.LogInformation("GetAllProjects for user");
 
@@ -295,210 +277,197 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            User dataAccessUserModel = _mapper.Map<User>(user);
-            var dataAccessProjectModel = await _projectRepository.List(dataAccessUserModel);
+            var dataTransferProjectModel = await _projectRepository.List(existingUser);
 
-            return _mapper.Map<DataTransferModels.Project[]>(dataAccessProjectModel);
+            return dataTransferProjectModel.ToArray();
         }
 
-        public async Task<DataTransferModels.Session[]> GetAllSessions()
+        public async Task<Session[]> GetAllSessions()
         {
             _logger.LogInformation("GetAllSessions");
 
-            var dataAccessSessionModel = await _sessionRepository.List();
-            return _mapper.Map<DataTransferModels.Session[]>(dataAccessSessionModel);
+            var dataTransferSessionModel = await _sessionRepository.List();
+            return dataTransferSessionModel.ToArray();
         }
 
-        public async Task<DataTransferModels.User[]> GetAllUsers()
+        public async Task<User[]> GetAllUsers()
         {
             _logger.LogInformation("GetAllUsers");
 
-            var dataAccessUserModel = await _userRepository.List();
-            return _mapper.Map<DataTransferModels.User[]>(dataAccessUserModel);
+            var dataTransferUserModel = await _userRepository.List();
+            return dataTransferUserModel.ToArray();
         }
 
-        public async Task<DataTransferModels.Element> GetElement(Guid id)
+        public async Task<Element> GetElement(Guid id)
         {
             _logger.LogInformation("GetElement");
             
-            var dataAccessElementModel = await _elementRepository.Get(id);
+            var dataTransferElementModel = await _elementRepository.Get(id);
 
-            return _mapper.Map<DataTransferModels.Element>(dataAccessElementModel);
+            return dataTransferElementModel;
         }
 
-        public async Task<DataTransferModels.ElementValue> GetElementValue(Guid id)
+        public async Task<ElementValue> GetElementValue(Guid id)
         {
             _logger.LogInformation("GetElementValue");
 
-            var dataAccessElementValueModel = await _elementValueRepository.Get(id);
+            var dataTransferElementValueModel = await _elementValueRepository.Get(id);
 
-            return _mapper.Map<DataTransferModels.ElementValue>(dataAccessElementValueModel);
+            return dataTransferElementValueModel;
         }
 
-        public async Task<DataTransferModels.Form> GetForm(Guid id)
+        public async Task<Form> GetForm(Guid id)
         {
             _logger.LogInformation("GetForm");
 
-            var dataAccessFormModel = await _formRepository.Get(id);
+            var dataTransferFormModel = await _formRepository.Get(id);
 
-            return _mapper.Map<DataTransferModels.Form>(dataAccessFormModel);
+            return dataTransferFormModel;
         }
 
-        public async Task<DataTransferModels.Project> GetProject(Guid id)
+        public async Task<Project> GetProject(Guid id)
         {
             _logger.LogInformation("GetProject");
 
-            var dataAccessProjectModel = await _projectRepository.Get(id);
+            var dataTransferProjectModel = await _projectRepository.Get(id);
 
-            return _mapper.Map<DataTransferModels.Project>(dataAccessProjectModel);
+            return dataTransferProjectModel;
         }
 
-        public async Task<DataTransferModels.Session> GetSession(Guid id)
+        public async Task<Session> GetSession(Guid id)
         {
             _logger.LogInformation("GetSession");
 
-            Session dataAccessSessionModel = await _sessionRepository.Get(id);
+            Session dataTransferSessionModel = await _sessionRepository.Get(id);
 
-            return _mapper.Map<DataTransferModels.Session>(dataAccessSessionModel);
+            return dataTransferSessionModel;
         }
 
-        public async Task<DataTransferModels.User> GetUser(Guid id)
+        public async Task<User> GetUser(Guid id)
         {
             _logger.LogInformation("GetUser");
 
-            User dataAccessUserModel = await _userRepository.Get(id);
+            User dataTransferUserModel = await _userRepository.Get(id);
 
-            return _mapper.Map<DataTransferModels.User>(dataAccessUserModel);
+            return dataTransferUserModel;
         }
 
-        public async Task<DataTransferModels.User> GetUser(string googleId)
+        public async Task<User> GetUser(string googleId)
         {
             _logger.LogInformation("GetUser with Google ID");
 
-            User dataAccessUserModel = await _userRepository.Get(googleId);
+            User dataTransferUserModel = await _userRepository.Get(googleId);
 
-            return _mapper.Map<DataTransferModels.User>(dataAccessUserModel);
+            return dataTransferUserModel;
         }
 
-        public async Task<DataTransferModels.Element> RemoveElement(DataTransferModels.Element element)
+        public async Task<Element> RemoveElement(Element element)
         {
             _logger.LogInformation("RemoveElement");
 
-            Element dataAccessElementModel = _mapper.Map<Element>(element);
-            dataAccessElementModel = await _elementRepository.Delete(dataAccessElementModel);
+            var dataTransferElementModel = await _elementRepository.Delete(element);
 
-            return _mapper.Map<DataTransferModels.Element>(dataAccessElementModel);
+            return dataTransferElementModel;
         }
 
-        public async Task<DataTransferModels.ElementValue> RemoveElementValue(DataTransferModels.ElementValue elementValue)
+        public async Task<ElementValue> RemoveElementValue(ElementValue elementValue)
         {
             _logger.LogInformation("RemoveElementValue");
 
-            ElementValue dataAccessElementValueModel = _mapper.Map<ElementValue>(elementValue);
-            dataAccessElementValueModel = await _elementValueRepository.Delete(dataAccessElementValueModel);
+            var dataTransferElementValueModel = await _elementValueRepository.Delete(elementValue);
 
-            return _mapper.Map<DataTransferModels.ElementValue>(dataAccessElementValueModel);
+            return dataTransferElementValueModel;
         }
 
-        public async Task<DataTransferModels.Form> RemoveForm(DataTransferModels.Form form)
+        public async Task<Form> RemoveForm(Form form)
         {
             _logger.LogInformation("RemoveForm");
 
-            Form dataAccessFormModel = _mapper.Map<Form>(form);
-            dataAccessFormModel = await _formRepository.Delete(dataAccessFormModel);
+            var dataTransferFormModel = await _formRepository.Delete(form);
 
-            return _mapper.Map<DataTransferModels.Form>(dataAccessFormModel);
+            return dataTransferFormModel;
         }
 
-        public async Task<DataTransferModels.Project> RemoveProject(DataTransferModels.Project project)
+        public async Task<Project> RemoveProject(Project project)
         {
             _logger.LogInformation("RemoveProject");
 
-            Project dataAccessProjectModel = _mapper.Map<Project>(project);
-            dataAccessProjectModel = await _projectRepository.Delete(dataAccessProjectModel);
+            Project dataTransferProjectModel = await _projectRepository.Delete(project);
 
-            return _mapper.Map<DataTransferModels.Project>(dataAccessProjectModel);
+            return dataTransferProjectModel;
         }
 
-        public async Task<DataTransferModels.Session> RemoveSession(DataTransferModels.Session session)
+        public async Task<Session> RemoveSession(Session session)
         {
             _logger.LogInformation("RemoveSession");
 
-            Session dataAccessSessionModel = _mapper.Map<Session>(session);
-            dataAccessSessionModel = await _sessionRepository.Delete(dataAccessSessionModel);
+            var dataTransferSessionModel = await _sessionRepository.Delete(session);
 
-            return _mapper.Map<DataTransferModels.Session>(dataAccessSessionModel);
+            return dataTransferSessionModel;
         }
 
-        public async Task<DataTransferModels.User> RemoveUser(DataTransferModels.User user)
+        public async Task<User> RemoveUser(User user)
         {
             _logger.LogInformation("RemoveUser");
 
-            User dataAccessUserModel = _mapper.Map<User>(user);
-            dataAccessUserModel = await _userRepository.Delete(dataAccessUserModel);
+            User dataTransferUserModel = await _userRepository.Delete(user);
 
-            return _mapper.Map<DataTransferModels.User>(dataAccessUserModel);
+            return dataTransferUserModel;
         }
 
-        public async Task<DataTransferModels.Element> UpdateElement(DataTransferModels.Element element)
+        public async Task<Element> UpdateElement(Element element)
         {
             _logger.LogInformation("UpdateElement");
 
-            Element dataAccessElementModel = _mapper.Map<Element>(element);
-            dataAccessElementModel = await _elementRepository.Update(dataAccessElementModel);
+            Element dataTransferElementModel = await _elementRepository.Update(element);
 
-            return _mapper.Map<DataTransferModels.Element>(dataAccessElementModel);
+            return dataTransferElementModel;
         }
 
-        public async Task<DataTransferModels.ElementValue> UpdateElementValue(DataTransferModels.ElementValue elementValue)
+        public async Task<ElementValue> UpdateElementValue(ElementValue elementValue)
         {
             _logger.LogInformation("UpdateElementValue");
 
-            ElementValue dataAccessElementValueModel = _mapper.Map<ElementValue>(elementValue);
-            dataAccessElementValueModel = await _elementValueRepository.Update(dataAccessElementValueModel);
+            var dataTransferElementValueModel = await _elementValueRepository.Update(elementValue);
 
-            return _mapper.Map<DataTransferModels.ElementValue>(dataAccessElementValueModel);
+            return dataTransferElementValueModel;
         }
 
         // updating description and display name only
-        public async Task<DataTransferModels.Form> UpdateForm(DataTransferModels.Form form)
+        public async Task<Form> UpdateForm(Form form)
         {
             _logger.LogInformation("UpdateForm");
 
-            Form dataAccessFormModel = _mapper.Map<Form>(form);
-            dataAccessFormModel = await _formRepository.Update(dataAccessFormModel);
+            var dataTransferFormModel = await _formRepository.Update(form);
 
-            return _mapper.Map<DataTransferModels.Form>(dataAccessFormModel);
+            return dataTransferFormModel;
         }
 
-        public async Task<DataTransferModels.Project> UpdateProject(DataTransferModels.Project project)
+        public async Task<Project> UpdateProject(Project project)
         {
             _logger.LogInformation("UpdateProject");
 
-            Project dataAccessProjectModel = _mapper.Map<Project>(project);
-            dataAccessProjectModel = await _projectRepository.Update(dataAccessProjectModel);
+            var dataTransferProjectModel = await _projectRepository.Update(project);
 
-            return _mapper.Map<DataTransferModels.Project>(dataAccessProjectModel);
+            return dataTransferProjectModel;
         }
 
-        public async Task<DataTransferModels.Session> UpdateSession(DataTransferModels.Session session)
+        public async Task<Session> UpdateSession(Session session)
         {
             _logger.LogInformation("UpdateSession");
 
-            Session dataAccessSessionModel = _mapper.Map<Session>(session);
-            dataAccessSessionModel = await _sessionRepository.Update(dataAccessSessionModel);
+            var dataTransferSessionModel = await _sessionRepository.Update(session);
 
-            return _mapper.Map<DataTransferModels.Session>(dataAccessSessionModel);
+            return dataTransferSessionModel;
         }
 
-        public async Task<DataTransferModels.User> UpdateUser(DataTransferModels.User user)
+        public async Task<User> UpdateUser(User user)
         {
             _logger.LogInformation("UpdateUser");
 
-            User dataAccessUserModel = _mapper.Map<User>(user);
-            dataAccessUserModel = await _userRepository.Update(dataAccessUserModel);
+            var dataTransferUserModel = await _userRepository.Update(user);
 
-            return _mapper.Map<DataTransferModels.User>(dataAccessUserModel);
+            return dataTransferUserModel;
         }
     }
 }

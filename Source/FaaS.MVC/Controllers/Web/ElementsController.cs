@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using FaaS.DataTransferModels;
 using FaaS.MVC.Models;
 using FaaS.Services;
-using FaaS.Services.DataTransferModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;

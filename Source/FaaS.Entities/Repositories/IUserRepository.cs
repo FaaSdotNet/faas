@@ -1,4 +1,4 @@
-﻿using FaaS.Entities.DataAccessModels;
+﻿using FaaS.DataTransferModels;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -14,8 +14,6 @@ namespace FaaS.Entities.Repositories
         Task<IEnumerable<User>> List();
 
         Task<User> Add(User user);
-
-        Task<User> Add(string googleId, DateTime registered, IEnumerable<Project> projects);
 
         Task<User> Update(User updatedUser);
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FaaS.Services.DataTransferModels
+namespace FaaS.DataTransferModels
 {
     public class Element
     {
@@ -12,7 +12,7 @@ namespace FaaS.Services.DataTransferModels
 
         public int Type { get; set; }
 
-        public bool Mandatory { get; set; }
+        public bool Required { get; set; }
 
         public Form Form { get; set; }
     }

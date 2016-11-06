@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FaaS.Services.DataTransferModels
+namespace FaaS.DataTransferModels
 {
     public class Session
     {

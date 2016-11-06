@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
 
-namespace FaaS.Services.DataTransferModels.Mapping
+namespace FaaS.Entities.DataAccessModels.Mapping
 {
     public class ElementValueMappingProfile : Profile
     {
         public ElementValueMappingProfile()
         {
-            CreateMap<Entities.DataAccessModels.ElementValue, ElementValue>()
+            CreateMap<ElementValue, DataTransferModels.ElementValue>()
                 .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dst => dst.Value, opt => opt.MapFrom(src => src.Value))
                 .ForMember(dst => dst.Element, opt => opt.MapFrom(src => src.Element))
                 .ForMember(dst => dst.Session, opt => opt.MapFrom(src => src.Session));
 
-            CreateMap<ElementValue, Entities.DataAccessModels.ElementValue>()
+            CreateMap<DataTransferModels.ElementValue, ElementValue>()
                 .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dst => dst.Value, opt => opt.MapFrom(src => src.Value))
                 .ForMember(dst => dst.Element, opt => opt.MapFrom(src => src.Element))

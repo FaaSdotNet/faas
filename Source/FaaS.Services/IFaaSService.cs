@@ -1,4 +1,4 @@
-﻿using FaaS.Services.DataTransferModels;
+﻿using FaaS.DataTransferModels;
 using System;
 using System.Threading.Tasks;
 

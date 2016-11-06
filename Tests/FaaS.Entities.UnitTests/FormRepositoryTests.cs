@@ -18,12 +18,11 @@ namespace FaaS.Entities.UnitTests
             var actualForm = await _FormRepository.Get(id);
 
             Assert.NotNull(actualForm);
-            Assert.IsType<Form>(actualForm);
+            Assert.IsType<DataTransferModels.Form>(actualForm);
         }
 
         [Theory]
         [InlineData(null)]
-        [InlineData("")]
         public async void GetSingleForm_NullOrEmpty_ReturnsForm(Guid id)
         {
             var actualForm = await _FormRepository.Get(id);
@@ -41,7 +40,7 @@ namespace FaaS.Entities.UnitTests
             Assert.Equal(4, actualForms.Count());
             foreach (var actualForm in actualForms)
             {
-                Assert.IsType<Form>(actualForm);
+                Assert.IsType<DataTransferModels.Form>(actualForm);
             }
         }
 
@@ -49,7 +48,7 @@ namespace FaaS.Entities.UnitTests
         public async void AddForm_Null_Throws()
         {
             var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
-            Project actualProject = await _ProjectRepository.Get(id);
+            DataTransferModels.Project actualProject = await _ProjectRepository.Get(id);
             await Assert.ThrowsAsync<ArgumentNullException>(() => _FormRepository.Add(actualProject, null));
         }
 
@@ -57,20 +56,19 @@ namespace FaaS.Entities.UnitTests
         public async void AddForm_NotNull_ReturnsFormWithId()
         {
             var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
-            Project actualProject = await _ProjectRepository.Get(id);
+            DataTransferModels.Project actualProject = await _ProjectRepository.Get(id);
 
-            var newForm = new Form
+            var newForm = new DataTransferModels.Form
             {
-                Name = "NotInDbFormName",
+                FormName = "NotInDbFormName",
                 Created = DateTime.Now,
                 Description = "TestDescriptionNew",
-                Elements = new List<Element>()
             };
-            Form actualForm = await _FormRepository.Add(actualProject, newForm);
+            DataTransferModels.Form actualForm = await _FormRepository.Add(actualProject, newForm);
 
             // Checks returned value
             Assert.NotNull(actualForm);
-            Assert.Equal(newForm.Name, actualForm.Name);
+            Assert.Equal(newForm.FormName, actualForm.FormName);
             Assert.Equal(newForm.Created, actualForm.Created);
             Assert.NotEqual(Guid.Empty, actualForm.Id);
 
@@ -87,12 +85,11 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void UpdateForm_NotNull_NotInDB()
         {
-            var newForm = new Form
+            var newForm = new DataTransferModels.Form
             {
-                Name = "NotInDatabaseFormName",
+                FormName = "NotInDatabaseFormName",
                 Created = DateTime.Now,
                 Description = "NotInDatabaseDescription",
-                Elements = new List<Element>()
             };
 
             var updatedForm = await _FormRepository.Update(newForm);
@@ -105,14 +102,14 @@ namespace FaaS.Entities.UnitTests
             var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
             var actualForm = await _FormRepository.Get(id);
 
-            actualForm.Name = "NotHisPreviousName";
+            actualForm.FormName = "NotHisPreviousName";
 
             actualForm = await _FormRepository.Update(actualForm);
             actualForm = await _FormRepository.Get(id);
 
             // Checks returned value
             Assert.NotNull(actualForm);
-            Assert.Equal("NotHisPreviousName", actualForm.Name);
+            Assert.Equal("NotHisPreviousName", actualForm.FormName);
             Assert.NotEqual(Guid.Empty, actualForm.Id);
         }
 
@@ -128,21 +125,20 @@ namespace FaaS.Entities.UnitTests
                     GetTestElementWithoutElementValuesAndOptions(252, true),
             };
 
-            var newForm = new Form
+            var newForm = new DataTransferModels.Form
             {
-                Name = "TestFormNewName",
+                FormName = "TestFormNewName",
                 Created = DateTime.Now,
-                Elements = elements
             };
 
-            Form actualForm = await _FormRepository.Add(actualProject, newForm);
+            DataTransferModels.Form actualForm = await _FormRepository.Add(actualProject, newForm);
 
             // Checks returned value
             Assert.NotNull(actualForm);
-            Assert.Equal(newForm.Name, actualForm.Name);
+            Assert.Equal(newForm.FormName, actualForm.FormName);
             Assert.Equal(newForm.Created, actualForm.Created);
             Assert.NotEqual(Guid.Empty, actualForm.Id);
-            Assert.Equal(3, actualForm.Elements.Count);
+            //Assert.Equal(3, actualForm.Elements.Count);
 
             // Checks storage is persistant
             Assert.NotNull(_FormRepository.Get(actualForm.Id));
@@ -157,12 +153,11 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void DeleteForm_NotNull_NotInDb()
         {
-            var newForm = new Form
+            var newForm = new DataTransferModels.Form
             {
-                Name = "TestProjectNotInDb",
+                FormName = "TestProjectNotInDb",
                 Created = DateTime.Now,
-                Description = "TestDescriptionNotInDb",
-                Elements = new List<Element>()
+                Description = "TestDescriptionNotInDb"
             };
             var actualForm = await _FormRepository.Delete(newForm);
             Assert.Null(actualForm);
@@ -171,13 +166,17 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void DeleteForm_NotNull_InDb()
         {
-            Form formToDelete = GetTestFormWithoutElements(1);
+            DataTransferModels.Form formToDelete = new DataTransferModels.Form
+            {
+                FormName = "TestForm1",
+                Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}")
+            };
 
             var deletedForm = await _FormRepository.Delete(formToDelete);
 
             // Checks returned value
             Assert.NotNull(deletedForm);
-            Assert.Equal("TestForm1", deletedForm.Name);
+            Assert.Equal("TestForm1", deletedForm.FormName);
             Assert.NotEqual(Guid.Empty, deletedForm.Id);
 
             deletedForm = await _FormRepository.Get(formToDelete.Id);

@@ -1,6 +1,8 @@
-﻿using FaaS.Entities.Configuration;
+﻿using AutoMapper;
+using FaaS.Entities.Configuration;
 using FaaS.Entities.Contexts;
 using FaaS.Entities.DataAccessModels;
+using FaaS.Entities.DataAccessModels.Mapping;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,7 @@ namespace FaaS.Entities.Repositories
     public class SessionRepository : ISessionRepository
     {
         private readonly FaaSContext _context;
+        private IMapper _mapper;
 
         /// <summary>
         /// Constructor indended for tests' purposes only.
@@ -26,27 +29,32 @@ namespace FaaS.Entities.Repositories
             }
 
             _context = faaSContext;
+            var config = new MapperConfiguration(cfg => EntitiesMapperConfiguration.InitializeMappings(cfg));
+            _mapper = config.CreateMapper();
         }
 
-        public SessionRepository(IOptions<ConnectionOptions> connectionOptions)
+        public SessionRepository(IOptions<ConnectionOptions> connectionOptions, IMapper mapper)
         {
             _context = new FaaSContext(connectionOptions.Value.ConnectionString);
+            _mapper = mapper;
         }
 
-        public async Task<Session> Add(Session session)
+        public async Task<DataTransferModels.Session> Add(DataTransferModels.Session session)
         {
             if (session == null)
             {
                 throw new ArgumentNullException(nameof(session));
             }
 
-            var addedSession = _context.Sessions.Add(session);
+            Session dataAccessSessionModel = _mapper.Map<Session>(session);
+
+            var addedSession = _context.Sessions.Add(dataAccessSessionModel);
             await _context.SaveChangesAsync();
 
-            return addedSession;
+            return _mapper.Map<DataTransferModels.Session>(addedSession);
         }
 
-        public async Task<Session> Delete(Session session)
+        public async Task<DataTransferModels.Session> Delete(DataTransferModels.Session session)
         {
             if (session == null)
             {
@@ -63,13 +71,17 @@ namespace FaaS.Entities.Repositories
 
             await _context.SaveChangesAsync();
 
-            return deletedSession;
+            return _mapper.Map<DataTransferModels.Session>(deletedSession);
         }
 
-        public async Task<IEnumerable<Session>> List()
-            => await _context.Sessions.ToArrayAsync();
+        public async Task<IEnumerable<DataTransferModels.Session>> List()
+        {
+            var sessions = await _context.Sessions.ToArrayAsync();
 
-        public async Task<Session> Update(Session updatedSession)
+            return _mapper.Map<IEnumerable<DataTransferModels.Session>>(sessions);
+        }
+
+        public async Task<DataTransferModels.Session> Update(DataTransferModels.Session updatedSession)
         {
             if (updatedSession == null)
             {
@@ -82,16 +94,19 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentException("Session is not in db!");
             }
 
-            _context.Sessions.Attach(updatedSession);
-            var entry = _context.Entry(updatedSession);
-            entry.State = EntityState.Modified;
+            oldSession.Filled = updatedSession.Filled;
+            _context.Entry(oldSession).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
 
-            return updatedSession;
+            return _mapper.Map<DataTransferModels.Session>(oldSession);
         }
 
-        public async Task<Session> Get(Guid id) =>
-            await _context.Sessions.SingleOrDefaultAsync(e => e.Id == id);
+        public async Task<DataTransferModels.Session> Get(Guid id)
+        {
+            Session session = await _context.Sessions.SingleOrDefaultAsync(e => e.Id == id);
+
+            return _mapper.Map<DataTransferModels.Session>(session);
+        }
     }
 }

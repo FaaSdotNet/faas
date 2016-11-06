@@ -1,6 +1,8 @@
-﻿using FaaS.Entities.Configuration;
+﻿using AutoMapper;
+using FaaS.Entities.Configuration;
 using FaaS.Entities.Contexts;
 using FaaS.Entities.DataAccessModels;
+using FaaS.Entities.DataAccessModels.Mapping;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -13,10 +15,12 @@ namespace FaaS.Entities.Repositories
     public class ElementValueRepository : IElementValueRepository
     {
         private readonly FaaSContext _context;
+        private IMapper _mapper;
 
-        public ElementValueRepository(IOptions<ConnectionOptions> connectionOptions)
+        public ElementValueRepository(IOptions<ConnectionOptions> connectionOptions, IMapper mapper)
         {
             _context = new FaaSContext(connectionOptions.Value.ConnectionString);
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -31,9 +35,12 @@ namespace FaaS.Entities.Repositories
             }
 
             _context = faaSContext;
+            var config = new MapperConfiguration(cfg =>
+                EntitiesMapperConfiguration.InitializeMappings(cfg));
+            _mapper = config.CreateMapper();
         }
 
-        public async Task<ElementValue> Add(Element element, Session session, ElementValue elementValue)
+        public async Task<DataTransferModels.ElementValue> Add(DataTransferModels.Element element, DataTransferModels.Session session, DataTransferModels.ElementValue elementValue)
         {
             if (element == null)
             {
@@ -60,16 +67,18 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentException("session not in DB");
             }
 
-            elementValue.ElementId = element.Id;
-            elementValue.SessionId = session.Id;
+            ElementValue dataAccessElementValueModel = _mapper.Map<ElementValue>(elementValue);
 
-            var addedElementValue = _context.ElementValues.Add(elementValue);
+            dataAccessElementValueModel.ElementId = element.Id;
+            dataAccessElementValueModel.SessionId = session.Id;
+
+            var addedElementValue = _context.ElementValues.Add(dataAccessElementValueModel);
             await _context.SaveChangesAsync();
 
-            return addedElementValue;
+            return _mapper.Map<DataTransferModels.ElementValue>(addedElementValue);
         }
 
-        public async Task<ElementValue> Update(ElementValue elementValue)
+        public async Task<DataTransferModels.ElementValue> Update(DataTransferModels.ElementValue elementValue)
         {
             if (elementValue == null)
             {
@@ -82,16 +91,15 @@ namespace FaaS.Entities.Repositories
                 return null;
             }
 
-            _context.ElementValues.Attach(elementValue);
-            var entry = _context.Entry(elementValue);
-            entry.State = EntityState.Modified;
+            oldElementValue.Value = elementValue.Value;
+            _context.Entry(oldElementValue).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
 
-            return elementValue;
+            return _mapper.Map<DataTransferModels.ElementValue>(oldElementValue);
         }
 
-        public async Task<ElementValue> Delete(ElementValue elementValue)
+        public async Task<DataTransferModels.ElementValue> Delete(DataTransferModels.ElementValue elementValue)
         {
             if (elementValue == null)
             {
@@ -108,25 +116,42 @@ namespace FaaS.Entities.Repositories
 
             await _context.SaveChangesAsync();
 
-            return deletedElementValue;
+            return _mapper.Map<DataTransferModels.ElementValue>(deletedElementValue);
         }
 
-        public async Task<ElementValue> Get(Guid id)
-            => await _context.ElementValues.SingleOrDefaultAsync(e => e.Id == id);
+        public async Task<DataTransferModels.ElementValue> Get(Guid id)
+        {
+            ElementValue elementValue = await _context.ElementValues
+                                                .SingleOrDefaultAsync(e => e.Id == id);
 
-        public async Task<IEnumerable<ElementValue>> List()
-            => await _context.ElementValues.ToArrayAsync();
+            return _mapper.Map<DataTransferModels.ElementValue>(elementValue);
+        }
 
-        public async Task<IEnumerable<ElementValue>> List(Session session)
-            => await _context
-            .ElementValues
-            .Where(elementValue => elementValue.SessionId == session.Id)
-            .ToArrayAsync();
+        public async Task<IEnumerable<DataTransferModels.ElementValue>> List()
+        {
+            var elementValues = await _context.ElementValues.ToArrayAsync();
 
-        public async Task<IEnumerable<ElementValue>> List(Element element)
-            => await _context
-            .ElementValues
-            .Where(elementValue => elementValue.ElementId == element.Id)
-            .ToArrayAsync();
+            return _mapper.Map<IEnumerable<DataTransferModels.ElementValue>>(elementValues);
+        }
+
+        public async Task<IEnumerable<DataTransferModels.ElementValue>> List(DataTransferModels.Session session)
+        {
+            var elementValues = await _context
+                                    .ElementValues
+                                    .Where(elementValue => elementValue.SessionId == session.Id)
+                                    .ToArrayAsync();
+
+            return _mapper.Map<IEnumerable<DataTransferModels.ElementValue>>(elementValues);
+        }
+
+        public async Task<IEnumerable<DataTransferModels.ElementValue>> List(DataTransferModels.Element element)
+        {
+            var elementValues = await _context
+                                    .ElementValues
+                                    .Where(elementValue => elementValue.ElementId == element.Id)
+                                    .ToArrayAsync();
+
+            return _mapper.Map<IEnumerable<DataTransferModels.ElementValue>>(elementValues);
+        }
     }
 }

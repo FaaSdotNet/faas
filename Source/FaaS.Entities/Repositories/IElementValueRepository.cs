@@ -1,5 +1,5 @@
 ﻿using System;
-using FaaS.Entities.DataAccessModels;
+using FaaS.DataTransferModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using FaaS.Services.DataTransferModels.Mapping;
+using FaaS.Entities.DataAccessModels.Mapping;
 
-namespace FaaS.Services.Configuration
+namespace FaaS.Entities.Configuration
 {
-    public static class ServicesMapperConfiguration
+    public static class EntitiesMapperConfiguration
     {
         public static void InitializeMappings(IMapperConfigurationExpression configuration)
         {

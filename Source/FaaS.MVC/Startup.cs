@@ -3,7 +3,7 @@ using FaaS.Entities.Configuration;
 using FaaS.Entities.Repositories;
 using FaaS.MVC.Configuration;
 using FaaS.Services;
-using FaaS.Services.Configuration;
+using FaaS.Entities.Configuration;
 using FaaS.Services.RandomId;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,7 +43,7 @@ namespace FaaS.MVC
             var mapper = new MapperConfiguration(cfg =>
             {
                 ViewModelsMapperConfiguration.InitializeMappings(cfg);
-                ServicesMapperConfiguration.InitializeMappings(cfg);
+                EntitiesMapperConfiguration.InitializeMappings(cfg);
             }).CreateMapper();
 
             // Do not allow application to start with broken configuration. Fail fast.

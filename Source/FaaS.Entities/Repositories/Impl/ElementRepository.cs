@@ -1,6 +1,8 @@
-﻿using FaaS.Entities.Configuration;
+﻿using AutoMapper;
+using FaaS.Entities.Configuration;
 using FaaS.Entities.Contexts;
 using FaaS.Entities.DataAccessModels;
+using FaaS.Entities.DataAccessModels.Mapping;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -13,10 +15,12 @@ namespace FaaS.Entities.Repositories
     public class ElementRepository : IElementRepository
     {
         private readonly FaaSContext _context;
+        private IMapper _mapper;
 
-        public ElementRepository(IOptions<ConnectionOptions> connectionOptions)
+        public ElementRepository(IOptions<ConnectionOptions> connectionOptions, IMapper mapper)
         {
             _context = new FaaSContext(connectionOptions.Value.ConnectionString);
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -31,9 +35,11 @@ namespace FaaS.Entities.Repositories
             }
 
             _context = faaSContext;
+            var config = new MapperConfiguration(cfg => EntitiesMapperConfiguration.InitializeMappings(cfg));
+            _mapper = config.CreateMapper();
         }
 
-        public async Task<Element> Add(Form form, Element element)
+        public async Task<DataTransferModels.Element> Add(DataTransferModels.Form form, DataTransferModels.Element element)
         {
             if (form == null)
             {
@@ -44,16 +50,18 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentNullException(nameof(element));
             }
 
-            element.Form = _context.Forms.Find(form.Id);
-            element.FormId = form.Id;
+            var dataAccessElementModel = _mapper.Map<Element>(element);
 
-            var addedElement = _context.Elements.Add(element);
+            dataAccessElementModel.Form = _context.Forms.Find(form.Id);
+            dataAccessElementModel.FormId = form.Id;
+
+            var addedElement = _context.Elements.Add(dataAccessElementModel);
             await _context.SaveChangesAsync();
 
-            return addedElement;
+            return _mapper.Map<DataTransferModels.Element>(addedElement);
         }
 
-        public async Task<Element> Update(Element updatedElement)
+        public async Task<DataTransferModels.Element> Update(DataTransferModels.Element updatedElement)
         {
             if (updatedElement == null)
             {
@@ -77,10 +85,10 @@ namespace FaaS.Entities.Repositories
          
             await _context.SaveChangesAsync();
 
-            return updatedElement;
+            return _mapper.Map<DataTransferModels.Element>(oldElement);
         }
 
-        public async Task<Element> Delete(Element element)
+        public async Task<DataTransferModels.Element> Delete(DataTransferModels.Element element)
         {
             if (element == null)
             {
@@ -96,19 +104,31 @@ namespace FaaS.Entities.Repositories
             var deletedElement = _context.Elements.Remove(oldElement);
             await _context.SaveChangesAsync();
 
-            return deletedElement;
+            return _mapper.Map<DataTransferModels.Element>(deletedElement);
         }
 
-        public async Task<Element> Get(Guid id)
-            => await _context.Elements.SingleOrDefaultAsync(e => e.Id == id);
+        public async Task<DataTransferModels.Element> Get(Guid id)
+        {
+            Element element = await _context.Elements.SingleOrDefaultAsync(e => e.Id == id);
 
-        public async Task<IEnumerable<Element>> GetAll()
-            => await _context.Elements.ToArrayAsync();
+            return _mapper.Map<DataTransferModels.Element>(element);
+        }
 
-        public async Task<IEnumerable<Element>> GetAll(Form form)
-            => await _context
-            .Elements
-            .Where(element => element.FormId == form.Id)
-            .ToArrayAsync();
+        public async Task<IEnumerable<DataTransferModels.Element>> GetAll()
+        {
+            var elements = await _context.Elements.ToArrayAsync();
+
+            return _mapper.Map<IEnumerable<DataTransferModels.Element>>(elements);
+        }
+
+        public async Task<IEnumerable<DataTransferModels.Element>> GetAll(DataTransferModels.Form form)
+        {
+            var elements = await _context
+                            .Elements
+                            .Where(element => element.FormId == form.Id)
+                            .ToArrayAsync();
+
+            return _mapper.Map<IEnumerable<DataTransferModels.Element>>(elements);
+        }
     }
 }
