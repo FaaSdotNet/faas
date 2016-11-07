@@ -19,13 +19,23 @@ namespace FaaS.MVC.Controllers.Api
     {
         public const string RouteController = "projects";
 
-        private readonly IFaaSService service;
+        /// <summary>
+        /// User service
+        /// </summary>
+        private readonly IUserService userService;
+
+        /// <summary>
+        /// Project service
+        /// </summary>
+        private readonly IProjectService projectService;
+
         private readonly ILogger<ProjectsContoller> logger;
 
 
-        public ProjectsContoller(IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, IMapper mapper, IFaaSService service, ILogger<ProjectsContoller> logger) : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
+        public ProjectsContoller(IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, IMapper mapper, IUserService userService, IProjectService projectService, ILogger<ProjectsContoller> logger) : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
         {
-            this.service = service;
+            this.userService = userService;
+            this.projectService = projectService;
             this.logger = logger;
         }
 
@@ -45,9 +55,9 @@ namespace FaaS.MVC.Controllers.Api
                 return Unauthorized();
             }
 
-            var userDto = await service.GetUser(new Guid(userId));
+            var userDto = await userService.Get(new Guid(userId));
            
-            var projects = await service.GetAllProjects(userDto);
+            var projects = await projectService.GetAllForUser(userDto);
             
 
             // Apply limit
@@ -92,7 +102,7 @@ namespace FaaS.MVC.Controllers.Api
                 return Unauthorized();
             }
 
-            var project = await service.GetProject(id);
+            var project = await projectService.Get(id);
 
             if(project == null)
             {
@@ -119,7 +129,7 @@ namespace FaaS.MVC.Controllers.Api
 
                 var userId = new Guid(stringGuid);
 
-                var userDto = await service.GetUser(userId);
+                var userDto = await userService.Get(userId);
                 project.Created = DateTime.Now;
                
 
@@ -134,7 +144,7 @@ namespace FaaS.MVC.Controllers.Api
                 }
 
 
-                var result = await service.AddProject(userDto, projectDto);
+                var result = await projectService.Add(userDto, projectDto);
 
                 var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
 
@@ -168,7 +178,7 @@ namespace FaaS.MVC.Controllers.Api
                 }
 
                 var projectDto = mapper.Map<ProjectViewModel, Project>(project);
-                var result = await service.UpdateProject(projectDto);
+                var result = await projectService.Update(projectDto);
               
                 return Ok(result);
             }
@@ -192,8 +202,8 @@ namespace FaaS.MVC.Controllers.Api
                     return Unauthorized();
                 }
 
-                var project = await service.GetProject(id);
-                var result = await service.RemoveProject(project);
+                var project = await projectService.Get(id);
+                var result = await projectService.Remove(project);
 
                 return Ok(result);
             }

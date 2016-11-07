@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FaaS.Services.DataTransferModels;
+using FaaS.DataTransferModels;
 using FaaS.Entities.Repositories;
 using Microsoft.Extensions.Logging;
-using AutoMapper;
 
 namespace FaaS.Services
 {
@@ -27,23 +25,16 @@ namespace FaaS.Services
         private readonly IProjectRepository projectRepository;
 
         /// <summary>
-        /// Mapper
-        /// </summary>
-        private IMapper mapper;
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="formRepository">form repository</param>
         /// <param name="projectRepository">project repository</param>
         /// <param name="logger">logger</param>
-        /// <param name="mapper">mapper</param>
-        public FormService(IFormRepository formRepository, IProjectRepository projectRepository, ILogger<IFormService> logger, IMapper mapper)
+        public FormService(IFormRepository formRepository, IProjectRepository projectRepository, ILogger<IFormService> logger)
         {
             this.formRepository = formRepository;
             this.projectRepository = projectRepository;
             this.logger = logger;
-            this.mapper = mapper;
         }
 
         public async Task<Form> Add(Project project, Form form)
@@ -66,29 +57,21 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            var dataAccessProjectModel = mapper.Map<Entities.DataAccessModels.Project>(project);
-            var dataAccessFormModel = mapper.Map<Entities.DataAccessModels.Form>(form);
-            dataAccessFormModel = await formRepository.Add(dataAccessProjectModel, dataAccessFormModel);
-
-            return mapper.Map<Form>(dataAccessFormModel);
+            return await formRepository.Add(existingProject, form);
         }
 
         public async Task<Form> Get(Guid id)
         {
             logger.LogInformation("Get operation was called");
 
-            var dataAccessFormModel = await formRepository.Get(id);
-
-            return mapper.Map<Form>(dataAccessFormModel);
+            return await formRepository.Get(id);
         }
 
         public async Task<Form[]> GetAll()
         {
             logger.LogInformation("GetAll operation was called");
 
-            var dataAccessFormModel = await formRepository.List();
-
-            return mapper.Map<Form[]>(dataAccessFormModel);
+            return (await formRepository.List()).ToArray();
         }
 
         public async Task<Form[]> GetAllForProject(Project project)
@@ -103,30 +86,21 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            //Project dataAccessProjectModel = _mapper.Map<Project>(project);
-            var dataAccessFormModel = await formRepository.List(/*dataAccessProjectModel*/existingProject);
-
-            return mapper.Map<Form[]>(dataAccessFormModel);
+            return (await formRepository.List(existingProject)).ToArray();
         }
 
         public async Task<Form> Remove(Form form)
         {
             logger.LogInformation("Remove operation was called");
 
-            var dataAccessFormModel = mapper.Map<Entities.DataAccessModels.Form>(form);
-            dataAccessFormModel = await formRepository.Delete(dataAccessFormModel);
-
-            return mapper.Map<Form>(dataAccessFormModel);
+            return await formRepository.Delete(form);
         }
 
         public async Task<Form> Update(Form form)
         {
             logger.LogInformation("Update operation was called");
 
-            var dataAccessFormModel = mapper.Map<Entities.DataAccessModels.Form>(form);
-            dataAccessFormModel = await formRepository.Update(dataAccessFormModel);
-
-            return mapper.Map<Form>(dataAccessFormModel);
+            return await formRepository.Update(form);
         }
     }
 }

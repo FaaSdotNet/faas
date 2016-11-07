@@ -1,6 +1,7 @@
-﻿using FaaS.Services.DataTransferModels;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+
+using FaaS.DataTransferModels;
 
 namespace FaaS.Services.Interfaces
 {

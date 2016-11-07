@@ -3,12 +3,7 @@ using FaaS.Entities.Configuration;
 using FaaS.Entities.Repositories;
 using FaaS.MVC.Configuration;
 using FaaS.Services;
-<<<<<<< HEAD
-using FaaS.Services.Configuration;
 using FaaS.Services.Interfaces;
-=======
-using FaaS.Entities.Configuration;
->>>>>>> master
 using FaaS.Services.RandomId;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

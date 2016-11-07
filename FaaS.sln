@@ -17,6 +17,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaaS.Entities", "Source\FaaS.Entities\FaaS.Entities.csproj", "{88B1F427-50CC-4F9D-ABE5-0E963BA684A6}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "FaaS.Services", "Source\FaaS.Services\FaaS.Services.xproj", "{8E6F8BD4-27CE-46FD-8D27-2CC4AED4C43A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{466A633C-D6C3-4316-8056-C4E3194089DB} = {466A633C-D6C3-4316-8056-C4E3194089DB}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaaS.Migrations", "Utilities\FaaS.Migrations\FaaS.Migrations.csproj", "{6F022CE0-F7D3-4599-A47B-7452B5514775}"
 EndProject

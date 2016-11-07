@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FaaS.Services.DataTransferModels;
+using FaaS.DataTransferModels;
 using Microsoft.Extensions.Logging;
-using AutoMapper;
 using FaaS.Entities.Repositories;
 
 namespace FaaS.Services
@@ -30,23 +28,16 @@ namespace FaaS.Services
         private readonly IUserRepository userRepository;
 
         /// <summary>
-        /// Mapper
-        /// </summary>
-        private IMapper mapper;
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="projectRepository">project repository</param>
         /// <param name="userRepository">user repository</param>
         /// <param name="logger">logger</param>
-        /// <param name="mapper">mapper</param>
-        public ProjectService(IProjectRepository projectRepository, IUserRepository userRepository, ILogger<IProjectService> logger, IMapper mapper)
+        public ProjectService(IProjectRepository projectRepository, IUserRepository userRepository, ILogger<IProjectService> logger)
         {
             this.projectRepository = projectRepository;
             this.userRepository = userRepository;
             this.logger = logger;
-            this.mapper = mapper;
         }
 
         public async Task<Project> Add(User user, Project project)
@@ -69,11 +60,7 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            var dataAccessUserModel = mapper.Map<Entities.DataAccessModels.User>(user);
-            var dataAccessProjectModel = mapper.Map<Entities.DataAccessModels.Project>(project);
-            dataAccessProjectModel = await projectRepository.Add(dataAccessUserModel, dataAccessProjectModel);
-
-            return mapper.Map<Project>(dataAccessProjectModel);
+            return await projectRepository.Add(existingUser, project);
         }
 
 
@@ -81,8 +68,7 @@ namespace FaaS.Services
         {
             logger.LogInformation("Get operation called");
 
-            var dataAccessProjectModel = await projectRepository.Get(id);
-            return mapper.Map<Project>(dataAccessProjectModel);
+            return await projectRepository.Get(id);
         }
 
         public async Task<Project[]> GetAllForUser(User user)
@@ -96,31 +82,22 @@ namespace FaaS.Services
                 logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
-
-            var dataAccessUserModel = mapper.Map<Entities.DataAccessModels.User>(user);
-            var dataAccessProjectModel = await projectRepository.List(dataAccessUserModel);
-
-            return mapper.Map<Project[]>(dataAccessProjectModel);
+           
+            return (await projectRepository.List(existingUser)).ToArray();
         }
 
         public async Task<Project> Remove(Project project)
         {
             logger.LogInformation("Remove was called");
-
-            var dataAccessProjectModel = mapper.Map<Entities.DataAccessModels.Project>(project);
-            dataAccessProjectModel = await projectRepository.Delete(dataAccessProjectModel);
-
-            return mapper.Map<Project>(dataAccessProjectModel);
+           
+            return await projectRepository.Delete(project);
         }
 
         public async Task<Project> Update(Project project)
         {
             logger.LogInformation("Update was called");
 
-            var dataAccessProjectModel = mapper.Map<Entities.DataAccessModels.Project>(project);
-            dataAccessProjectModel = await projectRepository.Update(dataAccessProjectModel);
-
-            return mapper.Map<Project>(dataAccessProjectModel);
+            return await projectRepository.Update(project);
         }
     }
 }

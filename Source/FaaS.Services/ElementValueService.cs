@@ -1,12 +1,10 @@
 ﻿using FaaS.Services.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FaaS.Services.DataTransferModels;
+using FaaS.DataTransferModels;
 using Microsoft.Extensions.Logging;
 using FaaS.Entities.Repositories;
-using AutoMapper;
 
 namespace FaaS.Services
 {
@@ -36,25 +34,18 @@ namespace FaaS.Services
         private readonly ISessionRepository sessionRepository;
 
         /// <summary>
-        /// Mapper
-        /// </summary>
-        private IMapper mapper;
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="elementValueRepository">element value repository</param>
         /// <param name="elementRepository">element repository</param>
         /// <param name="sessionRepository">session repository</param>
         /// <param name="logger">logger</param>
-        /// <param name="mapper">mapper</param>
-        public ElementValueService(IElementValueRepository elementValueRepository, IElementRepository elementRepository, ISessionRepository sessionRepository, ILogger<IElementValueService> logger, IMapper mapper)
+        public ElementValueService(IElementValueRepository elementValueRepository, IElementRepository elementRepository, ISessionRepository sessionRepository, ILogger<IElementValueService> logger)
         {
             this.elementValueRepository = elementValueRepository;
             this.elementRepository = elementRepository;
             this.sessionRepository = sessionRepository;
             this.logger = logger;
-            this.mapper = mapper;
         }
 
         public async Task<ElementValue> Add(Element element, Session session, ElementValue elementValue)
@@ -85,21 +76,14 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            var dataAccessElementModel = mapper.Map<Entities.DataAccessModels.Element>(element);
-            var dataAccessSessionModel = mapper.Map<Entities.DataAccessModels.Session>(session);
-            var dataAccessElementValueModel = mapper.Map<Entities.DataAccessModels.ElementValue>(elementValue);
-            dataAccessElementValueModel = await elementValueRepository.Add(dataAccessElementModel, dataAccessSessionModel, dataAccessElementValueModel);
-        
-            return mapper.Map<ElementValue>(dataAccessElementValueModel);
+            return await elementValueRepository.Add(existingElement, existingSession, elementValue);
         }
 
         public async Task<ElementValue> Get(Guid id)
         {
             logger.LogInformation("Get operation was called");
 
-            var dataAccessElementValueModel = await elementValueRepository.Get(id);
-
-            return mapper.Map<ElementValue>(dataAccessElementValueModel);
+            return await elementValueRepository.Get(id);
         }
 
         public async Task<ElementValue[]> GetAllForElement(Element element)
@@ -114,10 +98,7 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            var dataAccessElementModel = mapper.Map<Entities.DataAccessModels.Element>(element);
-            var dataAccessElementValueModel = await elementValueRepository.List(dataAccessElementModel);
-
-            return mapper.Map<ElementValue[]>(dataAccessElementValueModel);
+            return (await elementValueRepository.List(element)).ToArray();
         }
 
         public async Task<ElementValue[]> GetAllForSession(Session session)
@@ -132,30 +113,21 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            var dataAccessSessionModel = mapper.Map<Entities.DataAccessModels.Session>(session);
-            var dataAccessElementValueModel = await elementValueRepository.List(dataAccessSessionModel);
-
-            return mapper.Map<ElementValue[]>(dataAccessElementValueModel);
+            return (await elementValueRepository.List(existingSession)).ToArray();
         }
 
         public async Task<ElementValue> Remove(ElementValue elementValue)
         {
             logger.LogInformation("Remove operation was called");
 
-            var dataAccessElementValueModel = mapper.Map<Entities.DataAccessModels.ElementValue>(elementValue);
-            dataAccessElementValueModel = await elementValueRepository.Delete(dataAccessElementValueModel);
-
-            return mapper.Map<ElementValue>(dataAccessElementValueModel);
+            return await elementValueRepository.Delete(elementValue);
         }
 
         public async Task<ElementValue> Update(ElementValue elementValue)
         {
             logger.LogInformation("Update operation was called");
-
-            var dataAccessElementValueModel = mapper.Map<Entities.DataAccessModels.ElementValue>(elementValue);
-            dataAccessElementValueModel = await elementValueRepository.Update(dataAccessElementValueModel);
-
-            return mapper.Map<ElementValue>(dataAccessElementValueModel);
+            
+            return await elementValueRepository.Update(elementValue);
         }
     }
 }

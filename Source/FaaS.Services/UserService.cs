@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using AutoMapper;
-using FaaS.Entities;
 using FaaS.Entities.Repositories;
-using FaaS.Services.DataTransferModels;
+using FaaS.DataTransferModels;
 
 namespace FaaS.Services
 {
@@ -26,23 +23,15 @@ namespace FaaS.Services
         private readonly IUserRepository userRepository;
 
         /// <summary>
-        /// Mapper
-        /// </summary>
-        private IMapper mapper;
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="userRepository">user repository</param>
         /// <param name="logger">logger</param>
-        /// <param name="mapper">mapper</param>
-        public UserService(IUserRepository userRepository, ILogger<IUserService> logger, IMapper mapper)
+        public UserService(IUserRepository userRepository, ILogger<IUserService> logger)
         {
             this.userRepository = userRepository;
             this.logger = logger;
-            this.mapper = mapper;
         }
-
 
         public async Task<User> Add(User user)
         {
@@ -56,54 +45,42 @@ namespace FaaS.Services
                 throw new InvalidOperationException(errorMessage);
             }
 
-            var dataAccesUserModel = mapper.Map<Entities.DataAccessModels.User>(user);
-            dataAccesUserModel = await userRepository.Add(dataAccesUserModel);
-
-            return mapper.Map<User>(dataAccesUserModel);
+            return await userRepository.Add(user);
         }
 
         public async Task<User> Get(string googleId)
         {
             logger.LogInformation("Get [google id] operation called");
 
-            var dataAccessUserModel = await userRepository.Get(googleId);
-            return mapper.Map<User>(dataAccessUserModel);
+            return await userRepository.Get(googleId);
         }
 
         public async Task<User> Get(Guid id)
         {
             logger.LogInformation("Get [guid] operation called");
 
-            var dataAccessUserModel = await userRepository.Get(id);
-            return mapper.Map<User>(dataAccessUserModel);
+            return await userRepository.Get(id);
         }
 
         public async Task<User[]> GetAll()
         {
             logger.LogInformation("GetAll operation called");
 
-            var dataAccessUserModel = await userRepository.List();
-            return mapper.Map<User[]>(dataAccessUserModel);
+            return (await userRepository.List()).ToArray();
         }
 
         public async Task<User> Remove(User user)
         {
             logger.LogInformation("Remove operation called");
 
-            var dataAccessUserModel = mapper.Map<Entities.DataAccessModels.User>(user);
-            dataAccessUserModel = await userRepository.Delete(dataAccessUserModel);
-
-            return mapper.Map<User>(dataAccessUserModel);
+            return await userRepository.Delete(user);
         }
 
         public async Task<User> Update(User user)
         {
             logger.LogInformation("Update operation called");
 
-            var dataAccessUserModel = mapper.Map<Entities.DataAccessModels.User>(user);
-            dataAccessUserModel = await userRepository.Update(dataAccessUserModel);
-
-            return mapper.Map<User>(dataAccessUserModel);
+            return await userRepository.Update(user);
         }
     }
 }

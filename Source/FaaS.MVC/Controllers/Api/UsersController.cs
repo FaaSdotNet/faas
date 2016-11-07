@@ -20,13 +20,17 @@ namespace FaaS.MVC.Controllers.Api
     {
         public const string RouteController = "users";
 
-        private readonly IFaaSService service;
+        /// <summary>
+        /// User service
+        /// </summary>
+        private readonly IUserService userService;
+
         private readonly ILogger<UsersController> logger;
 
 
-        public UsersController(IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, IMapper mapper, IFaaSService service, ILogger<UsersController> logger) : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
+        public UsersController(IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, IMapper mapper, IUserService userService, ILogger<UsersController> logger) : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
         {
-            this.service = service;
+            this.userService = userService;
             this.logger = logger;
         }
 
@@ -46,7 +50,7 @@ namespace FaaS.MVC.Controllers.Api
             }
 
 
-            var users = await service.GetAllUsers();
+            var users = await userService.GetAll();
 
 
             // Apply limit
@@ -89,7 +93,7 @@ namespace FaaS.MVC.Controllers.Api
                 return Unauthorized();
             }
 
-            var user = await service.GetUser(id);
+            var user = await userService.Get(id);
 
             if (user == null)
             {
@@ -108,7 +112,7 @@ namespace FaaS.MVC.Controllers.Api
             {
                 user.Registered = DateTime.Now;
                 var userDto = mapper.Map<CreateUserViewModel, User>(user);
-                var result = await service.AddUser(userDto);
+                var result = await userService.Add(userDto);
 
                 var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
                 var newUrl = new Uri(urlHelper.Action("GetUser", "Users", new
@@ -140,7 +144,7 @@ namespace FaaS.MVC.Controllers.Api
                 }
 
                 var userDto = mapper.Map<UserViewModel, User>(user);
-                var result = await service.UpdateUser(userDto);
+                var result = await userService.Update(userDto);
 
                 return Ok(result);
             }
@@ -164,8 +168,8 @@ namespace FaaS.MVC.Controllers.Api
                     return Unauthorized();
                 }
 
-                var user = await service.GetUser(id);
-                var result = await service.RemoveUser(user);
+                var user = await userService.Get(id);
+                var result = await userService.Remove(user);
 
                 return Ok(result);
             }

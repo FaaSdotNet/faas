@@ -3,10 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FaaS.Services.DataTransferModels;
+using FaaS.DataTransferModels;
 using Microsoft.Extensions.Logging;
 using FaaS.Entities.Repositories;
-using AutoMapper;
 
 namespace FaaS.Services
 {
@@ -26,21 +25,14 @@ namespace FaaS.Services
         private readonly ISessionRepository sessionRepository;
 
         /// <summary>
-        /// Mapper
-        /// </summary>
-        private IMapper mapper;
-
-        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="sessionRepository">session repository</param>
         /// <param name="logger">logger</param>
-        /// <param name="mapper">mapper</param>
-        public SessionService(ISessionRepository sessionRepository, ILogger<ISessionService> logger, IMapper mapper)
+        public SessionService(ISessionRepository sessionRepository, ILogger<ISessionService> logger)
         {
             this.sessionRepository = sessionRepository;
             this.logger = logger;
-            this.mapper = mapper;
         }
 
         public async Task<Session> Add(Session session)
@@ -55,47 +47,35 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            var dataAccessSessionModel = mapper.Map<Entities.DataAccessModels.Session>(session);
-            dataAccessSessionModel = await sessionRepository.Add(dataAccessSessionModel);
-
-            return mapper.Map<Session>(dataAccessSessionModel);
+            return await sessionRepository.Add(session);
         }
 
         public async Task<Session> Get(Guid id)
         {
             logger.LogInformation("Get operation was called");
 
-            var dataAccessSessionModel = await sessionRepository.Get(id);
-
-            return mapper.Map<Session>(dataAccessSessionModel);
+            return await sessionRepository.Get(id);
         }
 
         public async Task<Session[]> GetAll()
         {
             logger.LogInformation("GetAll operation was called");
 
-            var dataAccessSessionModel = await sessionRepository.List();
-            return mapper.Map<Session[]>(dataAccessSessionModel);
+            return (await sessionRepository.List()).ToArray();
         }
 
         public async Task<Session> Remove(Session session)
         {
             logger.LogInformation("Remove operation was called");
 
-            var dataAccessSessionModel = mapper.Map<Entities.DataAccessModels.Session>(session);
-            dataAccessSessionModel = await sessionRepository.Delete(dataAccessSessionModel);
-
-            return mapper.Map<Session>(dataAccessSessionModel);
+            return await sessionRepository.Delete(session);
         }
 
         public async Task<Session> Update(Session session)
         {
             logger.LogInformation("Update operation was called");
 
-            var dataAccessSessionModel = mapper.Map<Entities.DataAccessModels.Session>(session);
-            dataAccessSessionModel = await sessionRepository.Update(dataAccessSessionModel);
-
-            return mapper.Map<Session>(dataAccessSessionModel);
+            return await sessionRepository.Update(session);
         }
     }
 }

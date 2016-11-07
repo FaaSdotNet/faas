@@ -17,12 +17,16 @@ namespace FaaS.MVC.Controllers.Api
         public const string RoutePrefix = "api/v1.0/";
         public const string RouteController = "login";
 
-        private readonly IFaaSService service;
+        /// <summary>
+        /// User service
+        /// </summary>
+        private readonly IUserService userService;
+
         private readonly ILogger<UsersController> logger;
 
-        public LoginController(IFaaSService service, IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, ILogger<UsersController> logger)
+        public LoginController(IUserService userService, IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, ILogger<UsersController> logger)
         {
-            this.service = service;
+            this.userService = userService;
             this.logger = logger;
         }
 
@@ -35,7 +39,7 @@ namespace FaaS.MVC.Controllers.Api
             {
                 if (ModelState.IsValid)
                 {
-                    var existingUser = await service.GetUser(user.GoogleId);
+                    var existingUser = await userService.Get(user.GoogleId);
                     if (existingUser == null)
                     {
                         return NotFound("User not found : " + user.GoogleId);

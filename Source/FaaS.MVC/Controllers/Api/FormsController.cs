@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -19,12 +18,22 @@ namespace FaaS.MVC.Controllers.Api
     {
         public const string RouteController = "forms";
 
-        private readonly IFaaSService service;
+        /// <summary>
+        /// Form service
+        /// </summary>
+        private readonly IFormService formService;
+
+        /// <summary>
+        /// Project service
+        /// </summary>
+        private readonly IProjectService projectService;
+
         private readonly ILogger<ProjectsContoller> logger;
 
-        public FormsController(IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, IMapper mapper, IFaaSService service, ILogger<ProjectsContoller> logger) : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
+        public FormsController(IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, IMapper mapper, IFormService formService, IProjectService projectService, ILogger<ProjectsContoller> logger) : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
         {
-            this.service = service;
+            this.formService = formService;
+            this.projectService = projectService;
             this.logger = logger;
         }
 
@@ -45,14 +54,14 @@ namespace FaaS.MVC.Controllers.Api
             }
 
 
-            var projectDto = await service.GetProject(projectGuid);
+            var projectDto = await projectService.Get(projectGuid);
 
             if (projectDto == null)
             {
                 return NotFound("Project not found with guid:" + projectGuid);
             }
 
-            var forms = await service.GetAllForms(projectDto);
+            var forms = await formService.GetAllForProject(projectDto);
 
 
             // Apply limit
@@ -95,7 +104,7 @@ namespace FaaS.MVC.Controllers.Api
                 return Unauthorized();
             }
 
-            var form = await service.GetForm(id);
+            var form = await formService.Get(id);
 
             if (form == null)
             {
@@ -115,8 +124,8 @@ namespace FaaS.MVC.Controllers.Api
                 form.Created = DateTime.Now;
                 var formDto = mapper.Map<CreateFormViewModel, Form>(form);
                 var projectId = form.SelectedProjectId;
-                var projectDto = await service.GetProject(projectId);
-                var result = await service.AddForm(projectDto, formDto);
+                var projectDto = await projectService.Get(projectId);
+                var result = await formService.Add(projectDto, formDto);
 
                 var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
                 var newUrl = new Uri(urlHelper.Action("GetForm", "Forms", new
@@ -149,7 +158,7 @@ namespace FaaS.MVC.Controllers.Api
                 }
 
                 var formDto = mapper.Map<FormViewModel, Form>(form);
-                var result = await service.UpdateForm(formDto);
+                var result = await formService.Update(formDto);
 
                 return Ok(result);
             }
@@ -173,8 +182,8 @@ namespace FaaS.MVC.Controllers.Api
                     return Unauthorized();
                 }
 
-                var form = await service.GetForm(id);
-                var result = await service.RemoveForm(form);
+                var form = await formService.Get(id);
+                var result = await formService.Remove(form);
 
                 return Ok(result);
             }
