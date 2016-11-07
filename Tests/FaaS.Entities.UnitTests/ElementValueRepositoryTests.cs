@@ -17,14 +17,14 @@ namespace FaaS.Entities.UnitTests
             var actualElementValue = await _ElementValueRepository.Get(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"));
 
             Assert.NotNull(actualElementValue);
-            Assert.IsType<ElementValue>(actualElementValue);
+            Assert.IsType<DataTransferModels.ElementValue>(actualElementValue);
         }
 
         [Fact]
         public async void GetAllElementElementValues_ReturnsAllElementValueInstancesForElement()
         {
             var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
-            Element actualElement = await _ElementRepository.Get(id);
+            DataTransferModels.Element actualElement = await _ElementRepository.Get(id);
             var actualElementValues = await _ElementValueRepository.List(actualElement);
 
             Assert.NotNull(actualElementValues);
@@ -32,7 +32,7 @@ namespace FaaS.Entities.UnitTests
             Assert.Equal(3, actualElementValues.Count());
             foreach (var actualElementValue in actualElementValues)
             {
-                Assert.IsType<ElementValue>(actualElementValue);
+                Assert.IsType<DataTransferModels.ElementValue>(actualElementValue);
             }
         }
 
@@ -46,7 +46,7 @@ namespace FaaS.Entities.UnitTests
             Assert.Equal(4, actualElementValues.Count());
             foreach (var actualElementValue in actualElementValues)
             {
-                Assert.IsType<ElementValue>(actualElementValue);
+                Assert.IsType<DataTransferModels.ElementValue>(actualElementValue);
             }
         }
 
@@ -54,50 +54,50 @@ namespace FaaS.Entities.UnitTests
         public async void AddElementValue_Null_Throws()
         {
             var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
-            Element actualElement = await _ElementRepository.Get(id);
-            Session actualSession = await _SessionRepository.Get(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"));
+            DataTransferModels.Element actualElement = await _ElementRepository.Get(id);
+            DataTransferModels.Session actualSession = await _SessionRepository.Get(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"));
             await Assert.ThrowsAsync<ArgumentNullException>(() => _ElementValueRepository.Add(actualElement, actualSession, null));
         }
 
         [Fact]
         public async void AddElementValue_NullElement_Throws()
         {
-            ElementValue newElementValue = new ElementValue
+            DataTransferModels.ElementValue newElementValue = new DataTransferModels.ElementValue
             {
                 Value = "NotInDbValue"
             };
-            Session actualSession = await _SessionRepository.Get(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"));
+            DataTransferModels.Session actualSession = await _SessionRepository.Get(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"));
             await Assert.ThrowsAsync<ArgumentNullException>(() => _ElementValueRepository.Add(null, actualSession, newElementValue));
         }
 
         [Fact]
         public async void AddElementValue_NullSession_Throws()
         {
-            ElementValue newElementValue = new ElementValue
+            DataTransferModels.ElementValue newElementValue = new DataTransferModels.ElementValue
             {
                 Value = "NotInDbValue"
             };
             var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
-            Element actualElement = await _ElementRepository.Get(id);
+            DataTransferModels.Element actualElement = await _ElementRepository.Get(id);
             await Assert.ThrowsAsync<ArgumentNullException>(() => _ElementValueRepository.Add(actualElement, null, newElementValue));
         }
 
         [Fact]
         public async void AddElementValue_NotNull_ElementNotInDb()
         {
-            ElementValue newElementValue = new ElementValue
+            DataTransferModels.ElementValue newElementValue = new DataTransferModels.ElementValue
             {
                 Value = "NotInDbValue"
             };
-            Element newElement = new Element()
+            DataTransferModels.Element newElement = new DataTransferModels.Element()
             {
                 Type = 2,
                 Description = "TestDescriptionNotInDb",
-                ElementValues = new List<ElementValue>(),
+                //ElementValues = new List<ElementValue>(),
                 Required = true,
                 Options = "TestOption"
             };
-            Session actualSession = await _SessionRepository.Get(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"));
+            DataTransferModels.Session actualSession = await _SessionRepository.Get(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"));
 
             await Assert.ThrowsAsync<ArgumentException>(() => _ElementValueRepository.Add(newElement, actualSession, newElementValue));
         }
@@ -105,13 +105,13 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void AddElementValue_NotNull_SessionNotInDb()
         {
-            ElementValue newElementValue = new ElementValue
+            DataTransferModels.ElementValue newElementValue = new DataTransferModels.ElementValue
             {
                 Value = "NotInDbValue"
             };
             var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
-            Element actualElement = await _ElementRepository.Get(id);
-            Session newSession = new Session()
+            DataTransferModels.Element actualElement = await _ElementRepository.Get(id);
+            DataTransferModels.Session newSession = new DataTransferModels.Session()
             {
                 Filled = DateTime.Now,
             };
@@ -123,14 +123,14 @@ namespace FaaS.Entities.UnitTests
         public async void AddElementValue_NotNull_ReturnsElementValueWithId()
         {
             var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
-            Element actualElement = await _ElementRepository.Get(id);
+            DataTransferModels.Element actualElement = await _ElementRepository.Get(id);
 
-            var newElementValue = new ElementValue
+            var newElementValue = new DataTransferModels.ElementValue
             {
                 Value = "TestValue5"
             };
-            Session actualSession = await _SessionRepository.Get(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"));
-            ElementValue actualElementValue = await _ElementValueRepository.Add(actualElement, actualSession, newElementValue);
+            DataTransferModels.Session actualSession = await _SessionRepository.Get(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"));
+            DataTransferModels.ElementValue actualElementValue = await _ElementValueRepository.Add(actualElement, actualSession, newElementValue);
 
             // Checks returned value
             Assert.NotNull(actualElementValue);
@@ -150,7 +150,7 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void UpdateElementValue_NotNull_NotInDB()
         {
-            var newElementValue = new ElementValue
+            var newElementValue = new DataTransferModels.ElementValue
             {
                 Value = "ValueNotInDb"
             };
@@ -179,14 +179,14 @@ namespace FaaS.Entities.UnitTests
         public async void AddElementValue_CorrectParts_ReturnsElementValueWithId()
         {
             var id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}");
-            Element actualElement = await _ElementRepository.Get(id);
-            Session actualSession = await _SessionRepository.Get(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"));
-            var newElementValue = new ElementValue
+            DataTransferModels.Element actualElement = await _ElementRepository.Get(id);
+            DataTransferModels.Session actualSession = await _SessionRepository.Get(new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"));
+            var newElementValue = new DataTransferModels.ElementValue
             {
                 Value = "TestElementValueNewValue"
             };
 
-            ElementValue actualElementValue = await _ElementValueRepository.Add(actualElement, actualSession, newElementValue);
+            DataTransferModels.ElementValue actualElementValue = await _ElementValueRepository.Add(actualElement, actualSession, newElementValue);
 
             // Checks returned value
             Assert.NotNull(actualElementValue);
@@ -206,7 +206,7 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void DeleteElementValue_NotNull_NotInDb()
         {
-            var newElementValue = new ElementValue
+            var newElementValue = new DataTransferModels.ElementValue
             {
                 Value = "TestElementValueNotInDb"
             };
@@ -217,16 +217,20 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void DeleteElementVAlue_NotNull_InDb()
         {
-            ElementValue elementToDelete = GetTestElementValueWithoutElementAndSession(1);
+            var elementValueToDelete = new DataTransferModels.ElementValue
+            {
+                Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(1)}}}"),
+                Value = "test"
+            };
 
-            var deletedElement = await _ElementValueRepository.Delete(elementToDelete);
+            var deletedElement = await _ElementValueRepository.Delete(elementValueToDelete);
 
             // Checks returned value
             Assert.NotNull(deletedElement);
             Assert.Equal("TestValue1", deletedElement.Value);
             Assert.NotEqual(Guid.Empty, deletedElement.Id);
 
-            deletedElement = await _ElementValueRepository.Get(elementToDelete.Id);
+            deletedElement = await _ElementValueRepository.Get(elementValueToDelete.Id);
             Assert.Null(deletedElement);
         }
 

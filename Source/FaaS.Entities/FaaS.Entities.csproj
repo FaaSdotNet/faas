@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=5.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AutoMapper.5.1.1\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -91,33 +95,46 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configurations\ConnectionOptions.cs" />
+    <Compile Include="Configurations\EntitiesMapperConfiguration.cs" />
     <Compile Include="Contexts\FaaSContext.cs" />
     <Compile Include="DataAccessModels\Element.cs" />
     <Compile Include="DataAccessModels\Form.cs" />
+    <Compile Include="DataAccessModels\Mapping\ElementMappingProfile.cs" />
+    <Compile Include="DataAccessModels\Mapping\ElementValueMappingProfile.cs" />
+    <Compile Include="DataAccessModels\Mapping\FormMappingProfile.cs" />
+    <Compile Include="DataAccessModels\Mapping\ProjectMappingProfile.cs" />
+    <Compile Include="DataAccessModels\Mapping\SessionMappingProfile.cs" />
+    <Compile Include="DataAccessModels\Mapping\UserMappingProfile.cs" />
     <Compile Include="DataAccessModels\ModelBase.cs" />
     <Compile Include="DataAccessModels\Project.cs" />
     <Compile Include="DataAccessModels\Session.cs" />
     <Compile Include="DataAccessModels\User.cs" />
     <Compile Include="DataAccessModels\ElementValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\ElementRepository.cs" />
-    <Compile Include="Repositories\ElementValueRepository.cs" />
-    <Compile Include="Repositories\FormRepository.cs" />
+    <Compile Include="Repositories\Impl\ElementRepository.cs" />
+    <Compile Include="Repositories\Impl\ElementValueRepository.cs" />
+    <Compile Include="Repositories\Impl\FormRepository.cs" />
     <Compile Include="Repositories\IElementRepository.cs" />
     <Compile Include="Repositories\IElementValueRepository.cs" />
     <Compile Include="Repositories\IFormRepository.cs" />
     <Compile Include="Repositories\IProjectRepository.cs" />
     <Compile Include="Repositories\ISessionRepository.cs" />
     <Compile Include="Repositories\IUserRepository.cs" />
-    <Compile Include="Repositories\ProjectRepository.cs" />
-    <Compile Include="Repositories\SessionRepository.cs" />
-    <Compile Include="Repositories\UserRepository.cs" />
+    <Compile Include="Repositories\Impl\ProjectRepository.cs" />
+    <Compile Include="Repositories\Impl\SessionRepository.cs" />
+    <Compile Include="Repositories\Impl\UserRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FaaS.DataTransferModels\FaaS.DataTransferModels.csproj">
+      <Project>{466a633c-d6c3-4316-8056-c4e3194089db}</Project>
+      <Name>FaaS.DataTransferModels</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

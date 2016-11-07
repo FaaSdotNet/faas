@@ -24,10 +24,9 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void AddSession_NotNull_ReturnsSessionWithId()
         {
-            var newSession = new Session
+            var newSession = new DataTransferModels.Session
             {
-                Filled = DateTime.Now,
-                ElementValues = new List<ElementValue>()
+                Filled = DateTime.Now
             };
             var actualSession = await _SessionRepository.Add(newSession);
 
@@ -65,7 +64,7 @@ namespace FaaS.Entities.UnitTests
             Assert.Equal(3, actualSessions.Count());
             foreach (var actualSession in actualSessions)
             {
-                Assert.IsType<Session>(actualSession);
+                Assert.IsType<DataTransferModels.Session>(actualSession);
             }
         }
 
@@ -78,10 +77,9 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void UpdateSession_NotNull_NotInDB()
         {
-            var newSession = new Session
+            var newSession = new DataTransferModels.Session
             {
-                Filled = DateTime.Now,
-                ElementValues = new List<ElementValue>()
+                Filled = DateTime.Now
             };
 
             await Assert.ThrowsAsync<ArgumentException>(() => _SessionRepository.Update(newSession));
@@ -115,10 +113,9 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void DeleteSession_NotNull_NotInDB()
         {
-            var newSession = new Session
+            var newSession = new DataTransferModels.Session
             {
-                Filled = DateTime.Now,
-                ElementValues = new List<ElementValue>()
+                Filled = DateTime.Now
             };
 
             await Assert.ThrowsAsync<ArgumentException>(() => _SessionRepository.Delete(newSession));

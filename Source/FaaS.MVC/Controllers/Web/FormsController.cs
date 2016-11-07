@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using AutoMapper;
+using FaaS.DataTransferModels;
+using FaaS.MVC.Models;
+using FaaS.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using FaaS.Services;
-using AutoMapper;
-using FaaS.MVC.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using FaaS.Services.DataTransferModels;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FaaS.MVC.Controllers.Web
 {

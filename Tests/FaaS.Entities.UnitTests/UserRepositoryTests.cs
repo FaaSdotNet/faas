@@ -26,7 +26,7 @@ namespace FaaS.Entities.UnitTests
             var actualUser = await _UserRepository.Get("TestGoogleId1");
 
             Assert.NotNull(actualUser);
-            Assert.IsType<User>(actualUser);
+            Assert.IsType<DataTransferModels.User>(actualUser);
         }
 
         [Theory]
@@ -49,7 +49,7 @@ namespace FaaS.Entities.UnitTests
             Assert.Equal(3, actualUsers.Count());
             foreach (var actualUser in actualUsers)
             {
-                Assert.IsType<User>(actualUser);
+                Assert.IsType<DataTransferModels.User>(actualUser);
             }
         }
 
@@ -62,13 +62,12 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void AddUser_NotNull_ReturnsUserWithId()
         {
-            var newUser = new User
+            var newUser = new DataTransferModels.User
             {
                 GoogleId = "104560124403688998123",
-                Registered = DateTime.Now,
-                Projects = new List<Project>()
+                Registered = DateTime.Now
             };
-            User actualUser = await _UserRepository.Add(newUser);
+            DataTransferModels.User actualUser = await _UserRepository.Add(newUser);
 
             // Checks returned value
             Assert.NotNull(actualUser);
@@ -89,11 +88,10 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void UpdateUser_NotNull_NotInDB()
         {
-            var newUser = new User
+            var newUser = new DataTransferModels.User
             {
                 GoogleId = "NotInDatabaseGoogleId",
-                Registered = DateTime.Now,
-                Projects = new List<Project>()
+                Registered = DateTime.Now
             };
 
             await Assert.ThrowsAsync<ArgumentException>(() => _UserRepository.Update(newUser));
@@ -124,11 +122,10 @@ namespace FaaS.Entities.UnitTests
         [Fact]
         public async void DeleteUser_NotNull_NotInDB()
         {
-            var newUser = new User
+            var newUser = new DataTransferModels.User
             {
                 GoogleId = "NotInDatabaseGoogleId",
-                Registered = DateTime.Now,
-                Projects = new List<Project>()
+                Registered = DateTime.Now
             };
 
             await Assert.ThrowsAsync<ArgumentException>(() => _UserRepository.Delete(newUser));
@@ -153,17 +150,10 @@ namespace FaaS.Entities.UnitTests
             //Assert.Equal(2, actualUsers.Count());
         }
 
-        [Theory]
-        [MemberData(nameof(InvalidAddUserArguments))]
-        public async void AddUser_NullGoogleIdOrRegisteredOrProjects_Throws(string googleId, DateTime registered, IEnumerable<Project> projects)
-        {
-            await Assert.ThrowsAsync<ArgumentNullException>(() => _UserRepository.Add(googleId, registered, projects));
-        }
-
         [Fact]
         public async void AddUser_CorrectParts_ReturnsUserWithId()
         {
-            var newUser = new User
+            var newUser = new DataTransferModels.User
             {
                 GoogleId = "104560124403688998123",
                 Registered = DateTime.Now,
@@ -175,7 +165,7 @@ namespace FaaS.Entities.UnitTests
                     GetTestProjectWithoutForms(6),
             };
 
-            User actualUser = await _UserRepository.Add(newUser.GoogleId, newUser.Registered, projects);
+            DataTransferModels.User actualUser = await _UserRepository.Add(newUser);
 
             // Checks returned value
             Assert.NotNull(actualUser);

@@ -15,6 +15,7 @@
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Source\FaaS.DataTransferModels\FaaS.DataTransferModels.csproj" />
     <ProjectReference Include="..\..\Source\FaaS.Entities\FaaS.Entities.csproj" />
   </ItemGroup>
   <ItemGroup>

@@ -6,24 +6,24 @@ namespace FaaS.MVC.Models.Mapping
     {
         public ProjectMappingProfile()
         {
-            CreateMap<Services.DataTransferModels.Project, ProjectViewModel>()
+            CreateMap<DataTransferModels.Project, ProjectViewModel>()
                .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
                .ForMember(dst => dst.ProjectName, opt => opt.MapFrom(src => src.ProjectName))
                .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.Created))
                .ForMember(dst => dst.Description, opt => opt.MapFrom(src => src.Description));
 
-            CreateMap<ProjectViewModel, Services.DataTransferModels.Project>()
+            CreateMap<ProjectViewModel, DataTransferModels.Project>()
                .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
                .ForMember(dst => dst.ProjectName, opt => opt.MapFrom(src => src.ProjectName))
                .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.Created))
                .ForMember(dst => dst.Description, opt => opt.MapFrom(src => src.Description))
                .ForMember(dst => dst.User, opt => opt.Ignore());
 
-            CreateMap<Services.DataTransferModels.Project, ProjectDetailsViewModel>()
-                .IncludeBase<Services.DataTransferModels.Project, ProjectViewModel>()
+            CreateMap<DataTransferModels.Project, ProjectDetailsViewModel>()
+                .IncludeBase<DataTransferModels.Project, ProjectViewModel>()
                 .ForMember(dst => dst.UserId, opt => opt.MapFrom(src => src.User.Id));
 
-            CreateMap<CreateProjectViewModel, Services.DataTransferModels.Project>()
+            CreateMap<CreateProjectViewModel, DataTransferModels.Project>()
                 .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dst => dst.ProjectName, opt => opt.MapFrom(src => src.ProjectName))
                 .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.Created))

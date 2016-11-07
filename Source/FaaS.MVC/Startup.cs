@@ -2,10 +2,13 @@
 using FaaS.Entities.Configuration;
 using FaaS.Entities.Repositories;
 using FaaS.MVC.Configuration;
-using FaaS.MVC.Middleware;
 using FaaS.Services;
+<<<<<<< HEAD
 using FaaS.Services.Configuration;
 using FaaS.Services.Interfaces;
+=======
+using FaaS.Entities.Configuration;
+>>>>>>> master
 using FaaS.Services.RandomId;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -45,7 +48,7 @@ namespace FaaS.MVC
             var mapper = new MapperConfiguration(cfg =>
             {
                 ViewModelsMapperConfiguration.InitializeMappings(cfg);
-                ServicesMapperConfiguration.InitializeMappings(cfg);
+                EntitiesMapperConfiguration.InitializeMappings(cfg);
             }).CreateMapper();
 
             // Do not allow application to start with broken configuration. Fail fast.
@@ -106,9 +109,6 @@ namespace FaaS.MVC
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-
-                // Custom middlerare example
-                app.UseMiddleware<GuardianMiddleware>();
             }
             else
             {
@@ -119,19 +119,22 @@ namespace FaaS.MVC
             app.UseSession();
 
             app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "home",
-                    template: "Home",
-                    defaults: new { controller = "Home", action = "Index" });
+                {
 
-                routes.MapRoute(
-                    name: "id",
-                    template: "{controller=Forms}/{action=Index}/{id}");
+                  
+                    routes.MapRoute(
+                        name: "home",
+                        template: "Home",
+                        defaults: new {controller = "Home", action = "Index"});
 
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{codename?}");
+                    routes.MapRoute(
+                        name: "id",
+                        template: "{controller=Forms}/{action=Index}/{id}");
+
+                    routes.MapRoute(
+                        name: "default",
+                        template: "{controller=Application}/{action=Index}");
+
             });
         }
     }
