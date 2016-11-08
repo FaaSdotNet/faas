@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using FaaS.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -10,12 +7,15 @@ namespace FaaS.MVC.Controllers.Web.React
 {
     public class FormController : Controller
     {
-        private readonly IFaaSService faaSService;
+        /// <summary>
+        /// Form service
+        /// </summary>
+        private readonly IFormService formService;
         private IMapper _mapper;
 
-        public FormController(IFaaSService faaSService, IMapper mapper)
+        public FormController(IFormService formService, IMapper mapper)
         {
-            this.faaSService = faaSService;
+            this.formService = formService;
             _mapper = mapper;
         }
 

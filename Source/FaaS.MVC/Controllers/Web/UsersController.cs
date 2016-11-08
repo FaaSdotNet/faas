@@ -12,21 +12,21 @@ namespace FaaS.MVC.Controllers.Web
 {
     public class UsersController : Controller
     {
-        private readonly IFaaSService _faaSService;
-        private IMapper _mapper;
-        private static User _superUser = new User();
+        private readonly IUserService userService;
+        private IMapper mapper;
+        private static User superUser = new User();
 
-        public UsersController(IFaaSService faaSService, IMapper mapper)
+        public UsersController(IUserService userService, IMapper mapper)
         {
-            _faaSService = faaSService;
-            _mapper = mapper;
+            this.userService = userService;
+            this.mapper = mapper;
         }
 
         [ActionName("Index")]
         public async Task<IActionResult> List()
         {
-            var usersDTO = await _faaSService.GetAllUsers();
-            return View(_mapper.Map<IEnumerable<UserViewModel>>(usersDTO));
+            var usersDTO = await userService.GetAll();
+            return View(mapper.Map<IEnumerable<UserViewModel>>(usersDTO));
         }
 
         // GET: Users/Create
@@ -40,11 +40,11 @@ namespace FaaS.MVC.Controllers.Web
         public async Task<IActionResult> Details()
         {
             var userId = HttpContext.Session.GetString("userId");
-            var existingUser = await _faaSService.GetUser(new Guid(userId));
+            var existingUser = await userService.Get(new Guid(userId));
 
             ViewData["userName"] = existingUser.UserName;
 
-            return View(_mapper.Map<UserDetailsViewModel>(existingUser));
+            return View(mapper.Map<UserDetailsViewModel>(existingUser));
         }
 
         // POST: Users/Create
@@ -56,8 +56,8 @@ namespace FaaS.MVC.Controllers.Web
         {
             if (ModelState.IsValid)
             {
-                var userDTO = _mapper.Map<CreateUserViewModel, User>(user);
-                var addedUser = await _faaSService.AddUser(userDTO);
+                var userDTO = mapper.Map<CreateUserViewModel, User>(user);
+                var addedUser = await userService.Add(userDTO);
 
                 HttpContext.Session.SetString("userId", addedUser.Id.ToString());
                 return RedirectToAction("Index", "Home");
