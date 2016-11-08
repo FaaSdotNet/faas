@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
+using NuGet.Protocol.Core.v3;
 
 namespace FaaS.MVC.Controllers.Api
 {
@@ -48,6 +49,8 @@ namespace FaaS.MVC.Controllers.Api
             [FromQuery(Name = "attributes")]string[] attributes)
         {
             var userId = HttpContext.Session.GetString("userId");
+            logger.LogInformation("User id: {}", userId);
+            logger.LogInformation("User id: {}", HttpContext.Session.ToJson());
 
             if (string.IsNullOrEmpty(userId))
             {

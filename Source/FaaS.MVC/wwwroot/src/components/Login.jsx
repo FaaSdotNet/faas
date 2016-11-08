@@ -1,6 +1,11 @@
 ﻿import React, { Component } from "react";
 import MyInput from "./form/MyInput"
 import MySubmit from "./form/MySubmit"
+import cookie from 'react-cookie'
+import { hashHistory } from 'react-router';
+import {User} from "../entities/User";
+
+
 
 
 export class LoginComponent extends Component {
@@ -8,7 +13,12 @@ export class LoginComponent extends Component {
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
+        if (localStorage.getItem("user") != null) {
+            document.location.href = "/#/dashboard";
+            console.log("Redirecting from login.");
+        }
     }
+
 
 
     handleSubmit(event) {
@@ -17,17 +27,29 @@ export class LoginComponent extends Component {
         var result = fetch('/api/v1.0/login', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/json'
                 },
+                credentials: "same-origin",
+
                 body: JSON.stringify({
-                    GoogleId: googleId,
+                    GoogleId: googleId
                 })
             });
             result.then( (res) =>  {
                 console.log(res);
-                console.log(res.headers);
-                res.json().then((js) => console.log(js));
-                console.log(" Cookie: ", document.cookie);
+                
+                if (res.ok) {
+
+                    res.json()
+                        .then((js) => {
+                            console.log(js);
+                            console.info("UserID: ", js.id);
+                            cookie.save("userId", js.id);
+                            localStorage.setItem("userId", js.id);
+                            localStorage.setItem("user", JSON.stringify(js));
+                            document.location.href ="/#/dashboard";
+                        });
+                }
         });
     }
 

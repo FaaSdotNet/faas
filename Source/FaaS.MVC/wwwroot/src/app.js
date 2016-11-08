@@ -7,4 +7,7 @@ import { browserHistory, hashHistory } from "react-router";
 import Root from "./Root";
 
 // Render the main component into the dom
-ReactDOM.render(<Root history={hashHistory} />, document.getElementById('app'));
+ReactDOM.render(
+    <Root history={hashHistory} />, 
+    document.getElementById('app')
+);
