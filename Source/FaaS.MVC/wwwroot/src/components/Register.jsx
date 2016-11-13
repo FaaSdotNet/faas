@@ -47,7 +47,7 @@ class RegisterComponent extends Component {
                 <MyInput ref="registerGoogleId" id="GoogleId" label="Google ID" />
                 <MyInput ref="registerUserName" id="UserName" label="Username" />
 
-                <MySubmit ref="registerButton" onClick={this.handleSubmit} id="registerButton" value="Sing Up"/>
+                <MySubmit ref="registerButton" onClick={this.handleSubmit} id="registerButton" value="Sign Up"/>
 
 
             </div>

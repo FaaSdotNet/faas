@@ -60,7 +60,7 @@ export class LoginComponent extends Component {
                     Sign in with your Google Account
                 </h4>
                 <MyInput ref="loginGoogleId" id="GoogleId" label="Google ID"/>
-                <MySubmit ref="loginButton" onClick={this.handleSubmit} id="loginButton" value="Sing In"/>
+                <MySubmit ref="loginButton" onClick={this.handleSubmit} id="loginButton" value="Sign In"/>
 
                 <p className="text-center">
                     Don't have an account?

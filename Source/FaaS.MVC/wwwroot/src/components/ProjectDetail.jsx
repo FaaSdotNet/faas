@@ -1,7 +1,7 @@
 ﻿import React, { Component } from "react";
 
 
-export class UserDetail extends Component {
+export class ProjectDetail extends Component {
 
     constructor(props) {
         super(props);
@@ -10,7 +10,7 @@ export class UserDetail extends Component {
     }
 
     componentWillMount() {
-        const result = fetch('/api/v1.0/users/' + this.props.params.userid,
+        const result = fetch('/api/v1.0/projects/' + this.props.params.projectid,
         {
             method: "GET",
             credentials: "same-origin",
@@ -33,18 +33,18 @@ export class UserDetail extends Component {
         var rows =[];
         var state = this.state;
         if (state) {
-            rows.push(<p key={state.userName}><b>User Name: </b>{state.userName}</p>);
-            rows.push(<p key={state.googleId}><b>Google ID: </b>{state.googleId}</p>);
-            rows.push(<p key={state.registered}><b>Registered: </b>{state.registered}</p>);
+            rows.push(<p key={state.projectName}><b>Project Name: </b>{state.projectName}</p>);
+            rows.push(<p key={state.description}><b>Description: </b>{state.description}</p>);
+            rows.push(<p key={state.created}><b>Created: </b>{state.created}</p>);
         }
 
         return (
             <div>
-                <h2>User Details</h2>
+                <h2>Project Details</h2>
                 {rows}
             </div>
-        );
+       );
     }
 }
 
-export default UserDetail;
+export default ProjectDetail;

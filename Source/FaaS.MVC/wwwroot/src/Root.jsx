@@ -11,6 +11,9 @@ import ProjectCreate from "./components/ProjectCreate";
 import Dashboard from "./components/Dashboard";
 import UserList from "./components/UserList";
 import UserDetail from "./components/UserDetail";
+import UserEdit from "./components/UserEdit";
+import UserDelete from "./components/UserDelete";
+import ProjectDetail from "./components/ProjectDetail";
 
 
 
@@ -29,14 +32,17 @@ class Root extends Component {
                     <Route path="register" component={Register} />
                     <Route path="projects" component={ProjectList} />
                     <Route path="projects/create" component={ProjectCreate} />
-                    <Route path="users/:userid"  component={UserDetail} />
-                    <Route path="users"  component={UserList} />
+                    <Route path="projects/:projectid" component={ProjectDetail} />
+                    <Route path="users/:userid" component={UserDetail} />
+                    <Route path="users/edit/:userid" component={UserEdit} />
+                    <Route path="users/delete/:userid" component={UserDelete} />
+                    <Route path="users" component={UserList} />
 
                     <IndexRoute component={Index} />
                 </Route>
             </Router>
         );
-    }
+                }
 }
 
 export default Root;

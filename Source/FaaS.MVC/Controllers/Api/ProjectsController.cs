@@ -16,7 +16,7 @@ using NuGet.Protocol.Core.v3;
 namespace FaaS.MVC.Controllers.Api
 {
     [Route(RoutePrefix+RouteController)]
-    public class ProjectsContoller: DefaultController
+    public class ProjectsController: DefaultController
     {
         public const string RouteController = "projects";
 
@@ -30,10 +30,10 @@ namespace FaaS.MVC.Controllers.Api
         /// </summary>
         private readonly IProjectService projectService;
 
-        private readonly ILogger<ProjectsContoller> logger;
+        private readonly ILogger<ProjectsController> logger;
 
 
-        public ProjectsContoller(IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, IMapper mapper, IUserService userService, IProjectService projectService, ILogger<ProjectsContoller> logger) : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
+        public ProjectsController(IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, IMapper mapper, IUserService userService, IProjectService projectService, ILogger<ProjectsController> logger) : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
         {
             this.userService = userService;
             this.projectService = projectService;

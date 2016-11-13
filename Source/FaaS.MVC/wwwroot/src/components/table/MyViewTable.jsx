@@ -12,22 +12,22 @@ export class MyTableRow extends Component
         return(
             <tr>
                 <td>
-                    <a href={`/api/v1.0/${this.props.name}/${obj.id}`}>
+                    <a href={`/#/${this.props.name}/${obj.id}`}>
                         {obj[this.props.propName]}
                     </a>
                 </td>
                 <td>
-                    <a href={`/api/v1.0/${this.props.name}/${obj.id}`}>
+                    <a href={`/#/${this.props.name}/${obj.id}`}>
                         View
                     </a>
                 </td>
                 <td>
-                    <a href={`/api/v1.0/${this.props.name}/${obj.id}`}>
+                    <a href={`/#/${this.props.name}/edit/${obj.id}`}>
                         Edit
                     </a>
                 </td>
                 <td>
-                    <a href={`/api/v1.0/${this.props.name}/${obj.id}`}>
+                    <a href={`/#/${this.props.name}/delete/${obj.id}`}>
                         Delete
                     </a>
                 </td>

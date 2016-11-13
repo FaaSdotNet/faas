@@ -6,7 +6,7 @@ class IndexComponent extends Component {
     constructor() {
         super();
         const user = localStorage.getItem("user");
-        if(user) {
+        if (user) {
             document.location.href = "/#/dashboard";
             console.log("Redirecting from index");
         }

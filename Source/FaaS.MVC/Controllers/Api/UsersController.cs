@@ -129,7 +129,8 @@ namespace FaaS.MVC.Controllers.Api
             }
         }
 
-        // PUT 
+        // PUT
+        [HttpPatch]
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] UserViewModel user)
         {
@@ -154,9 +155,9 @@ namespace FaaS.MVC.Controllers.Api
             }
         }
 
-        // DELETE projects/{id}
+        // DELETE users/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(string id)
         {
             try
             {
@@ -168,7 +169,7 @@ namespace FaaS.MVC.Controllers.Api
                     return Unauthorized();
                 }
 
-                var user = await userService.Get(id);
+                var user = await userService.Get(new Guid(id));
                 var result = await userService.Remove(user);
 
                 return Ok(result);
