@@ -12,6 +12,7 @@ class RegisterComponent extends Component {
     handleSubmit(event) {
         const googleId = this.refs.registerGoogleId.state.value;
         const userName = this.refs.registerUserName.state.value;
+
         var result = fetch('/api/v1.0/users', {
             method: 'POST',
             headers: {
@@ -23,15 +24,11 @@ class RegisterComponent extends Component {
                 UserName: userName
             })
         });
+        
         result.then( (res) =>  {
-            console.log(res);
-                
             if (res.ok) {
-
                 res.json()
                     .then((js) => {
-                        console.log(js);
-                        console.info("UserID: ", js.id);
                         document.location.href ="/#/login";
                     });
             }

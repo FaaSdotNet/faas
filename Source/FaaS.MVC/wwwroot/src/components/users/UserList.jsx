@@ -1,5 +1,5 @@
 ﻿import React, { Component } from "react";
-import MyViewTable from "./table/MyViewTable"
+import MyViewTable from "../table/MyViewTable"
 
 
 export class UserList extends Component {

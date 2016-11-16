@@ -1,5 +1,5 @@
 ﻿import React, { Component } from "react";
-
+import FormList from "../forms/FormList"
 
 export class ProjectDetail extends Component {
 
@@ -33,15 +33,15 @@ export class ProjectDetail extends Component {
         var rows =[];
         var state = this.state;
         if (state) {
-            rows.push(<p key={state.projectName}><b>Project Name: </b>{state.projectName}</p>);
-            rows.push(<p key={state.description}><b>Description: </b>{state.description}</p>);
+            rows.push(<h2 key={state.projectName}><b>Project: </b>{state.projectName}</h2>);
+            rows.push(<p key={state.description}>{state.description}</p>);
             rows.push(<p key={state.created}><b>Created: </b>{state.created}</p>);
         }
 
         return (
             <div>
-                <h2>Project Details</h2>
                 {rows}
+                <FormList />
             </div>
        );
     }

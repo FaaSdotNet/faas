@@ -1,26 +1,44 @@
 ﻿import React, { Component } from "react";
-import { Nav, Navbar, NavItem, Header, Brand } from "react-bootstrap";
+import { Nav, Navbar, NavItem, NavDropdown, MenuItem, Header, Brand } from "react-bootstrap";
 import { hashHistory } from 'react-router';
 // import AuthActions from '../actions/AuthActions';
 // import AuthStore from '../stores/AuthStore';
 
 
-class NotLoggedIn extends Component {
+class NotLoggedInMenu extends Component {
     render() {
         return(
             <Nav>
-                <NavItem href="/#/login">
-                    Login
+                <NavItem href="/#/About">
+                    About
                 </NavItem>
-                <NavItem href="/#/register">
-                    Register
+                <NavItem href="/#/Contact">
+                    Contact
+                </NavItem>
+                <NavItem href="/#/FAQ">
+                    FAQ
                 </NavItem>
             </Nav>
         );
     }
 }
 
-class LoggedIn extends Component {
+class LoggedInMenu extends Component {
+    render() {
+        return(
+            <Nav>
+                <NavItem href="/#/projects">
+                    Projects
+                </NavItem>
+                <NavItem href="/#/forms">
+                    Forms
+                </NavItem>
+            </Nav>
+        );
+    }
+}
+
+class LoggedInUser extends Component {
 
     constructor() {
         super();
@@ -38,20 +56,21 @@ class LoggedIn extends Component {
 
     render() {
         const user = JSON.parse(localStorage.getItem("user"));
+
+        let title = <div><img style={{display: "inline"}} className="img-responsive img-circle" src="../images/default_user.png" alt="defaut_user" height="24" width="24" />
+                        &nbsp;{user.userName}</div>;
+
         return (
-              <Nav>
-                <NavItem href={`/#/users/${user.id}`}>
-                    You are logged in as {user.userName}
-                </NavItem>
-                <NavItem href="/#/projects">
-                    Projects
-                </NavItem>
-                <NavItem href="/#/users">
-                    Users
-                </NavItem>
-                <NavItem onClick={this.logout}>
-                    Logout
-                </NavItem>
+              <Nav pullRight>
+                <NavDropdown noCaret id="userDropdown" title={title}>
+                    <MenuItem href={`/#/users/${user.id}`} >
+                        Details
+                    </MenuItem>
+                    <MenuItem divider />
+                    <MenuItem onClick={this.logout}>
+                        Log Out
+                    </MenuItem>
+                </NavDropdown>
             </Nav>
             );
     }
@@ -65,23 +84,22 @@ class HeaderComponent extends Component {
         this.state = { userId: localStorage.getItem('userId') };
     }
 
-    componentWillMount() {
-        this.setState({
-            userId: localStorage.getItem('userId')
-        });
-        console.log(localStorage.getItem('userId'));
-    }
-
     render() {
+        var menu = <Navbar.Collapse><NotLoggedInMenu/></Navbar.Collapse>;
+        if (localStorage.getItem("userId") != null)
+        {
+            menu = <Navbar.Collapse><LoggedInMenu/><LoggedInUser/></Navbar.Collapse>;
+        }
         return (
             <Navbar>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <a href="#">React Contacts</a>
+                        <a href="#">FaaS Home</a>
                     </Navbar.Brand>
                 </Navbar.Header>
-                        { localStorage.getItem('userId') == null && <NotLoggedIn/> }
-                        { localStorage.getItem('userId') != null && <LoggedIn/>}
+                <Navbar.Collapse>
+                    {menu}
+                </Navbar.Collapse>
             </Navbar>
         );
     }

@@ -5,7 +5,31 @@ export class MyTableRow extends Component
     constructor(props) {
         super(props);
     }
-  
+    
+    handleDelete(event) {
+        var result = fetch('/api/v1.0/' + this.props.name + '/' + this.props.object.id,
+        {
+            method: 'DELETE',
+            credentials: "same-origin",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        });
+
+        result.then( (res) =>  {
+            if (res.ok) {
+                res.json()
+                    .then((js) => {
+                        document.location.href = "/#/login";
+                    });
+            }
+        });
+    }
+
+    handleEdit(event) {
+        document.location.href = "/#/" + this.props.name + "/edit/" + this.props.object.id;
+    }
     
     render(){
         const obj = this.props.object;
@@ -17,19 +41,12 @@ export class MyTableRow extends Component
                     </a>
                 </td>
                 <td>
-                    <a href={`/#/${this.props.name}/${obj.id}`}>
-                        View
-                    </a>
+                    <button onClick={() => {this.handleEdit()}}
+                            type="button" className="btn btn-warning btn-md" role="button">Edit</button>
                 </td>
                 <td>
-                    <a href={`/#/${this.props.name}/edit/${obj.id}`}>
-                        Edit
-                    </a>
-                </td>
-                <td>
-                    <a href={`/#/${this.props.name}/delete/${obj.id}`}>
-                        Delete
-                    </a>
+                    <button onClick={() => {if (confirm('Delete the item?')) {this.handleDelete()};}}
+                            type="button" className="btn btn-danger btn-md" role="button">Delete</button>
                 </td>
             </tr>
         );
@@ -54,22 +71,20 @@ export class MyViewTable extends Component {
          {
              method: "GET",
              credentials: "same-origin",
-            headers: {
+             headers: {
                 'Content-Type': 'application/json'
-            }
+             }
         });
 
         result.then( (res) =>  {
-            if(res.ok) {
+            if (res.ok) {
                 res.json()
                     .then((js) => {
-                        console.log(js);
                         const obj = {};
                         obj[this.props.name] = js;
                         this.setState(obj);
                     });
             }
-            console.log(res);
         });
     }
     
@@ -80,7 +95,6 @@ export class MyViewTable extends Component {
         if (state) {
             state.forEach((obj) => {
                 rows.push(<MyTableRow key={obj.id} name={this.props.name} object={obj} propName={this.props.propName} />);
-                console.log(obj);
             });
         }
         
@@ -90,9 +104,6 @@ export class MyViewTable extends Component {
                     <tr>
                         <th>
                             Name
-                        </th>
-                        <th>
-                            View
                         </th>
                         <th>
                             Edit

@@ -11,51 +11,49 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
-using NuGet.Protocol.Core.v3;
 
 namespace FaaS.MVC.Controllers.Api
 {
     [Route(RoutePrefix + RouteController)]
-    public class ProjectsController: DefaultController
+    public class ElementsController : DefaultController
     {
-        public const string RouteController = "projects";
+        public const string RouteController = "elements";
 
         /// <summary>
-        /// User service
+        /// Form service
         /// </summary>
-        private readonly IUserService userService;
+        private readonly IFormService formService;
 
         /// <summary>
-        /// Project service
+        /// Element service
         /// </summary>
-        private readonly IProjectService projectService;
+        private readonly IElementService elementService;
 
-        private readonly ILogger<ProjectsController> logger;
+        private readonly ILogger<ElementsController> logger;
 
-        public ProjectsController(IRandomIdService randomId,
+        public ElementsController(IRandomIdService randomId,
             IActionContextAccessor actionContextAccessor,
             IHttpContextAccessor httpContextAccessor,
             IUrlHelperFactory urlHelperFactory,
             IMapper mapper,
-            IUserService userService,
-            IProjectService projectService,
-            ILogger<ProjectsController> logger)
+            IFormService formService,
+            IElementService elementService,
+            ILogger<ElementsController> logger)
             : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
         {
-            this.userService = userService;
-            this.projectService = projectService;
+            this.formService = formService;
+            this.elementService = elementService;
             this.logger = logger;
         }
 
-        // GET projects
+        // GET elements
         [HttpGet]
-        public async Task<IActionResult> GetAllProjects(
+        public async Task<IActionResult> GetAllElements(
+            //[FromQuery(Name = "form")] Guid id,
             [FromQuery(Name = "limit")]int limit,
             [FromQuery(Name = "attributes")]string[] attributes)
         {
             var userId = HttpContext.Session.GetString("userId");
-            logger.LogInformation("User id: {}", userId);
-            logger.LogInformation("User id: {}", HttpContext.Session.ToJson());
 
             if (string.IsNullOrEmpty(userId))
             {
@@ -63,22 +61,27 @@ namespace FaaS.MVC.Controllers.Api
                 return Unauthorized();
             }
 
-            var userDto = await userService.Get(new Guid(userId));
-           
-            var projects = await projectService.GetAllForUser(userDto);
+            var formId = HttpContext.Session.GetString("formId");
+            var formDto = await formService.Get(new Guid(formId));
+            if (formDto == null)
+            {
+                return NotFound("Form not found with guid:" + formId);
+            }
+
+            var elements = await elementService.GetAllForForm(formDto);
 
             // Apply limit
             if (limit > 0)
             {
-                projects = projects.Take(limit).ToArray();
+                elements = elements.Take(limit).ToArray();
             }
 
             // Select only given fields
             if (attributes != null && attributes.Any())
             {
-                projects = projects.Select(user =>
+                elements = elements.Select(user =>
                 {
-                    var projection = new Project();
+                    var projection = new Element();
 
                     foreach (var attribute in attributes)
                     {
@@ -91,13 +94,13 @@ namespace FaaS.MVC.Controllers.Api
                 }).ToArray();
             }
 
-            logger.LogInformation($"Retrieved {projects.Length} projects.");
-            return Ok(projects);
+            logger.LogInformation($"Retrieved {elements.Length} elements.");
+            return Ok(elements);
         }
 
-        // GET project/{id}/
+        // GET element/{id}/
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProject(Guid id)
+        public async Task<IActionResult> GetElement(Guid id)
         {
             var userId = HttpContext.Session.GetString("userId");
 
@@ -107,52 +110,32 @@ namespace FaaS.MVC.Controllers.Api
                 return Unauthorized();
             }
 
-            var project = await projectService.Get(id);
-
-            if (project == null)
+            var element = await elementService.Get(id);
+            if (element == null)
             {
-                return NotFound("Cannot find project with id: " + id.ToString());
+                return NotFound("Cannot find element with guid: " + id);
             }
-            HttpContext.Session.SetString("projectId", project.Id.ToString());
 
-            return Ok(project);
+            return Ok(element);
         }
 
-        // POST projects
+        // POST elements
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]CreateProjectViewModel project)
+        public async Task<IActionResult> Post([FromBody] CreateElementViewModel element)
         {
             try
             {
-                var stringGuid = HttpContext.Session.GetString("userId");
-                if (string.IsNullOrEmpty(stringGuid))
-                {
-                    Response.StatusCode = 401;
-                    return Unauthorized();
-                }
-
-                var userId = new Guid(stringGuid);
-                var userDto = await userService.Get(userId);
-
-                logger.LogInformation("Creating new project: \"{}\" with \"{}\" ", project.ProjectName, project.Description);
-
-                project.Created = DateTime.Now;
-                var projectDto = mapper.Map<CreateProjectViewModel, Project>(project);
-                if (projectDto == null)
-                {
-                    logger.LogError("Mapping problem!!!!");
-                    return BadRequest();
-                }
-
-                var result = await projectService.Add(userDto, projectDto);
+                var elementDto = mapper.Map<CreateElementViewModel, Element>(element);
+                var formId = HttpContext.Session.GetString("formId");
+                var formDto = await formService.Get(new Guid(formId));
+                var result = await elementService.Add(formDto, elementDto);
 
                 var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
-
-                var newUrl = new Uri(urlHelper.Action("GetProject", "Projects", new
+                var newUrl = new Uri(urlHelper.Action("GetElement", "Elements", new
                 {
-                    id = project.Id,
+                    id = elementDto.Id,
                 }, httpContextAccessor.HttpContext.Request.Scheme));
-                logger.LogInformation("Generated new project with name " + projectDto.ProjectName);
+                logger.LogInformation("Generated new element with name " + elementDto.Description);
 
                 return Created(newUrl, result);
             }
@@ -162,10 +145,10 @@ namespace FaaS.MVC.Controllers.Api
             }
         }
 
-        // PUT
+        // PUT 
         [HttpPatch]
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] ProjectViewModel project)
+        public async Task<IActionResult> Put([FromBody] ElementViewModel element)
         {
             try
             {
@@ -177,9 +160,9 @@ namespace FaaS.MVC.Controllers.Api
                     return Unauthorized();
                 }
 
-                var projectDto = mapper.Map<ProjectViewModel, Project>(project);
-                var result = await projectService.Update(projectDto);
-              
+                var elementDto = mapper.Map<ElementViewModel, Element>(element);
+                var result = await elementService.Update(elementDto);
+
                 return Ok(result);
             }
             catch (Exception ex)
@@ -188,7 +171,7 @@ namespace FaaS.MVC.Controllers.Api
             }
         }
 
-        // DELETE projects/{id}
+        // DELETE elements/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -202,8 +185,8 @@ namespace FaaS.MVC.Controllers.Api
                     return Unauthorized();
                 }
 
-                var project = await projectService.Get(id);
-                var result = await projectService.Remove(project);
+                var element = await elementService.Get(id);
+                var result = await elementService.Remove(element);
 
                 return Ok(result);
             }

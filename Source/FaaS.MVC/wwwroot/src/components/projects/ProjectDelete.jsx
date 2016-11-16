@@ -1,19 +1,19 @@
-﻿import React, { Component } from "react";
+import React, { Component } from "react";
 
-class UserDelete extends Component {
+class ProjectDelete extends Component {
 
     constructor() {
         super();
         this.handleSubmit = this.handleSubmit.bind(this);
 
         this.state = {};
-        this.state.googleId = "";
-        this.state.userName = "";
-        this.state.registered = "";
+        this.state.projectName = "";
+        this.state.description = "";
+        this.state.created = "";
     }
 
     componentWillMount() {
-        const result = fetch('/api/v1.0/users/' + this.props.params.userid,
+        const result = fetch('/api/v1.0/projects/' + this.props.params.projectid,
         {
             method: "GET",
             credentials: "same-origin",
@@ -23,7 +23,7 @@ class UserDelete extends Component {
         });
 
         result.then( (res) =>  {
-            if(res.ok) {
+            if (res.ok) {
                 res.json()
                     .then((js) => {
                         this.setState(js);
@@ -33,9 +33,7 @@ class UserDelete extends Component {
     }
 
     handleSubmit(event) {
-        const googleId = this.state.googleId;
-        const userName = this.state.userName;
-        var result = fetch('/api/v1.0/users/' + this.props.params.userid,
+        var result = fetch('/api/v1.0/projects/' + this.props.params.projectid,
         {
             method: 'DELETE',
             credentials: "same-origin",
@@ -44,6 +42,7 @@ class UserDelete extends Component {
                 'Content-Type': 'application/json',
             }
         });
+
         result.then( (res) =>  {
             if (res.ok) {
                 res.json()
@@ -57,8 +56,8 @@ class UserDelete extends Component {
     render() {
         return (
             <div className="form-horizontal">
-                <h4>Delete User</h4>
-                <p>Delete user with User Name: {this.state.userName} ?</p>
+                <h4>Delete Project</h4>
+                <p>Delete project with Name: {this.state.projectName} ?</p>
 
                 <input type="button" 
                     id="deleteButton"
@@ -70,4 +69,4 @@ class UserDelete extends Component {
     }
 }
 
-export default UserDelete;
+export default ProjectDelete;

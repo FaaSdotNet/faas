@@ -1,6 +1,6 @@
 ﻿import React, { Component } from "react";
-import MyInput from "./form/MyInput"
-import MySubmit from "./form/MySubmit"
+import MyInput from "../form/MyInput"
+import MySubmit from "../form/MySubmit"
 
 
 export class ProjectCreateComponent extends Component {
@@ -10,11 +10,9 @@ export class ProjectCreateComponent extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-
     handleSubmit(event) {
         const projectName = this.refs.projectName.state.value;
         const projectDesc = this.refs.projectDescription.state.value;
-        console.log('Creating new project: ', projectName);
         var result = fetch('/api/v1.0/projects', {
             method: 'POST',
             headers: {
@@ -28,18 +26,17 @@ export class ProjectCreateComponent extends Component {
         });
 
         result.then( (res) =>  {
-            console.log(res);
-                
             if (res.ok) {
-
                 res.json()
                     .then((js) => {
-                        console.log(js);
-                        console.info("project id: ", js.id);
                         document.location.href ="/#/projects";
                     });
             }
         });
+    }
+
+    handleCancel(event) {
+        document.location.href = "/#/projects";
     }
 
     render() {
@@ -48,7 +45,8 @@ export class ProjectCreateComponent extends Component {
                 <MyInput ref="projectName" id="projectName" label="Project Name"/>
                 <MyInput ref="projectDescription" id="projectDescription" label="Description"/>
                 
-                <MySubmit ref="projectSubmit" onClick={this.handleSubmit} id="projectButton" value="Create"/>
+                <MySubmit ref="projectSubmit" onClick={this.handleSubmit} id="projectCreate" value="Create"/>
+                <MySubmit ref="projectCancel" onClick={this.handleCancel} id="projectCancel" value="Cancel"/>
             </div>
         );
     }

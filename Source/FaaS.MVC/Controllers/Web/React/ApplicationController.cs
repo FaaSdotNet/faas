@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FaaS.MVC.Controllers.Web.React
 {
     [Route("")]
-    public class ApplicationContoller : Controller
+    public class ApplicationController : Controller
     {
 
         public async Task<IActionResult> Index()

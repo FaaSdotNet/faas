@@ -6,8 +6,6 @@ import { hashHistory } from 'react-router';
 import {User} from "../entities/User";
 
 
-
-
 export class LoginComponent extends Component {
 
     constructor(props) {
@@ -15,15 +13,12 @@ export class LoginComponent extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         if (localStorage.getItem("user") != null) {
             document.location.href = "/#/dashboard";
-            console.log("Redirecting from login.");
         }
     }
 
-
-
     handleSubmit(event) {
         const googleId = this.refs.loginGoogleId.state.value;
-        console.log('Logging in as: ', googleId);
+        
         var result = fetch('/api/v1.0/login', {
                 method: 'POST',
                 headers: {
@@ -35,15 +30,11 @@ export class LoginComponent extends Component {
                     GoogleId: googleId
                 })
             });
-            result.then( (res) =>  {
-                console.log(res);
-                
-                if (res.ok) {
 
+            result.then( (res) =>  {    
+                if (res.ok) {
                     res.json()
                         .then((js) => {
-                            console.log(js);
-                            console.info("UserID: ", js.id);
                             cookie.save("userId", js.id);
                             localStorage.setItem("userId", js.id);
                             localStorage.setItem("user", JSON.stringify(js));
@@ -55,16 +46,25 @@ export class LoginComponent extends Component {
 
     render() {
         return (
-            <div className="form-horizontal">
+            <div className="form-horizontal text-center">
                 <h4>
                     Sign in with your Google Account
                 </h4>
+                <br/>
                 <MyInput ref="loginGoogleId" id="GoogleId" label="Google ID"/>
-                <MySubmit ref="loginButton" onClick={this.handleSubmit} id="loginButton" value="Sign In"/>
+                <div className="form-group">
+                    <div className="col-md-offset-1 col-md-10">
+                        <input type="button" 
+                            id="loginButton"
+                            onClick={this.handleSubmit}
+                            value="Sign In" 
+                            className="btn btn-default"/>
+                    </div>
+                </div>
 
                 <p className="text-center">
                     Don't have an account?
-                    <a href="/#/register">Create a new one!</a>
+                    <a href="/#/register"> Create a new one!</a>
                 </p>
             </div>
         );

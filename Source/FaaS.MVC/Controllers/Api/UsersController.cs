@@ -119,7 +119,7 @@ namespace FaaS.MVC.Controllers.Api
                 {
                     id = user.Id,
                 }, httpContextAccessor.HttpContext.Request.Scheme));
-                logger.LogInformation("Generated new project with name " + userDto.UserName);
+                logger.LogInformation("Generated new user with name " + userDto.UserName);
 
                 return Created(newUrl, result);
             }
@@ -157,7 +157,7 @@ namespace FaaS.MVC.Controllers.Api
 
         // DELETE users/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
@@ -169,7 +169,7 @@ namespace FaaS.MVC.Controllers.Api
                     return Unauthorized();
                 }
 
-                var user = await userService.Get(new Guid(id));
+                var user = await userService.Get(id);
                 var result = await userService.Remove(user);
 
                 return Ok(result);

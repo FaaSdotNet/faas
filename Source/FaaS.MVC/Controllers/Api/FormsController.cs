@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace FaaS.MVC.Controllers.Api
 {
+    [Route(RoutePrefix + RouteController)]
     public class FormsController : DefaultController
     {
         public const string RouteController = "forms";
@@ -28,20 +29,27 @@ namespace FaaS.MVC.Controllers.Api
         /// </summary>
         private readonly IProjectService projectService;
 
-        private readonly ILogger<ProjectsContoller> logger;
+        private readonly ILogger<ProjectsController> logger;
 
-        public FormsController(IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, IMapper mapper, IFormService formService, IProjectService projectService, ILogger<ProjectsContoller> logger) : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
+        public FormsController(IRandomIdService randomId,
+            IActionContextAccessor actionContextAccessor,
+            IHttpContextAccessor httpContextAccessor,
+            IUrlHelperFactory urlHelperFactory,
+            IMapper mapper,
+            IFormService formService,
+            IProjectService projectService,
+            ILogger<ProjectsController> logger)
+            : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
         {
             this.formService = formService;
             this.projectService = projectService;
             this.logger = logger;
         }
 
-
-        // GET users
+        // GET forms
         [HttpGet]
         public async Task<IActionResult> GetAllForms(
-            [FromQuery(Name = "project")] Guid projectGuid,
+            //[FromQuery(Name = "project")] Guid id,
             [FromQuery(Name = "limit")]int limit,
             [FromQuery(Name = "attributes")]string[] attributes)
         {
@@ -53,16 +61,14 @@ namespace FaaS.MVC.Controllers.Api
                 return Unauthorized();
             }
 
-
-            var projectDto = await projectService.Get(projectGuid);
-
+            var projectId = HttpContext.Session.GetString("projectId");
+            var projectDto = await projectService.Get(new Guid(projectId));
             if (projectDto == null)
             {
-                return NotFound("Project not found with guid:" + projectGuid);
+                return NotFound("Project not found with guid:" + projectId);
             }
 
             var forms = await formService.GetAllForProject(projectDto);
-
 
             // Apply limit
             if (limit > 0)
@@ -92,7 +98,7 @@ namespace FaaS.MVC.Controllers.Api
             return Ok(forms);
         }
 
-        // GET project/{id}/
+        // GET form/{id}/
         [HttpGet("{id}")]
         public async Task<IActionResult> GetForm(Guid id)
         {
@@ -105,19 +111,18 @@ namespace FaaS.MVC.Controllers.Api
             }
 
             var form = await formService.Get(id);
-
             if (form == null)
             {
                 return NotFound("Cannot find form with guid: " + id);
             }
+            HttpContext.Session.SetString("formId", form.Id.ToString());
 
             return Ok(form);
         }
 
-
-        // POST projects
+        // POST forms
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]CreateFormViewModel form)
+        public async Task<IActionResult> Post([FromBody] CreateFormViewModel form)
         {
             try
             {
@@ -132,7 +137,7 @@ namespace FaaS.MVC.Controllers.Api
                 {
                     id = formDto.Id,
                 }, httpContextAccessor.HttpContext.Request.Scheme));
-                logger.LogInformation("Generated new project with name " + formDto.FormName);
+                logger.LogInformation("Generated new form with name " + formDto.FormName);
 
                 return Created(newUrl, result);
             }
@@ -142,8 +147,8 @@ namespace FaaS.MVC.Controllers.Api
             }
         }
 
-
         // PUT 
+        [HttpPatch]
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] FormViewModel form)
         {
@@ -168,7 +173,7 @@ namespace FaaS.MVC.Controllers.Api
             }
         }
 
-        // DELETE projects/{id}
+        // DELETE forms/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
