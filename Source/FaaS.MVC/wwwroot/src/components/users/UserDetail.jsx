@@ -29,6 +29,10 @@ export class UserDetail extends Component {
         });
     }
 
+    handleBack(event) {
+        document.location.href = "/#/dashboard";
+    }
+
     render() {
         var rows =[];
         var state = this.state;
@@ -42,6 +46,12 @@ export class UserDetail extends Component {
             <div>
                 <h2>User Details</h2>
                 {rows}
+
+                <input type="button" 
+                        id="backButton"
+                        onClick={this.handleBack}
+                        value="Back" 
+                        className="btn btn-default"/>
             </div>
         );
     }

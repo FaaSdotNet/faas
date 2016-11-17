@@ -44,9 +44,18 @@ export class ProjectCreateComponent extends Component {
             <div className="form-horizontal">
                 <MyInput ref="projectName" id="projectName" label="Project Name"/>
                 <MyInput ref="projectDescription" id="projectDescription" label="Description"/>
-                
-                <MySubmit ref="projectSubmit" onClick={this.handleSubmit} id="projectCreate" value="Create"/>
-                <MySubmit ref="projectCancel" onClick={this.handleCancel} id="projectCancel" value="Cancel"/>
+                <br/>
+                <input type="button" 
+                        id="submitButton"
+                        onClick={this.handleSubmit}
+                        value="Create" 
+                        className="btn btn-primary col-md-offset-5"/>
+
+                <input type="button" 
+                        id="cancelButton"
+                        onClick={this.handleCancel}
+                        value="Cancel" 
+                        className="btn btn-default"/>
             </div>
         );
     }

@@ -46,8 +46,18 @@ export class FormCreateComponent extends Component {
                 <MyInput ref="formName" id="formName" label="Form Name"/>
                 <MyInput ref="formDescription" id="formDescription" label="Description"/>
                 
-                <MySubmit ref="formSubmit" onClick={this.handleSubmit} id="formButton" value="Create"/>
-                <MySubmit ref="formCancel" onClick={this.handleCancel} id="formCancel" value="Cancel"/>
+                <br/>
+                <input type="button" 
+                        id="submitButton"
+                        onClick={this.handleSubmit}
+                        value="Create" 
+                        className="btn btn-primary col-md-offset-5"/>
+
+                <input type="button" 
+                        id="cancelButton"
+                        onClick={this.handleCancel}
+                        value="Cancel" 
+                        className="btn btn-default"/>
             </div>
         );
     }

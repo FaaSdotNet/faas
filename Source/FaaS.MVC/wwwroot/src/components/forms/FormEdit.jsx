@@ -90,10 +90,17 @@ class FormEdit extends Component {
                        onChange={this.handleDescriptionChange} className="form-control"
                        value={this.state.description} />
 
+                <br/>
                 <input type="button" 
                         id="editButton"
                         onClick={this.handleSubmit}
                         value="Save" 
+                        className="btn btn-primary col-md-offset-5"/>
+
+                <input type="button" 
+                        id="cancelButton"
+                        onClick={this.handleCancel}
+                        value="Cancel" 
                         className="btn btn-default"/>
             </div>
         );

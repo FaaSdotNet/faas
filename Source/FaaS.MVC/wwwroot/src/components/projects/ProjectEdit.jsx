@@ -67,10 +67,14 @@ class ProjectEdit extends Component {
             if (res.ok) {
                 res.json()
                     .then((js) => {
-                        document.location.href ="/#/login";
+                        document.location.href ="/#/projects";
                     });
             }
         });
+    }
+    
+    handleCancel(event) {
+        document.location.href = "/#/projects"
     }
 
     render() {
@@ -90,10 +94,17 @@ class ProjectEdit extends Component {
                        onChange={this.handleDescriptionChange} className="form-control"
                        value={this.state.description} />
 
+                <br/>
                 <input type="button" 
                         id="editButton"
                         onClick={this.handleSubmit}
                         value="Save" 
+                        className="btn btn-primary col-md-offset-5"/>
+
+                <input type="button" 
+                        id="cancelButton"
+                        onClick={this.handleCancel}
+                        value="Cancel" 
                         className="btn btn-default"/>
             </div>
         );
