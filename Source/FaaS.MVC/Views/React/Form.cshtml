@@ -1,9 +1,13 @@
-﻿@{
+﻿@model string
+
+@{
     ViewData["Title"] = "Form input";
+    Layout = "~/Views/Shared/_ReactLayout.cshtml";
 }
 
-<h2>Index</h2>
+<div id="react-root" class="row col-md-12 col-xs-12"></div>
 
-<div id="react-root"></div>
-
+<script>
+    var formElements = @Html.Raw(Model)
+</script>
 <script src="~/out/form.out.js"></script>

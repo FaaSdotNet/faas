@@ -59,6 +59,7 @@ namespace FaaS.Services
                 logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
+            existingElement.Form = element.Form;    //workarround, should not be here but Form property is null
 
             var existingSession = await sessionRepository.Get(session.Id);
             if (existingSession == null)

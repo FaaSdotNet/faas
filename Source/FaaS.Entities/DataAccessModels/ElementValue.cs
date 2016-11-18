@@ -8,14 +8,12 @@ namespace FaaS.Entities.DataAccessModels
     {
         [ForeignKey("Element")]
         public Guid ElementId { get; set; }
-
-        [Required]
+        
         public Element Element { get; set; }
 
         [ForeignKey("Session")]
         public Guid SessionId { get; set; }
-
-        [Required]
+        
         public Session Session { get; set; }
         
         public string Value { get; set; }

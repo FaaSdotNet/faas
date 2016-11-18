@@ -56,6 +56,7 @@ namespace FaaS.Entities.Repositories
             }
 
             Element elementType = _context.Elements.SingleOrDefault(e => e.Id == element.Id);
+            elementType.Form = _context.Forms.SingleOrDefault(f => f.Id == elementType.FormId);
             Session elementSession = _context.Sessions.SingleOrDefault(s => s.Id == session.Id);
 
             if (elementType == null)
@@ -70,6 +71,7 @@ namespace FaaS.Entities.Repositories
             ElementValue dataAccessElementValueModel = _mapper.Map<ElementValue>(elementValue);
 
             dataAccessElementValueModel.ElementId = element.Id;
+            dataAccessElementValueModel.Element = elementType;
             dataAccessElementValueModel.SessionId = session.Id;
 
             var addedElementValue = _context.ElementValues.Add(dataAccessElementValueModel);

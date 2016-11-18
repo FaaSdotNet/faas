@@ -1,0 +1,78 @@
+﻿import React from 'react';
+import { hashHistory, browserHistory } from 'react-router';
+import Element from './form/Element.jsx'
+import Header from './Header.jsx'
+import MySubmit from "./form/MySubmit.jsx"
+
+export default class Form extends React.Component {
+    constructor(props) {
+        super(props);
+		this.state = { 
+            elements: this.props.model.elements,
+            values: {}
+        };
+
+        console.log(this.props)
+    };
+
+    handleSubmit(e) {
+        var valuesToPost = [];
+        var i = 0;
+        for(var key in this.state.elements){
+            valuesToPost[i] = this.state.values[this.state.elements[key].id]
+            i++;
+        }
+        //var stringToSend = '{jsonString: "' +  JSON.stringify(this.state.values) + '" }'
+        var postObj = {};
+        postObj.form = this.props.model.form;
+        postObj.elements = this.state.elements;
+        postObj.values = valuesToPost;
+        var stringToSend = JSON.stringify({
+            Form: this.props.model.form,
+            Elements: this.state.elements,
+            Values: valuesToPost
+        });
+
+        console.log(stringToSend);
+
+        var result = fetch('/api/v1.0/form', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: "same-origin",
+            body: stringToSend
+        });
+
+        result.then( (res) =>  {
+            if (res.ok) {
+                browserHistory.push("/form/thankyou");
+            }
+        });
+    }
+
+    valueChanged(elementId, newVal){
+        var values = this.state.values;
+        values[elementId] = newVal;
+        this.setState({values: values}); 
+    }
+
+    render() {
+        var elementsList = [];
+        for(var key in this.state.elements){
+            if(this.state.elements.hasOwnProperty(key)){
+                elementsList.push(<li key={key}><Element content={this.state.elements[key]} valueChanged={this.valueChanged.bind(this)}/></li>)
+            }
+        }
+
+        return (
+            <div id="elemContainer">
+                <h1>{this.props.model.form.formName}</h1>
+                {elementsList}
+                <MySubmit onClick={this.handleSubmit.bind(this)} id="formButton" value="Submit"/>
+            </div>
+        );
+    };
+}
+
+//export default  Form;
