@@ -49,7 +49,7 @@ namespace FaaS.MVC.Controllers.Api
         // GET elements
         [HttpGet]
         public async Task<IActionResult> GetAllElements(
-            //[FromQuery(Name = "form")] Guid id,
+            [FromQuery(Name = "formId")] Guid formId,
             [FromQuery(Name = "limit")]int limit,
             [FromQuery(Name = "attributes")]string[] attributes)
         {
@@ -61,8 +61,8 @@ namespace FaaS.MVC.Controllers.Api
                 return Unauthorized();
             }
 
-            var formId = HttpContext.Session.GetString("formId");
-            var formDto = await formService.Get(new Guid(formId));
+            //var formId = HttpContext.Session.GetString("formId");
+            var formDto = await formService.Get(formId);
             if (formDto == null)
             {
                 return NotFound("Form not found with guid:" + formId);
@@ -126,8 +126,8 @@ namespace FaaS.MVC.Controllers.Api
             try
             {
                 var elementDto = mapper.Map<CreateElementViewModel, Element>(element);
-                var formId = HttpContext.Session.GetString("formId");
-                var formDto = await formService.Get(new Guid(formId));
+                var formId = element.FormId;
+                var formDto = await formService.Get(formId);
                 var result = await elementService.Add(formDto, elementDto);
 
                 var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
@@ -135,7 +135,8 @@ namespace FaaS.MVC.Controllers.Api
                 {
                     id = elementDto.Id,
                 }, httpContextAccessor.HttpContext.Request.Scheme));
-                logger.LogInformation("Generated new element with name " + elementDto.Description);
+                logger.LogInformation("[CREATE] element: {} ", elementDto);
+
 
                 return Created(newUrl, result);
             }
@@ -163,6 +164,9 @@ namespace FaaS.MVC.Controllers.Api
                 var elementDto = mapper.Map<ElementViewModel, Element>(element);
                 var result = await elementService.Update(elementDto);
 
+                logger.LogInformation("[UPDATE] element: {} ", elementDto);
+
+
                 return Ok(result);
             }
             catch (Exception ex)
@@ -187,6 +191,9 @@ namespace FaaS.MVC.Controllers.Api
 
                 var element = await elementService.Get(id);
                 var result = await elementService.Remove(element);
+
+                logger.LogInformation("[DELETE] element: {} ", element);
+
 
                 return Ok(result);
             }

@@ -67,14 +67,14 @@ class ProjectEdit extends Component {
             if (res.ok) {
                 res.json()
                     .then((js) => {
-                        document.location.href ="/#/projects";
+                        document.location.href ="/#/dashboard";
                     });
             }
         });
     }
     
     handleCancel(event) {
-        document.location.href = "/#/projects"
+        document.location.href = "/#/dashboard";
     }
 
     render() {

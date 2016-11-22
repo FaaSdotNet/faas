@@ -39,7 +39,7 @@ class ProjectDelete extends Component {
             credentials: "same-origin",
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             }
         });
 
@@ -47,7 +47,7 @@ class ProjectDelete extends Component {
             if (res.ok) {
                 res.json()
                     .then((js) => {
-                        document.location.href ="/#/login";
+                        document.location.href ="/#/dashboard";
                     });
             }
         });

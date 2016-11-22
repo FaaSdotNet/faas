@@ -49,13 +49,11 @@ class Root extends Component {
                     <Route path="projects/:projectid" component={ProjectDetail} />
                     <Route path="projects/edit/:projectid" component={ProjectEdit} />
                     <Route path="projects/delete/:projectid" component={ProjectDelete} />
-                    <Route path="forms" component={FormList} />
-                    <Route path="forms/create" component={FormCreate} />
+                    <Route path="forms/create/:projectId" component={FormCreate} />
                     <Route path="forms/:formid" component={FormDetail} />
                     <Route path="forms/edit/:formid" component={FormEdit} />
                     <Route path="forms/delete/:formid" component={FormDelete} />
-                    <Route path="elements" component={ElementList} />
-                    <Route path="elements/create" component={ElementCreate} />
+                    <Route path="elements/create/:formid" component={ElementCreate} />
                     <Route path="elements/:elementid" component={ElementDetail} />
                     <Route path="elements/edit/:elementid" component={ElementEdit} />
                     <Route path="elements/delete/:elementid" component={ElementDelete} />

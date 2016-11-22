@@ -62,16 +62,13 @@ namespace FaaS.MVC.Controllers.Api
                     return BadRequest("Wrong data");
                 }
 
-                for (int i = 0; i < model.Elements.Length; i++)
+                if (model.Elements.Where((t, i) => (t.Required && model.Values[i] == null) ||
+                                                   !existingElements.Select(e => e.Id).Contains(t.Id)).Any())
                 {
-                    if((model.Elements[i].Required && model.Values[i] == null) ||
-                        !existingElements.Select(e => e.Id).Contains(model.Elements[i].Id))
-                    {
-                        return BadRequest("Wrong data");
-                    }
+                    return BadRequest("Wrong data");
                 }
 
-                Session session = new Session
+                var session = new Session
                 {
                     Filled = DateTime.Now
                 };

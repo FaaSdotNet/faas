@@ -38,14 +38,12 @@ namespace FaaS.Services
             logger.LogInformation("Add operation called");
 
             var existingUser = await userRepository.Get(user.GoogleId);
-            if (existingUser != null)
-            {
-                var errorMessage = $"User with Google ID = [{user.GoogleId}] already exists.";
-                logger.LogError(errorMessage);
-                throw new InvalidOperationException(errorMessage);
-            }
+            if (existingUser == null)
+                return await userRepository.Add(user);
 
-            return await userRepository.Add(user);
+            var errorMessage = $"User with Google ID = [{user.GoogleId}] already exists.";
+            logger.LogError(errorMessage);
+            throw new InvalidOperationException(errorMessage);
         }
 
         public async Task<User> Get(string googleId)

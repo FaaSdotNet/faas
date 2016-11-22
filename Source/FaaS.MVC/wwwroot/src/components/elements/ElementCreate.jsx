@@ -6,6 +6,7 @@ export class ElementCreateComponent extends Component {
         super(props);
 
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
         this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.handleTypeChange = this.handleTypeChange.bind(this);
@@ -75,7 +76,8 @@ export class ElementCreateComponent extends Component {
                 Description: description,
                 Options: options,
                 Type: type,
-                Required: required
+                Required: required,
+                FormId: this.props.params.formid
             })
         });
 
@@ -83,14 +85,15 @@ export class ElementCreateComponent extends Component {
             if (res.ok) {
                 res.json()
                     .then((js) => {
-                        document.location.href ="/#/elements";
+                        console.log(js);
+                        document.location.href = `/#/forms/${this.props.params.formid}`;
                     });
             }
         });
     }
 
     handleCancel(event) {
-        document.location.href = "/#/elements"
+        document.location.href = `/#/forms/${this.props.params.formid}`;
     }
 
     handleAdd(event) {

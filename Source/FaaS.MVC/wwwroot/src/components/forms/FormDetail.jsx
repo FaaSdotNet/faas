@@ -42,7 +42,7 @@ export class FormDetail extends Component {
             <div>
                 <h2>Form Details</h2>
                 {rows}
-                <ElementList />
+                <ElementList formid={this.props.params.formid} />
             </div>
        );
     }

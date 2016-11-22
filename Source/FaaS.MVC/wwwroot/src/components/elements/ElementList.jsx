@@ -9,13 +9,14 @@ export class ElementListComponent extends Component {
     }
 
     handleAdd(event) {
-        document.location.href = "/#/elements/create/";
+        document.location.href = `/#/elements/create/${this.props.formid}`;
     }
 
     render() {
+        const url = `elements/?formId=${this.props.formid}`;
         return (
             <div className="row">
-                <MyViewTable name="elements" propName="elementName"/>
+                <MyViewTable url={url} name="elements" propName="description"/>
                 <button onClick={() => {this.handleAdd()}}
                             type="button" className="btn btn-primary btn-md" role="button">Add New Element</button>
             </div>

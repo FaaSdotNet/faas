@@ -16,7 +16,7 @@ export class ProjectListComponent extends Component {
         return (
             <div>
                 <div className="row">
-                    <MyViewTable name="projects" propName="projectName" />
+                    <MyViewTable url="projects" name="projects" propName="projectName" />
                 </div>
                 <button onClick={() => {this.handleAdd()}}
                             type="button" className="btn btn-primary btn-md" role="button">Add New Project</button>
