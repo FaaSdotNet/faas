@@ -5,17 +5,18 @@ export class ProjectDetail extends Component {
 
     constructor(props) {
         super(props);
+        this.projectid = this.props.params.projectid;
 
         this.state = null;
     }
 
     componentWillMount() {
-        const result = fetch('/api/v1.0/projects/' + this.props.params.projectid,
+        const result = fetch(`/api/v1.0/projects/${this.projectid}`,
         {
             method: "GET",
             credentials: "same-origin",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': "application/json"
             }
         });
 
@@ -29,19 +30,26 @@ export class ProjectDetail extends Component {
         });
     }
 
+    componentDidMount() {
+        console.log(this.props.params.projectid);
+        console.log(this.props.params);
+
+
+    }
+
     render() {
         var rows =[];
         var state = this.state;
         if (state) {
-            rows.push(<h2 key={state.projectName}><b>Project: </b>{state.projectName}</h2>);
-            rows.push(<p key={state.description}>{state.description}</p>);
+            rows.push(<h2 key={state.projectName}><b>Project: </b> {state.projectName} </h2>);
+            rows.push(<div key={state.description}>{state.description}</div>);
             rows.push(<p key={state.created}><b>Created: </b>{state.created}</p>);
         }
 
         return (
             <div>
                 {rows}
-                <FormList />
+                <FormList projectid={this.projectid} />
             </div>
        );
     }

@@ -22,7 +22,8 @@ export class FormCreateComponent extends Component {
             credentials: "same-origin",
             body: JSON.stringify({
                 FormName: formName,
-                Description: formDesc
+                Description: formDesc,
+                SelectedProjectId: this.props.params.projectId
             })
         });
 
@@ -30,7 +31,8 @@ export class FormCreateComponent extends Component {
             if (res.ok) {
                 res.json()
                     .then((js) => {
-                        document.location.href ="/#/forms";
+                        
+                        document.location.href =`/#/projects/${this.props.params.projectId}/`;
                     });
             }
         });

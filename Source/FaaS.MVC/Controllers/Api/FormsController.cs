@@ -49,7 +49,7 @@ namespace FaaS.MVC.Controllers.Api
         // GET forms
         [HttpGet]
         public async Task<IActionResult> GetAllForms(
-            //[FromQuery(Name = "project")] Guid id,
+            [FromQuery(Name = "projectId")] Guid projectId,
             [FromQuery(Name = "limit")]int limit,
             [FromQuery(Name = "attributes")]string[] attributes)
         {
@@ -61,8 +61,7 @@ namespace FaaS.MVC.Controllers.Api
                 return Unauthorized();
             }
 
-            var projectId = HttpContext.Session.GetString("projectId");
-            var projectDto = await projectService.Get(new Guid(projectId));
+            var projectDto = await projectService.Get(projectId);
             if (projectDto == null)
             {
                 return NotFound("Project not found with guid:" + projectId);
@@ -137,7 +136,7 @@ namespace FaaS.MVC.Controllers.Api
                 {
                     id = formDto.Id,
                 }, httpContextAccessor.HttpContext.Request.Scheme));
-                logger.LogInformation("Generated new form with name " + formDto.FormName);
+                logger.LogInformation("[CREATE] form: {} ", formDto);
 
                 return Created(newUrl, result);
             }
@@ -164,6 +163,8 @@ namespace FaaS.MVC.Controllers.Api
 
                 var formDto = mapper.Map<FormViewModel, Form>(form);
                 var result = await formService.Update(formDto);
+                logger.LogInformation("[UPDATE] form: {} ", formDto);
+
 
                 return Ok(result);
             }
@@ -189,6 +190,8 @@ namespace FaaS.MVC.Controllers.Api
 
                 var form = await formService.Get(id);
                 var result = await formService.Remove(form);
+                logger.LogInformation("[DELETE] form: {} ", form);
+  
 
                 return Ok(result);
             }

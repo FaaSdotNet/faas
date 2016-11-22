@@ -46,7 +46,7 @@ class FormDelete extends Component {
             if (res.ok) {
                 res.json()
                     .then((js) => {
-                        document.location.href ="/#/login";
+                        document.location.href ="/#/dashboard";
                     });
             }
         });

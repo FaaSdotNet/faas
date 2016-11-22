@@ -134,7 +134,6 @@ namespace FaaS.MVC.Controllers.Api
                 var userId = new Guid(stringGuid);
                 var userDto = await userService.Get(userId);
 
-                logger.LogInformation("Creating new project: \"{}\" with \"{}\" ", project.ProjectName, project.Description);
 
                 project.Created = DateTime.Now;
                 var projectDto = mapper.Map<CreateProjectViewModel, Project>(project);
@@ -143,6 +142,9 @@ namespace FaaS.MVC.Controllers.Api
                     logger.LogError("Mapping problem!!!!");
                     return BadRequest();
                 }
+
+                logger.LogInformation("[CREATE] project: {} ", projectDto);
+
 
                 var result = await projectService.Add(userDto, projectDto);
 
@@ -179,7 +181,9 @@ namespace FaaS.MVC.Controllers.Api
 
                 var projectDto = mapper.Map<ProjectViewModel, Project>(project);
                 var result = await projectService.Update(projectDto);
-              
+                logger.LogInformation("[UPDATE] Project: " + project);
+
+
                 return Ok(result);
             }
             catch (Exception ex)
@@ -203,6 +207,7 @@ namespace FaaS.MVC.Controllers.Api
                 }
 
                 var project = await projectService.Get(id);
+                logger.LogInformation("[DELETE] Project: " + project);
                 var result = await projectService.Remove(project);
 
                 return Ok(result);

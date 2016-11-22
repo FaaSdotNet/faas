@@ -59,7 +59,7 @@ class ElementEdit extends Component {
     }
 
     componentWillMount() {
-        const result = fetch('/api/v1.0/elements/' + this.props.params.elementid,
+        const result = fetch(`/api/v1.0/elements/${this.props.params.elementid}`,
         {
             method: "GET",
             credentials: "same-origin",
@@ -103,14 +103,14 @@ class ElementEdit extends Component {
             if (res.ok) {
                 res.json()
                     .then((js) => {
-                        document.location.href ="/#/elements";
+                        document.location.href =`/#/elements/${this.props.params.elementid}`;
                     });
             }
         });
     }
 
     handleCancel(event) {
-        document.location.href = "/#/elements"
+        document.location.href = `/#/elements/${this.props.params.elementid}`;
     }
 
     handleAdd(event) {

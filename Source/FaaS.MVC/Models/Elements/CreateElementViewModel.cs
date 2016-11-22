@@ -30,6 +30,8 @@ namespace FaaS.MVC.Models
 
         public SelectList ElementValueList { get; set; }
 
+        public Guid FormId { get; set; }
+
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (Id.ToString() != UrlEncoder.Default.Encode(Id.ToString()))

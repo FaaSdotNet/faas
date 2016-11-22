@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FaaS.MVC.Models.Mapping;
+using FaaS.Services;
 
 namespace FaaS.MVC.Configuration
 {

@@ -54,7 +54,7 @@ class FormEdit extends Component {
             credentials: "same-origin",
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 Id: this.props.params.formid,
@@ -67,7 +67,7 @@ class FormEdit extends Component {
             if (res.ok) {
                 res.json()
                     .then((js) => {
-                        document.location.href ="/#/login";
+                        document.location.href =`/#/forms/${this.props.params.formid}`;
                     });
             }
         });

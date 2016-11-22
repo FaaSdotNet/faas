@@ -11,5 +11,10 @@ namespace FaaS.DataTransferModels
         public Element Element { get; set; }
 
         public Session Session { get; set; }
+
+        public override string ToString()
+        {
+            return $"{nameof(Id)}: {Id}, {nameof(Value)}: {Value}, {nameof(Element)}: {Element}, {nameof(Session)}: {Session}";
+        }
     }
 }

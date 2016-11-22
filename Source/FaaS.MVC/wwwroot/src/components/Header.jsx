@@ -27,11 +27,11 @@ class LoggedInMenu extends Component {
     render() {
         return(
             <Nav>
+                <NavItem href="/#/dashboard">
+                    Dashboard
+                </NavItem>
                 <NavItem href="/#/projects">
                     Projects
-                </NavItem>
-                <NavItem href="/#/forms">
-                    Forms
                 </NavItem>
             </Nav>
         );
@@ -51,6 +51,7 @@ class LoggedInUser extends Component {
         localStorage.removeItem('user');
         localStorage.removeItem('userId');
         /** Clear all cookies starting with 'session' (to get all cookies, omit regex argument) */
+        document.del
         document.location.reload();        
     }
 
