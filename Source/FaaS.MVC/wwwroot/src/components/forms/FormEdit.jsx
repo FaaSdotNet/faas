@@ -67,6 +67,7 @@ class FormEdit extends Component {
             if (res.ok) {
                 res.json()
                     .then((js) => {
+                        console.log("Updated: " + js);
                         document.location.href =`/#/forms/${this.props.params.formid}`;
                     });
             }
