@@ -54,7 +54,7 @@ export class MyTableRow extends Component {
 
     render() {
         const obj = this.props.object;
-        var itemGroup = this.props.name.substr(0, this.props.name.length - 1);
+        const itemGroup = this.props.name.substr(0, this.props.name.length - 1);
         return(
             <tr>
                 <td>

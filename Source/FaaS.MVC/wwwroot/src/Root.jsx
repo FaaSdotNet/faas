@@ -1,6 +1,6 @@
 ﻿import React, { Component } from "react";
 import { Router, Route, IndexRoute } from "react-router";
-import { hashHistory } from "react-router"
+import {connect} from "react-redux";
 
 import Index from "./components/Index";
 import App from "./components/App";
@@ -16,18 +16,19 @@ import ProjectCreate from "./components/projects/ProjectCreate";
 import ProjectDetail from "./components/projects/ProjectDetail";
 import ProjectEdit from "./components/projects/ProjectEdit";
 import ProjectDelete from "./components/projects/ProjectDelete";
-import FormList from "./components/forms/FormList";
 import FormCreate from "./components/forms/FormCreate";
 import FormEdit from "./components/forms/FormEdit";
 import FormDetail from "./components/forms/FormDetail";
 import FormDelete from "./components/forms/FormDelete";
-import ElementList from "./components/elements/ElementList";
 import ElementCreate from "./components/elements/ElementCreate";
 import ElementEdit from "./components/elements/ElementEdit";
 import ElementDetail from "./components/elements/ElementDetail";
 import ElementDelete from "./components/elements/ElementDelete";
 
-class Root extends Component {
+@connect((store) => {
+    return store;
+})
+export class Root extends Component {
 
     // We need to provide a list of routes
     // for our app, and in this case we are
@@ -57,7 +58,6 @@ class Root extends Component {
                     <Route path="elements/:elementid" component={ElementDetail} />
                     <Route path="elements/edit/:elementid" component={ElementEdit} />
                     <Route path="elements/delete/:elementid" component={ElementDelete} />
-
                     <IndexRoute component={Index} />
                 </Route>
             </Router>

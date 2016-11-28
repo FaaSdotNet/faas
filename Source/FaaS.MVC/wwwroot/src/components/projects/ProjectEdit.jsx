@@ -49,7 +49,7 @@ class ProjectEdit extends Component {
     handleSubmit(event) {
         const projectName = this.state.projectName;
         const description = this.state.description;
-        var result = fetch('/api/v1.0/projects', {
+        const result = fetch('/api/v1.0/projects', {
             method: 'PUT',
             credentials: "same-origin",
             headers: {
