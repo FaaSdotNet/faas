@@ -2,17 +2,14 @@
  * Created by Wermington on 27.11.16.
  */
 import {
-	ELEMENTS_FETCH_SUCC,
-	ELEMENTS_ANY_FAIL,
-	ELEMENTS_DELETE_SUCC,
-	ELEMENTS_UPDATE_SUCC,
-	ELEMENTS_CREATE_SUCC,
-	ELEMENTS_GET_SUCC
+	Elements
 } from '../constants';
 
 import {apiClient} from "../utils";
 
-const FAIL_TYPE = ELEMENTS_ANY_FAIL;
+const COLL_TYPE = Elements;
+const FAIL_TYPE = COLL_TYPE.Fail;
+
 const URL_ELEM = "/elements/";
 
 export function fetchAll()
@@ -20,7 +17,7 @@ export function fetchAll()
 	return (dispatch) => {
 		apiClient.get(URL_ELEM)
 			.then((res) => {
-				dispatch ({type: ELEMENTS_FETCH_SUCC, payload: res});
+				dispatch ({type: COLL_TYPE.FetchSucc, payload: res});
 			})
 			.catch((err) => {
 				dispatch ({type: FAIL_TYPE, payload: err});
@@ -33,7 +30,7 @@ export function deleteElement(id)
 	return (dispatch) => {
 		apiClient.delete(URL_ELEM + id)
 			.then((res) => {
-				dispatch({type: ELEMENTS_DELETE_SUCC, payload: res});
+				dispatch({type: COLL_TYPE.DeleteSucc, payload: res});
 
 			})
 			.catch((err) => {
@@ -42,13 +39,13 @@ export function deleteElement(id)
 	};
 }
 
-export function updateElement(project)
+export function updateElement(element)
 {
 	return (dispatch) => {
-		apiClient.put(URL_ELEM, project)
+		apiClient.put(URL_ELEM, element)
 			.then(res => {
 				dispatch({
-					type: ELEMENTS_UPDATE_SUCC,
+					type: COLL_TYPE.UpdateSucc,
 					payload: res
 				});
 			}).catch((err) =>{
@@ -57,13 +54,29 @@ export function updateElement(project)
 	}
 }
 
+export function createElement(element)
+{
+	return (dispatch) => {
+		apiClient.post(URL_ELEM, element)
+			.then(res => {
+				dispatch({
+					type: COLL_TYPE.CreateSucc,
+					payload: res
+				})
+			}).catch((err) =>{
+			dispatch({ type: FAIL_TYPE, payload: err });
+		});
+	}
+}
+
+
 export function getElement(id)
 {
 	return (dispatch) => {
 		apiClient.get(URL_ELEM + id)
 			.then(res => {
 				dispatch({
-					type: ELEMENTS_GET_SUCC,
+					type: COLL_TYPE.GetSucc,
 					payload: res
 				});
 			}).catch((err) =>{

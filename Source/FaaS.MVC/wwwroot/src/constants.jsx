@@ -1,43 +1,62 @@
 import {createConstants} from './utils';
+import {Enum} from 'enumify';
+
 
 export const URL_PREFIX = "/api/v1.0/";
 
+export const PagesLoc = {
+	Dashboard: "dashboard",
+	Projects: "projects",
+	Forms: "forms",
+	Project: "project",
+	Form: "form",
+	Elements: "elements",
+	Element: "element"
+};
 
-export default createConstants(
-	'USER_LOGIN_REQUEST',
-	'USER_ANY_FAIL',
-	'USER_LOGIN_SUCC',
-	'USER_GET_SUCC',
-	'USER_UPDATE_SUCC',
-	'USER_DELETE_SUCC',
-	'USER_REGISTER_SUCC',
-	'USER_LOGOUT',
+export const Projects = {
+	Fetch: 'PROJECTS_FETCH',
+	FetchSucc: 'PROJECTS_FETCH_SUCC',
+	Fail: 'PROJECTS_ANY_FAIL',
+	DeleteSucc: 'PROJECTS_DELETE_SUCC',
+	UpdateSucc: 'PROJECTS_UPDATE_SUCC',
+	CreateSucc: 'PROJECTS_CREATE_SUCC',
+	GetSucc: 'PROJECTS_GET_SUCC',
+};
 
-	'PROJECTS_FETCH',
-	'PROJECTS_FETCH_SUCC',
-	'PROJECTS_FETCH_FAIL',
-	'PROJECTS_DELETE_SUCC',
-	'PROJECTS_UPDATE_SUCC',
-	'PROJECTS_CREATE_SUCC',
-	'PROJECTS_GET_SUCC',
-	'PROJECTS_SET',
-	'PROJECTS_UNSET',
+export const Forms = {
+	Fetch: 'FORMS_FETCH',
+	FetchSucc: 'FORMS_FETCH_SUCC',
+	Fail: 'FORMS_ANY_FAIL',
+	DeleteSucc: 'FORMS_DELETE_SUCC',
+	UpdateSucc: 'FORMS_UPDATE_SUCC',
+	CreateSucc: 'FORMS_CREATE_SUCC',
+	GetSucc: 'FORMS_GET_SUCC',
+};
 
-	'FORMS_FETCH',
-	'FORMS_FETCH_SUCC',
-	'FORMS_ANY_FAIL',
-	'FORMS_DELETE_SUCC',
-	'FORMS_UPDATE_SUCC',
-	'FORMS_CREATE_SUCC',
-	'FORMS_GET_SUCC',
-	'FORMS_SET',
-	'FORMS_UNSET',
+export const User = {
+	LoginReq: 'USER_LOGIN_REQUEST',
+	Fail: 'USER_ANY_FAIL',
+	LoginSucc: 'USER_LOGIN_SUCC',
+	Get: 'USER_GET_SUCC',
+	UpdateSucc: 'USER_UPDATE_SUCC',
+	DeleteSucc: 'USER_DELETE_SUCC',
+	RegisterSucc: 'USER_REGISTER_SUCC',
+	Logout: 'USER_LOGOUT',
+};
 
-	'ELEMENTS_FETCH',
-	'ELEMENTS_FETCH_SUCC',
-	'ELEMENTS_ANY_FAIL',
-	'ELEMENTS_DELETE_SUCC',
-	'ELEMENTS_UPDATE_SUCC',
-	'ELEMENTS_CREATE_SUCC',
-	'ELEMENTS_GET_SUCC',
-);
+export const Pages = {
+	PageSet: 'PAGE_SET',
+	FormSet: 'FORM_SET',
+	ProjectSet: 'PROJECT_SET'
+};
+
+export const Elements = {
+	Fetch: 'ELEMENTS_FETCH',
+	FetchSucc: 'ELEMENTS_FETCH_SUCC',
+	Fail: 'ELEMENTS_ANY_FAIL',
+	DeleteSucc: 'ELEMENTS_DELETE_SUCC',
+	UpdateSucc: 'ELEMENTS_UPDATE_SUCC',
+	CreateSucc: 'ELEMENTS_CREATE_SUCC',
+	GetSucc: 'ELEMENTS_GET_SUCC'
+};

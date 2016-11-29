@@ -2,19 +2,13 @@
  * Created by Wermington on 27.11.16.
  */
 import {
-	PROJECTS_SET,
-	PROJECTS_UNSET,
-	PROJECTS_CREATE_SUCC,
-	PROJECTS_FETCH_SUCC,
-	PROJECTS_ANY_FAIL,
-	PROJECTS_DELETE_SUCC,
-	PROJECTS_UPDATE_SUCC,
-	PROJECTS_GET_SUCC
+	Projects
 } from '../constants';
 
 import {apiClient} from "../utils";
 
-const FAIL_TYPE = PROJECTS_ANY_FAIL;
+const COLL_TYPE = Projects;
+const FAIL_TYPE = COLL_TYPE.Fail;
 const URL_ELEM = "/projects/";
 
 export function fetchAll()

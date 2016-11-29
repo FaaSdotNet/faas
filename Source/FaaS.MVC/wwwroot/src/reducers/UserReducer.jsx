@@ -1,4 +1,4 @@
-import {USER_LOGIN_REQUEST,USER_LOGIN_SUCC, USER_LOGIN_FAIL, USER_LOGOUT} from '../constants';
+import {User} from '../constants';
 import {createReducer} from "../utils/index";
 
 const initialState = {
@@ -10,14 +10,14 @@ const initialState = {
 };
 
 export default createReducer(initialState, {
-	[USER_LOGIN_REQUEST]: (state, payload) =>
+	[User.LoginReq]: (state, payload) =>
 	{
 		return Object.assign({}, state, {
 			'isAuthenticating': true,
 			'statusText': null
 		});
 	},
-	[USER_LOGIN_SUCC]: (state, payload) =>
+	[User.LoginSucc]: (state, payload) =>
 	{
 		return Object.assign({}, state, {
 			'isAuthenticating': false,
@@ -28,7 +28,7 @@ export default createReducer(initialState, {
 		});
 
 	},
-	[USER_LOGIN_FAIL]: (state, payload) =>
+	[User.Fail]: (state, payload) =>
 	{
 		return Object.assign({}, state, {
 			'isAuthenticating': false,
@@ -38,7 +38,7 @@ export default createReducer(initialState, {
 			'statusText': `Authentication Error: ${payload.status} ${payload.statusText}`
 		});
 	},
-	[USER_LOGOUT]: (state, payload) =>
+	[User.Logout]: (state, payload) =>
 	{
 		return Object.assign({}, state, {
 			'isAuthenticated': false,
