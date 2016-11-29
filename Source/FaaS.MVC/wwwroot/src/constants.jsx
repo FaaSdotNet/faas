@@ -4,6 +4,14 @@ import {Enum} from 'enumify';
 
 export const URL_PREFIX = "/api/v1.0/";
 
+export const REQUEST = {
+	headers: {
+		'Content-Type': "application/json",
+		'Accept': 'application/json'
+	},
+	base: '/api/v1.0/'
+};
+
 export const PagesLoc = {
 	Dashboard: "dashboard",
 	Projects: "projects",

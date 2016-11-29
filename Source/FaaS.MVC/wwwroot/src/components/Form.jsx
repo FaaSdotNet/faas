@@ -1,7 +1,6 @@
 ﻿import React from 'react';
-import { hashHistory, browserHistory } from 'react-router';
+import {browserHistory } from 'react-router';
 import Element from './form/Element.jsx'
-import Header from './Header.jsx'
 import MySubmit from "./form/MySubmit.jsx"
 
 export default class Form extends React.Component {
@@ -16,18 +15,18 @@ export default class Form extends React.Component {
     };
 
     handleSubmit(e) {
-        var valuesToPost = [];
-        var i = 0;
-        for(var key in this.state.elements){
-            valuesToPost[i] = this.state.values[this.state.elements[key].id]
+        const valuesToPost = [];
+        let i = 0;
+        for(const key in this.state.elements){
+            valuesToPost[i] = this.state.values[this.state.elements[key].id];
             i++;
         }
         //var stringToSend = '{jsonString: "' +  JSON.stringify(this.state.values) + '" }'
-        var postObj = {};
+        const postObj = {};
         postObj.form = this.props.model.form;
         postObj.elements = this.state.elements;
         postObj.values = valuesToPost;
-        var stringToSend = JSON.stringify({
+        const stringToSend = JSON.stringify({
             Form: this.props.model.form,
             Elements: this.state.elements,
             Values: valuesToPost

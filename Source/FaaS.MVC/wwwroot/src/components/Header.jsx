@@ -8,6 +8,7 @@ class HeaderComponent extends Component {
     constructor() {
         super();
         this.state = { userId: localStorage.getItem('userId') };
+        this.user = this.props.user;
     }
 
     render() {
@@ -21,7 +22,7 @@ class HeaderComponent extends Component {
                     </Navbar.Brand>
                 </Navbar.Header>
                 <Navbar.Collapse>
-                    <MainMenu />
+                    <MainMenu user={this.props.user} />
                 </Navbar.Collapse>
             </Navbar>
         );

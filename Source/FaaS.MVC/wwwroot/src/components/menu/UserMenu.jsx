@@ -37,9 +37,13 @@ export class LoggedInUser extends Component {
 	}
 
 	render() {
-		const user = JSON.parse(localStorage.getItem("user"));
+		const user = this.props.user;
+		//const user = JSON.parse(localStorage.getItem("user"));
 
-		let title = <div><img style={{display: "inline"}} className="img-responsive img-circle" src="../images/default_user.png" alt="defaut_user" height="24" width="24" />
+		let title = <div><img style={{display: "inline"}}
+							  className="img-responsive img-circle"
+							  src="../images/default_user.png"
+							  alt="defaut_user" height="24" width="24" />
 			&nbsp;{user.userName}</div>;
 
 		return (

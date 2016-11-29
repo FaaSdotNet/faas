@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Provider} from 'react-redux';
 import axios from 'axios';
+import {REQUEST} from "../constants";
 
 export function createConstants(...constants)
 {
@@ -40,10 +41,17 @@ export function parseJSON(response)
 	return response.json()
 }
 
+
+export function getHeaders(token)
+{
+	const head = REQUEST.headers;
+	return (!token) ? {...head} : {...head, Authorization: `Bearer ${token}`};
+
+}
+/*
+ * https://github.com/mzabriskie/axios
+ */
 export const apiClient = axios.create({
-	baseURL: '/api/v1.0/',
-	headers: {
-		'Content-Type': "application/json",
-		'Accept': 'application/json'
-	}
+	baseURL: REQUEST.base,
+	headers: REQUEST.headers
 });

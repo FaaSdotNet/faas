@@ -23,12 +23,12 @@ export class MainMenu extends Component {
 					FAQ
 				</NavItem>
 				{ isLoggedIn ? (
-					<UserMenu/>
+					<UserMenu user={this.props.user}/>
 				) : (
 					<LoginMenu/>
 				)}
 
-				{ isLoggedIn && <LoggedInUser/> }
+				{ isLoggedIn && <LoggedInUser user={this.props.user}/> }
 
 			</Nav>
 		);
