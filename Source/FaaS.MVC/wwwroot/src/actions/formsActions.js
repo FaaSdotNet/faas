@@ -37,7 +37,7 @@ export class FormsActions {
 		};
 	}
 
-	static updateForm(element){
+	static update(element){
 		return (dispatch) => {
 			apiClient.put(URL_ELEM, element)
 				.then(res => {
