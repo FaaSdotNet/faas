@@ -13,7 +13,7 @@ const COLL_NAME = "forms";
 const URL_ELEM = `/${COLL_NAME}/`;
 
 export class FormsActions {
-	static fetchAll() {
+	static fetchAll(projectId) {
 		return (dispatch) => {
 			apiClient.get(URL_ELEM)
 				.then((res) => {
@@ -73,7 +73,7 @@ export class FormsActions {
 		}
 	}
 
-	static create(element)
+	static create(projectId, element)
 	{
 		return (dispatch) => {
 			apiClient.post(URL_ELEM, element)

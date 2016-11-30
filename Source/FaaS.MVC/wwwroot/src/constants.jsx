@@ -1,8 +1,3 @@
-import {createConstants} from './utils';
-import {Enum} from 'enumify';
-
-
-export const URL_PREFIX = "/api/v1.0/";
 
 export const REQUEST = {
 	headers: {

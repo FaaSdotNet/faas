@@ -1,9 +1,6 @@
 ﻿import React, { Component } from "react";
 import MyInput from "./form/MyInput"
-import MySubmit from "./form/MySubmit"
 import cookie from 'react-cookie'
-import { hashHistory } from 'react-router';
-import {User} from "../entities/User";
 
 
 export class LoginComponent extends Component {
@@ -19,7 +16,7 @@ export class LoginComponent extends Component {
     handleSubmit(event) {
         const googleId = this.refs.loginGoogleId.state.value;
         
-        var result = fetch('/api/v1.0/login', {
+        const result = fetch('/api/v1.0/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

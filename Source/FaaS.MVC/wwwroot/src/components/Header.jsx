@@ -5,10 +5,9 @@ import {MainMenu} from "./menu/MainMenu";
 
 class HeaderComponent extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = { userId: localStorage.getItem('userId') };
-        this.user = this.props.user;
     }
 
     render() {

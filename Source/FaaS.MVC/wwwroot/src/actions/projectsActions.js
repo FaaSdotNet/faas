@@ -13,7 +13,7 @@ const COLL_NAME = "projects";
 const URL_ELEM = `/${COLL_NAME}/`;
 
 export class ProjectsActions {
-	static fetchAll() {
+	static fetchAll(userId) {
 		return (dispatch) => {
 			apiClient.get(URL_ELEM)
 				.then((res) => {
@@ -42,9 +42,9 @@ export class ProjectsActions {
 		};
 	}
 
-	static update(element){
+	static update(project){
 		return (dispatch) => {
-			apiClient.put(URL_ELEM, element)
+			apiClient.put(URL_ELEM, project)
 				.then(res => {
 					console.log(`[UPDATE] ${COLL_NAME}: `, res);
 					dispatch({
@@ -73,10 +73,10 @@ export class ProjectsActions {
 		}
 	}
 
-	static create(element)
+	static create(userId, project)
 	{
 		return (dispatch) => {
-			apiClient.post(URL_ELEM, element)
+			apiClient.post(URL_ELEM, project)
 				.then(res => {
 					console.log(`[CREATE] ${COLL_NAME}: `, res);
 					dispatch({
