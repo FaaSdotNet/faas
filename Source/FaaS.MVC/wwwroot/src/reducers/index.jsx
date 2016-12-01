@@ -4,11 +4,13 @@ import user from './UserReducer';
 import forms from './FormsReducer';
 import projects from './ProjectsReducer';
 import page from './PageReducer';
+import elements from'./ElementsRefucer';
 
 export default combineReducers({
-	user : user,
-	forms: forms,
-	projects: projects,
-	page: page,
+	user,
+	forms,
+	projects,
+	elements,
+	page,
 	router: routerStateReducer
 });

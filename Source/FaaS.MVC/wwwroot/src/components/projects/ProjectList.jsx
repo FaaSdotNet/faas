@@ -1,5 +1,5 @@
 ﻿import React, { Component } from "react";
-import MyViewTable from "../table/MyViewTable"
+import {ProjectListTable} from "./ProjectListTable"
 
 
 export class ProjectListComponent extends Component {
@@ -16,7 +16,7 @@ export class ProjectListComponent extends Component {
         return (
             <div>
                 <div className="row">
-                    <MyViewTable url="projects" name="projects" propName="projectName" />
+                    <ProjectListTable  />
                 </div>
                 <button onClick={() => {this.handleAdd()}}
                             type="button" className="btn btn-primary btn-md" role="button">Add New Project</button>

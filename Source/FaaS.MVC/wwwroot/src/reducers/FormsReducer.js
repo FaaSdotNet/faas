@@ -1,9 +1,7 @@
 /**
  * Created by Wermington on 27.11.16.
  */
-/**
- * Created by Wermington on 27.11.16.
- */
+
 
 import {
 	Forms
@@ -16,24 +14,30 @@ const initialState = {
 	statusText: null
 };
 
-export default createReducer(initialState, {
-	[Forms.FetchSucc]: (state, payload) => {
-		return {...state, forms: payload};
-	},
-	[Forms.Fail]: (state, payload) => {
-		return {...state, statusText: "[FAIL] Forms: "+ payload};
-	},
-	[Forms.CreateSucc]: (state, payload) => {
-		return {...state, forms: Object.assign({}, state.forms, payload)};
-	},
-	[Forms.DeleteSucc]: (state, payload) => {
-		return state;
-	},
-	[Forms.GetSucc]: (state, payload) => {
-		return {...state}
-	},
-	[Forms.UpdateSucc]: (state, payload) => {
-		return {...state, forms: Object.assign({}, state.forms, payload)};
-	}
-});
 
+export function formsReducer(state, action){
+	const type = action.type;
+	const payload = action.payload;
+	state= state || initialState;
+
+	console.log("[REDUCER] Forms: ", action);
+	switch (type)
+	{
+		case Forms.FetchSucc:
+			return {...state, forms: payload};
+		case Forms.Fail:
+			return {...state, statusText: "[FAIL] Elements: "+ payload};
+		case Forms.CreateSucc:
+			return {...state, forms: Object.assign({}, state.forms, payload)};
+		case Forms.DeleteSucc:
+			return {...state};
+		case Forms.GetSucc:
+			return {...state};
+		case Forms.UpdateSucc:
+			return {...state, forms: Object.assign({}, state.forms, payload)};
+	}
+	return state;
+}
+
+
+export default formsReducer;

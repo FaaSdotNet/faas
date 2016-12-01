@@ -3,4 +3,4 @@ import logger from "redux-logger";
 import thunk from "redux-thunk";
 import promise from "redux-promise-middleware";
 
-export default applyMiddleware(logger(), thunk, promise);
+export default applyMiddleware(logger(), thunk, promise());

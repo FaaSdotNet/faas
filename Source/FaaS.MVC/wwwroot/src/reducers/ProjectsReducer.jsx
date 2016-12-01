@@ -6,31 +6,41 @@ import {
 	Projects
 } from '../constants';
 
-import {createReducer} from "../utils/index";
 
 const initialState = {
-	projects: {},
+	projects: [],
 	statusText: null
 };
 
-export default createReducer(initialState, {
-	[Projects.FetchSucc]: (state, payload) => {
-		return {...state, projects: payload};
-	},
-	[Projects.Fail]: (state, payload) => {
-		return {...state, statusText: "[FAIL]: "+ payload};
-	},
-	[Projects.CreateSucc]: (state, payload) => {
-		return {...state, projects: Object.assign({}, state.projects, payload)};
-	},
-	[Projects.DeleteSucc]: (state, payload) => {
-		return state;
-	},
-	[Projects.GetSucc]: (state, payload) => {
-		return {...state, currentProject: payload.Id}
-	},
-	[Projects.UpdateSucc]: (state, payload) => {
-		return {...state, projects: Object.assign({}, state.projects, payload)};
-	}
-});
+export function projectsReducer(state, action){
+	state = state || initialState;
+	console.log("[REDUCER] Projects: ", action);
 
+	const payload = action.payload;
+	const type = action.type;
+
+	switch (type){
+		case Projects.FetchSucc:
+			console.info("[PROJECTS] setting projects:", payload);
+			return {...state, projects: payload};
+		case Projects.Fail:
+			console.error("[PROJECTS] FAIL:", payload);
+			return {...state, statusText: "[FAIL]: "+ payload};
+		case Projects.CreateSucc:
+			console.info("[PROJECTS] create:", payload);
+			return {...state, projects: Object.assign({}, state.projects, payload)};
+		case Projects.GetSucc:
+			console.info("[PROJECTS] get:", payload);
+			return {...state, currentProject: payload.Id};
+		case Projects.DeleteSucc:
+			console.info("[PROJECTS] delete:", payload);
+			return {...state};
+		case Projects.UpdateSucc:
+			console.info("[PROJECTS] update:", payload);
+			return {...state, projects: Object.assign({}, state.projects, payload)};
+	}
+
+	return state;
+}
+
+export default projectsReducer;

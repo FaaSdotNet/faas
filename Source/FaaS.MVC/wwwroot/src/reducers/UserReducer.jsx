@@ -4,49 +4,55 @@ import {createReducer} from "../utils/index";
 const initialState = {
 	token: null,
 	userName: null,
+	userId: null,
 	isAuthenticated: false,
 	isAuthenticating: false,
 	statusText: null
 };
 
-export default createReducer(initialState, {
-	[User.LoginReq]: (state, payload) =>
-	{
-		return Object.assign({}, state, {
-			'isAuthenticating': true,
-			'statusText': null
-		});
-	},
-	[User.LoginSucc]: (state, payload) =>
-	{
-		return Object.assign({}, state, {
-			'isAuthenticating': false,
-			'isAuthenticated': true,
-			'token': payload.token,
-			'userName': jwtDecode(payload.token).userName,
-			'statusText': 'You have been successfully logged in.'
-		});
+export function userReducer(state, action)
+{
+	state = state || initialState;
+	const payload = action.payload;
+	const type = action.type;
+	console.log("[REDUCER] User: ", action);
 
-	},
-	[User.Fail]: (state, payload) =>
-	{
-		return Object.assign({}, state, {
-			'isAuthenticating': false,
-			'isAuthenticated': false,
-			'token': null,
-			'userName': null,
-			'statusText': `Authentication Error: ${payload.status} ${payload.statusText}`
-		});
-	},
-	[User.Logout]: (state, payload) =>
-	{
-		return Object.assign({}, state, {
-			'isAuthenticated': false,
-			'token': null,
-			'userName': null,
-			'statusText': 'You have been successfully logged out.'
-		});
+	switch (type){
+		case User.LoginReq:
+			return Object.assign({}, state, {
+				'isAuthenticating': true,
+				'statusText': null
+			});
+		case User.LoginSucc:
+			return Object.assign({}, state, {
+				'isAuthenticating': false,
+				'isAuthenticated': true,
+				'token': payload.token,
+				'userName': payload.userName,
+				'statusText': 'You have been successfully logged in.'
+			});
+		case User.Fail:
+			return Object.assign({}, state, {
+				'isAuthenticating': false,
+				'isAuthenticated': false,
+				'token': null,
+				'userName': null,
+				'statusText': `Authentication Error: ${payload.status} ${payload.statusText}`
+			});
+		case User.Logout:
+			return Object.assign({}, state, {
+				'isAuthenticated': false,
+				'token': null,
+				'userName': null,
+				'statusText': 'You have been successfully logged out.'
+			});
+
 	}
-});
+
+	return state;
+}
+
+
+export default userReducer;
 
 

@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import {connect} from "react-redux";
+import {ProjectsActions} from "../../actions/projectsActions"
 
-
-/**
- *
- */
+@connect((store) => {
+	return store;
+})
 export class ProjectListRow extends Component{
 
     /**
@@ -13,7 +14,10 @@ export class ProjectListRow extends Component{
      */
     constructor(props){
         super(props);
+        console.log("Project List Row: ", this.props);
     }
+
+
 
     /**
      * Will open form list for projectId
@@ -24,7 +28,17 @@ export class ProjectListRow extends Component{
 
     }
 
-    /**
+	/**
+	 * Will open form list for projectId
+	 * @param projectId Project ID
+	 */
+	handleEditClick(projectId)
+	{
+
+	}
+
+
+	/**
      * Adds form to specified project
      * @param projectId Project Id
      */
@@ -48,7 +62,7 @@ export class ProjectListRow extends Component{
             <tr>
                 <td>
                     <a href="#" onClick={() => this.handleFormClick(this.props.project.id)}>
-                        {this.props.project.name}
+                        {this.props.project.projectName}
                     </a>
                 </td>
                 <td>
@@ -59,11 +73,17 @@ export class ProjectListRow extends Component{
                         Add Form
                     </button>
                 </td>
+				<td>
+					<button type="button" className="btn btn-default btn-md" onClick={ () => this.handleEditClick(this.props.project.id)}>
+						<span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-edit" aria-hidden="true"/>
+					</button>
+				</td>
                 <td>
-                    <button onClick={ () => this.handleDeleteProject(this.props.project.id)}>
-
-                    </button>
+                    <button type="button" className="btn btn-default btn-md"	 onClick={ () => this.handleDeleteProject(this.props.project.id)}>
+                    <span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-trash" aria-hidden="true"/>
+					</button>
                 </td>
+
             </tr>
         );
     }
@@ -74,6 +94,10 @@ export class ProjectListRow extends Component{
 /**
  *
  */
+
+@connect((store) => {
+	return store;
+})
 export class ProjectListTable extends Component{
     /**
      * @param props
@@ -81,28 +105,42 @@ export class ProjectListTable extends Component{
      */
     constructor(props){
         super(props);
-        this.rows = [];
+		console.log("Project List Table: ", this.props);
+		this.rows = [];
     }
 
-    componentWillUpdate() {
-        this.rows = [];
-        this.props.projects.forEach( (project) => {
-            this.rows.push(<ProjectListRow project={project} />)
-        });
-    }
+	componentWillMount(){
+    	let userId = this.props.user.userId;
+    	userId = localStorage.getItem('userId');
+    	console.log('User id: ', userId);
+		this.props.dispatch(ProjectsActions.fetchAll(userId));
+	}
+
 
     render(){
+
+		this.rows = [];
+		const projects = this.props.projects.projects;
+		console.log("Projects: ", projects);
+		projects.forEach( (project) => {
+			this.rows.push(<ProjectListRow key={project.id} project={project} />)
+		});
+
         return (
             <div className="row" id="projects">
                 <h1>
                     Projects
                 </h1>
-                <table>
+                <table className="table table-striped row">
                     <thead>
-                    <th>Project name</th>
-                    <th>Number of forms</th>
-                    <th>Add form</th>
-                    <th>Delete</th>
+						<tr>
+							<th>Project name</th>
+							<th>Number of forms</th>
+							<th>Add form</th>
+							<th>Edit</th>
+							<th>Delete</th>
+						</tr>
+
                     </thead>
                     <tbody>
                     {this.rows}
