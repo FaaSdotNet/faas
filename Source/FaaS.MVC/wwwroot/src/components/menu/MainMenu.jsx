@@ -10,7 +10,7 @@ import {LoggedInUser, UserMenu} from "./UserMenu";
 
 export class MainMenu extends Component {
 	render() {
-		const isLoggedIn = this.props.user != null;
+		const isLoggedIn = this.props.user.isAuthenticated;
 		return(
 			<Nav>
 				<NavItem href="/#/About">
@@ -23,12 +23,12 @@ export class MainMenu extends Component {
 					FAQ
 				</NavItem>
 				{ isLoggedIn ? (
-					<UserMenu/>
+					<UserMenu user={this.props.user}/>
 				) : (
 					<LoginMenu/>
 				)}
 
-				{ isLoggedIn && <LoggedInUser/> }
+				{ isLoggedIn && <LoggedInUser user={this.props.user}/> }
 
 			</Nav>
 		);

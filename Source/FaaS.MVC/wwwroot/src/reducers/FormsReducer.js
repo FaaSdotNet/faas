@@ -6,50 +6,34 @@
  */
 
 import {
-	FORMS_SET,
-	FORMS_UNSET,
-	FORMS_CREATE_SUCC,
-	FORMS_FETCH_SUCC,
-	FORMS_ANY_FAIL,
-	FORMS_DELETE_SUCC,
-	FORMS_UPDATE_SUCC,
-	FORMS_GET_SUCC
+	Forms
 } from '../constants';
 
 import {createReducer} from "../utils/index";
 
 const initialState = {
-	currentForm: null,
 	forms: {},
 	statusText: null
 };
 
 export default createReducer(initialState, {
-	[FORMS_SET]: (state, payload) =>
-	{
-		return {...state, currentForm: payload};
-	},
-	[FORMS_UNSET]: (state, payload) => {
-		return {...state, currentForm: null};
-
-	},
-	[FORMS_FETCH_SUCC]: (state, payload) => {
+	[Forms.FetchSucc]: (state, payload) => {
 		return {...state, forms: payload};
 	},
-	[FORMS_ANY_FAIL]: (state, payload) => {
-		return {...state, statusText: "[FAIL]: "+ payload};
+	[Forms.Fail]: (state, payload) => {
+		return {...state, statusText: "[FAIL] Forms: "+ payload};
 	},
-	[FORMS_CREATE_SUCC]: (state, payload) => {
-		return {...state, forms: Object.assign({}, state.forms, payload), currentForm: payload.Id};
+	[Forms.CreateSucc]: (state, payload) => {
+		return {...state, forms: Object.assign({}, state.forms, payload)};
 	},
-	[FORMS_DELETE_SUCC]: (state, payload) => {
+	[Forms.DeleteSucc]: (state, payload) => {
 		return state;
 	},
-	[FORMS_GET_SUCC]: (state, payload) => {
-		return {...state, currentForm: payload.Id}
+	[Forms.GetSucc]: (state, payload) => {
+		return {...state}
 	},
-	[FORMS_UPDATE_SUCC]: (state, payload) => {
-		return {...state, forms: Object.assign({}, state.forms, payload), currentForm: payload.Id};
+	[Forms.UpdateSucc]: (state, payload) => {
+		return {...state, forms: Object.assign({}, state.forms, payload)};
 	}
 });
 

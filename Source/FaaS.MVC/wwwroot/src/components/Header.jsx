@@ -5,8 +5,8 @@ import {MainMenu} from "./menu/MainMenu";
 
 class HeaderComponent extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = { userId: localStorage.getItem('userId') };
     }
 
@@ -21,7 +21,7 @@ class HeaderComponent extends Component {
                     </Navbar.Brand>
                 </Navbar.Header>
                 <Navbar.Collapse>
-                    <MainMenu />
+                    <MainMenu user={this.props.user} />
                 </Navbar.Collapse>
             </Navbar>
         );

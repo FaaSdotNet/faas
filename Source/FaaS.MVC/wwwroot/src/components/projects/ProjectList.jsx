@@ -8,7 +8,7 @@ export class ProjectListComponent extends Component {
         super(props);
     }
 
-    handleAdd(event) {
+    static handleAdd(event) {
         document.location.href = "/#/projects/create/";
     }
 

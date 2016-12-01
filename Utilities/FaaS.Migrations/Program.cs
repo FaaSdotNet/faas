@@ -7,18 +7,18 @@ namespace FaaS.Migrations
 {
     class Program
     {
-        private const string CONNECTION_STRING_NAME = "FaaSConnection";
+        private const string ConnectionStringName = "FaaSConnection";
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Console.WriteLine("Setting migration initializer...");
 
             // Ensure migration initializer is used and it uses context's connection
        
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<FaaSContext, FaaSContextConfiguration>(useSuppliedContext: true));
+            Database.SetInitializer(strategy: new MigrateDatabaseToLatestVersion<FaaSContext, FaaSContextConfiguration>(useSuppliedContext: true));
 
             // Initialize databases of both contexts with same connection string
-            using (var db = new FaaSContext(CONNECTION_STRING_NAME))
+            using (var db = new FaaSContext(ConnectionStringName))
             {
                 db.Database.Log = Console.Write;
                 IntializeDatabase(db);

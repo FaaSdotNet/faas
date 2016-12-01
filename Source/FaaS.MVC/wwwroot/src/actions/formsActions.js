@@ -3,106 +3,95 @@
  */
 
 import {
-	FORMS_SET,
-	FORMS_UNSET,
-	FORMS_FETCH,
-	FORMS_FETCH_SUCC,
-	FORMS_ANY_FAIL,
-	FORMS_DELETE_SUCC,
-	FORMS_UPDATE_SUCC,
-	FORMS_GET_SUCC,
-	FORM_CREATE_SUCC
+	Forms
 } from '../constants';
 
 import {apiClient} from "../utils";
+const COLL_TYPE = Forms;
+const FAIL_TYPE = COLL_TYPE.Fail;
+const COLL_NAME = "forms";
+const URL_ELEM = `/${COLL_NAME}/`;
 
-const FAIL_TYPE = FORMS_ANY_FAIL;
-const URL_ELEM = "/forms/";
-
-export function fetchAll()
-{
-	return (dispatch) => {
-		apiClient.get(URL_ELEM)
-			.then((res) => {
-				dispatch ({type: FORMS_FETCH_SUCC, payload: res});
-			})
-			.catch((err) => {
-				dispatch ({type: FAIL_TYPE, payload: err});
-			});
-	};
-}
-
-export function deleteForm(id)
-{
-	return (dispatch) => {
-		apiClient.delete(URL_ELEM + id)
-			.then((res) => {
-				dispatch({type: FORMS_DELETE_SUCC, payload: res});
-
-			})
-			.catch((err) => {
-				dispatch({type: FAIL_TYPE, payload: err});
-			});
-	};
-}
-
-
-export function createForm(form)
-{
-	return (dispatch) => {
-		apiClient.post(URL_ELEM, form)
-			.then((res) => {
-				dispatch({type: FORM_CREATE_SUCC, payload: res});
-
-			})
-			.catch((err) => {
-				dispatch({type: FAIL_TYPE, payload: err});
-			});
-	};
-}
-
-export function updateForm(form)
-{
-	return (dispatch) => {
-		apiClient.put(URL_ELEM, form)
-			.then(res => {
-				dispatch({
-					type: FORMS_UPDATE_SUCC,
-					payload: res
+export class FormsActions {
+	static fetchAll(projectId) {
+		return (dispatch) => {
+			apiClient.get(URL_ELEM)
+				.then((res) => {
+					console.log(`[FETCH] ${COLL_NAME}: `, res);
+					dispatch ({type: COLL_TYPE.FetchSucc, payload: res});
+				})
+				.catch((err) => {
+					console.error(`[ERROR] ${COLL_NAME}: `, err);
+					dispatch ({type: FAIL_TYPE, payload: err});
 				});
-			}).catch((err) =>{
-			dispatch({ type: FAIL_TYPE, payload: err });
-		});
+		};
 	}
-}
 
-export function getForm(id)
-{
-	return (dispatch) => {
-		apiClient.get(URL_ELEM + id)
-			.then(res => {
-				dispatch({
-					type: FORMS_GET_SUCC,
-					payload: res
+	static del(id){
+		return (dispatch) => {
+			apiClient.delete(URL_ELEM + id)
+				.then((res) => {
+					console.log(`[DELETE] ${COLL_NAME}: `, res);
+					dispatch({type: COLL_TYPE.DeleteSucc, payload: res});
+
+				})
+				.catch((err) => {
+					console.error(`[ERROR] ${COLL_NAME}: `, err);
+					dispatch({type: FAIL_TYPE, payload: err});
 				});
-			}).catch((err) =>{
-			dispatch({ type: FAIL_TYPE, payload: err });
-		});
+		};
+	}
+
+	static update(element){
+		return (dispatch) => {
+			apiClient.put(URL_ELEM, element)
+				.then(res => {
+					console.log(`[UPDATE] ${COLL_NAME}: `, res);
+					dispatch({
+						type: COLL_TYPE.UpdateSucc,
+						payload: res
+					});
+				}).catch((err) =>{
+				console.error(`[ERROR] ${COLL_NAME}: `, err);
+				dispatch({ type: FAIL_TYPE, payload: err });
+			});
+		}
+	}
+	static get(id){
+		return (dispatch) => {
+			apiClient.get(URL_ELEM + id)
+				.then(res => {
+					console.log(`[GET] ${COLL_NAME}: `, res);
+					dispatch({
+						type: COLL_TYPE.GetSucc,
+						payload: res
+					});
+				}).catch((err) =>{
+				console.log(`[ERROR] ${COLL_NAME}: `, err);
+				dispatch({ type: FAIL_TYPE, payload: err });
+			});
+		}
+	}
+
+	static create(projectId, element)
+	{
+		return (dispatch) => {
+			apiClient.post(URL_ELEM, element)
+				.then(res => {
+					console.log(`[CREATE] ${COLL_NAME}: `, res);
+					dispatch({
+						type: COLL_TYPE.CreateSucc,
+						payload: res
+					});
+				}).catch((err) =>{
+				console.log(`[ERROR] ${COLL_NAME}: `, err);
+				dispatch({ type: FAIL_TYPE, payload: err });
+			});
+		}
 	}
 }
 
-export function setCurrent(id)
-{
-	return {
-		type: FORMS_SET,
-		payload: id
-	}
-}
+export default FormsActions;
 
-export function unsetCurrent(id)
-{
-	return {
-		type: FORMS_UNSET,
-		payload: null
-	}
-}
+
+

@@ -3,50 +3,55 @@
  */
 
 import { pushState } from 'redux-router';
-import {USER_LOGIN_SUCC, USER_LOGIN_FAIL, USER_LOGIN, USER_LOGOUT} from '../constants';
+import {User} from '../constants';
 import {apiClient} from "../utils"
 
-export function loginUserSuccess(token) {
-	localStorage.setItem('token', token);
-	return {
-		type: USER_LOGIN_SUCC,
-		payload: {
-			token: token
+
+export class UserActions {
+	static loginSuccess(token){
+		localStorage.setItem('token', token);
+		return {
+			type: User.LoginSucc,
+			payload: {
+				token: token
+			}
+		}
+	}
+
+	static fail(){
+		localStorage.removeItem('token');
+		return {
+			type: User.Fail,
+			payload: {
+				status: error.response.status,
+				statusText: error.response.statusText
+			}
+		}
+	}
+
+	static loginRequest(){
+		return { type: User.LoginReq, payload: 0 }
+	}
+
+	static fetch() {
+		return (dispatch) => {
+			apiClient.get('/users/')
+				.then((res) => {
+					dispatch ({type: User.FetchSucc, payload: res});
+				})
+				.catch((err) => {
+					dispatch ({type: User.Fail, payload: err});
+				});
+		};
+	}
+
+	static logout() {
+		localStorage.removeItem('token');
+		return {
+			type: USER_LOGOUT
 		}
 	}
 }
 
 
-export function loginUserFailure(error) {
-	localStorage.removeItem('token');
-	return {
-		type: USER_LOGIN_FAIL,
-		payload: {
-			status: error.response.status,
-			statusText: error.response.statusText
-		}
-	}
-}
-
-
-export function loginUserRequest() {
-	return {
-		type: USER_LOGIN
-	}
-}
-
-export function fetchUser(id) {
-	return (dispatch) => {
-		apiClient.get("/users/" + id)
-			.then((res) => {
-				r
-			});
-	};
-}
-
-export function logout() {
-	localStorage.removeItem('token');
-	return {
-		type: USER_LOGOUT
-	}
-}
+export default UserActions;

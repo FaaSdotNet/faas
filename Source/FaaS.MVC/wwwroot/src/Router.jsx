@@ -1,12 +1,13 @@
 ﻿import React, { Component } from "react";
 import { Router, Route, IndexRoute } from "react-router";
 import {connect} from "react-redux";
+import Dashboard from "./components/Dashboard";
 
 import Index from "./components/Index";
 import App from "./components/App";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import Dashboard from "./components/Dashboard";
+
 import UserList from "./components/users/UserList";
 import UserDetail from "./components/users/UserDetail";
 import UserEdit from "./components/users/UserEdit";
@@ -26,19 +27,24 @@ import ElementDetail from "./components/elements/ElementDetail";
 import ElementDelete from "./components/elements/ElementDelete";
 
 @connect((store) => {
+    console.log(store);
     return store;
 })
 export class Root extends Component {
 
+    constructor(props){
+        super(props);
+        console.log(this.props);
+    }
     // We need to provide a list of routes
     // for our app, and in this case we are
     // doing so from a Root component
     render() {
-        return (
+		return (
             <Router history={this.props.history}>
-                <Route path='/' component={App}>
+                <Route path='/' component={App} user={this.props.user}>
                     <Route path="index" component={Index} />
-                    <Route path="dashboard" component={Dashboard} />
+                    <Route path="dashboard" component={Dashboard} user="" />
                     <Route path="login" component={Login} />
                     <Route path="register" component={Register} />
                     <Route path="users/:userid" component={UserDetail} />
