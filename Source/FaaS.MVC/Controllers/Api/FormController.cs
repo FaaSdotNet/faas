@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using FaaS.MVC.Models.React;
 using FaaS.DataTransferModels;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace FaaS.MVC.Controllers.Api
 {
@@ -48,7 +49,33 @@ namespace FaaS.MVC.Controllers.Api
             this.logger = logger;
         }
 
-        // POST forms
+
+        //GET form
+        [HttpGet]
+        public async Task<IActionResult> Get(string formId)
+        {
+            Form form = await formService.Get(new Guid(formId));
+            if (form == null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            Element[] elements = await elementService.GetAllForForm(form);
+            ElementValue[] values = new ElementValue[elements.Length];
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = new ElementValue();
+            }
+
+            FillFormViewModel model = new FillFormViewModel // TODO use this instead of collection of elements (no form name in collection)
+            {
+                Form = form,
+                Elements = elements,
+            };
+
+            return Ok(model);
+        }
+
+        // POST form
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] FillFormViewModel model)
         {
@@ -102,24 +129,11 @@ namespace FaaS.MVC.Controllers.Api
                 logger.LogInformation($"Added {existingElements.Count} values of form {existingForm.Id}: {existingForm.Description}");
 
                 return Created(newUrl, null);
-                //return Ok();
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message);  // TODO
             }
         }
     }
 }
-
-public class Whatever
-{
-    public string Guid { get; set; }
-    public string jsonString { get; set; }
-}
-
-public class ListOfWhatevers
-{
-    public List<Whatever> Whatevers { get; set; }
-}
-

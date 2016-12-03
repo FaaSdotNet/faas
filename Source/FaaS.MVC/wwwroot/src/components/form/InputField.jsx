@@ -1,5 +1,8 @@
 import React from 'react';
 import {Checkbox, CheckboxGroup} from 'react-checkbox-group';
+import DatePicker from 'react-datepicker'
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default class InputField extends React.Component {
     constructor(props) {
@@ -19,6 +22,14 @@ export default class InputField extends React.Component {
             value: e.target.value
         });
       this.props.valueChanged(this.state.elementId, e.target.value);
+    };
+
+    
+    onDateChanged(date) {
+        this.setState({
+            value: date
+        });
+      this.props.valueChanged(this.state.elementId, date);
     };
 
     onCheckboxChanged (newChecked) {
@@ -46,19 +57,21 @@ export default class InputField extends React.Component {
             case 0:
                 var arrayOptions = [];
                 for(var key in this.props.options){
-                    arrayOptions.push(<div key={key}><label key={key}><Checkbox key={key} value={key} /> {this.props.options[key]} </label></div>);
+                    arrayOptions.push(<div key={this.props.elementId + key}><label key={this.props.elementId + key + 'label'}><Checkbox key={this.props.elementId + key + 'chckbx'} value={key} /> {this.props.options[key]} </label></div>);
                 }
                 return (
-                    <CheckboxGroup key={0} name={this.state.elementId} value={this.state.checked}
-                        onChange={this.onCheckboxChanged.bind(this)}>
+                    <div>
+                        <CheckboxGroup key={this.props.elementId + 'checkbox'} name={this.state.elementId} value={this.state.checked}
+                            onChange={this.onCheckboxChanged.bind(this)}>
  
-                    {arrayOptions}
-                    </CheckboxGroup>
+                        {arrayOptions}
+                        </CheckboxGroup>
+                    </div>
                 );
             case 1:
                 return(
-                    <div>
-                        <input type="date" name={this.state.elementId} onChange={this.onValueChanged.bind(this)}/>
+                    <div key={this.props.elementId}>
+                        <DatePicker inline placeholderText="Click to select a date" selected={this.state.value} onChange={this.onDateChanged.bind(this)} monthsShown={2} />
                     </div>
                 );
             case 2:
@@ -67,34 +80,33 @@ export default class InputField extends React.Component {
                 arrayOptions.push(this.props.options[key]);
                 }
                 var radioOptions = arrayOptions.map(function(result){
-                return (
-                    <div><input type="radio" name={this.state.elementId}
-                                       value={result} 
-                                       checked={this.state.value === result} 
-                                    onChange={this.onValueChanged.bind(this)} />
-                                {result}
-                            </div>
-                );
+                    return (
+                        <div key={this.props.elementId + result}>
+                            <input type="radio" name={this.state.elementId}
+                                           value={result} checked={this.state.value === result} 
+                                        onChange={this.onValueChanged.bind(this)} />
+                            {result}
+                        </div>
+                    );
                 }, this);
                 return (
-                    <div>
-                    {radioOptions}
+                    <div key={this.props.elementId}>
+                        {radioOptions}
                     </div>
                 );
             case 3:
                 return(
-                    <div>
+                    <div key={this.props.elementId}>
                         <label>{this.state.value}</label>
                         <input type="range" name={this.state.elementId} onChange={this.onValueChanged.bind(this)} min="0" max="10" />
                     </div>
                 );
             case 4:
                 return(
-                    <div>
-                    <input type="text" name={this.state.elementId} onChange={this.onValueChanged.bind(this)}/>
+                    <div key={this.props.elementId}>
+                        <input type="text" name={this.state.elementId} onChange={this.onValueChanged.bind(this)}/>
                     </div>
                 );                    
         }
     };
 }
-
