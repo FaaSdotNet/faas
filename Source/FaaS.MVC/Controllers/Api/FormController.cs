@@ -10,10 +10,8 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
-using FaaS.MVC.Models.React;
 using FaaS.DataTransferModels;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace FaaS.MVC.Controllers.Api
 {
@@ -66,7 +64,7 @@ namespace FaaS.MVC.Controllers.Api
                 values[i] = new ElementValue();
             }
 
-            FillFormViewModel model = new FillFormViewModel // TODO use this instead of collection of elements (no form name in collection)
+            FillFormModel model = new FillFormModel // TODO use this instead of collection of elements (no form name in collection)
             {
                 Form = form,
                 Elements = elements,
@@ -77,7 +75,7 @@ namespace FaaS.MVC.Controllers.Api
 
         // POST form
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] FillFormViewModel model)
+        public async Task<IActionResult> Post([FromBody] FillFormModel model)
         {
             try
             {
@@ -136,4 +134,11 @@ namespace FaaS.MVC.Controllers.Api
             }
         }
     }
+}
+
+public class FillFormModel
+{
+    public Form Form { get; set; }
+    public Element[] Elements { get; set; }
+    public string[] Values { get; set; }
 }
