@@ -10,13 +10,13 @@ export class ProjectListComponent extends Component {
 		super(props);
 		this.handleAdd = this.handleAdd.bind(this);
 		this.state = {
-			createOpen: false
+			createOpen: {open: false}
 		}
 	}
 
 	handleAdd()
 	{
-		this.setState({createOpen: true});
+		this.setState({createOpen: {open: true}});
 	}
 
 	render()

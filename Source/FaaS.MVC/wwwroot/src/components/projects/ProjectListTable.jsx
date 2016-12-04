@@ -19,9 +19,9 @@ export class ProjectListRow extends Component{
     constructor(props){
         super(props);
         this.state = {
-        	editOpen:  false,
-			addFormOpen: false,
-			detailOpen: false
+        	editOpen:  {open: false},
+			addFormOpen: {open: false},
+			detailOpen: {open: false}
 		};
 
 		this.handleAddForm = this.handleAddForm.bind(this);
@@ -51,7 +51,7 @@ export class ProjectListRow extends Component{
 	 */
 	handleEditClick()
 	{
-		this.setState({ editOpen: true});
+		this.setState({ editOpen: { open: true }});
 	}
 
 

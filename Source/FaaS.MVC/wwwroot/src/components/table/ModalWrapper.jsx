@@ -15,16 +15,22 @@ export class ModalWrapper extends Component {
 
 		this.handleClose = this.props.handleClose;
 
+		this.open = this.props.open;
+
 		this.state = {
-			isOpen: this.props.open
+			isOpen: false
 		};
 	}
 
 	openModal()
 	{
+		console.log("Open called!");
+
 		this.setState({
 			isOpen: true
 		});
+
+		this.props.open.open = true;
 	};
 
 	hideModal()
@@ -32,17 +38,15 @@ export class ModalWrapper extends Component {
 		this.setState({
 			isOpen: false
 		});
+		this.props.open.open = false;
+
 	};
 
 	componentWillUpdate(nextProps, nextState)
 	{
-		if(this.props.open && this.state.isOpen != true){
-			this.openModal();
-		}
-	}
-
-	componentDidMount(){
-		if(this.props.open && this.state.isOpen != true){
+		console.log("[State] ", this.props.open.open, this.state.isOpen);
+		if(this.props.open.open && this.state.isOpen == false) {
+			console.log("Open should be called");
 			this.openModal();
 		}
 	}
@@ -52,7 +56,7 @@ export class ModalWrapper extends Component {
 	{
 		return (
 			<div>
-				<Modal isOpen={this.state.isOpen} onRequestHide={this.hideModal}>
+				<Modal isOpen={this.props.open.open} onRequestHide={this.hideModal}>
 					<ModalHeader>
 						<ModalClose onClick={ () =>
 						{
