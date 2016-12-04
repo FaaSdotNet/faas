@@ -26,6 +26,7 @@
     "react-bootstrap": "^0.30.7",
     "react-checkbox-group": "^3.0.1",
     "react-cookie": "^0.4.9",
+    "react-datepicker": "^0.34.0",
     "react-dom": "^15.4.1",
     "react-modal-bootstrap": "^1.1.0",
     "react-redux": "^4.4.6",
