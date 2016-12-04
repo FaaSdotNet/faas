@@ -1,23 +1,24 @@
 import {Pages} from '../constants';
 
 export class PagesActions {
-	static setPage(name) {
+	static setPage(id) {
 		return (dispatch) => {
-			dispatch({type: Pages.PageSet, payload: name})
+			dispatch({type: Pages.PageSet, payload: id})
 		}
 	}
 
-	static setForm(name) {
+	static setForm(id) {
 		return (dispatch) => {
-			dispatch({type: Pages.FormSet, payload: name})
+			dispatch({type: Pages.FormSet, payload: id})
 		}
 	}
 
-	static setProject(name) {
+	static setProject(id) {
 		return (dispatch) => {
-			dispatch({type: Pages.ProjectSet, payload: name})
+			dispatch({type: Pages.ProjectSet, payload: id})
 		}
 	}
+
 }
 
 export default PagesActions;

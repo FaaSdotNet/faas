@@ -11,7 +11,9 @@ import {createReducer} from "../utils/index";
 
 const initialState = {
 	forms: {},
-	statusText: null
+	statusText: null,
+	form: null,
+	reload: true
 };
 
 

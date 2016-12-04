@@ -28,6 +28,7 @@ export class ProjectsActions {
 	}
 
 	static del(id){
+		console.log("[ACTION] Project delete: ", id);
 		return (dispatch) => {
 			apiClient.delete(URL_ELEM + id)
 				.then((res) => {

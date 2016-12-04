@@ -7,7 +7,8 @@ const initialState = {
 	userId: null,
 	isAuthenticated: false,
 	isAuthenticating: false,
-	statusText: null
+	statusText: null,
+	reload: true
 };
 
 export function userReducer(state, action)
@@ -20,8 +21,8 @@ export function userReducer(state, action)
 	switch (type){
 		case User.LoginReq:
 			return Object.assign({}, state, {
-				'isAuthenticating': true,
-				'statusText': null
+				isAuthenticating: true,
+				statusText: null
 			});
 		case User.LoginSucc:
 			return Object.assign({}, state, {

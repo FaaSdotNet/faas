@@ -1,6 +1,11 @@
 ﻿import React, { Component } from "react";
 import FormList from "../forms/FormList"
+import {connect} from "react-redux";
 
+
+@connect((store) => {
+   return store;
+})
 export class ProjectDetail extends Component {
 
     constructor(props) {
@@ -30,16 +35,9 @@ export class ProjectDetail extends Component {
         });
     }
 
-    componentDidMount() {
-        console.log(this.props.params.projectid);
-        console.log(this.props.params);
-
-
-    }
-
     render() {
-        var rows =[];
-        var state = this.state;
+        let rows =[];
+        const state = this.state;
         if (state) {
             rows.push(<h2 key={state.projectName}><b>Project: </b> {state.projectName} </h2>);
             rows.push(<div key={state.description}>{state.description}</div>);

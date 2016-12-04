@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import {connect} from "react-redux";
-import {ProjectsActions} from "../../actions/projectsActions"
+import {ProjectsActions} from "../../actions/projectsActions";
+import {ButtonDelete} from "../table/ButtonDelete";
+import {ModalWrapper} from "../table/ModalWrapper";
+import ProjectEdit from "./ProjectEdit";
+import ProjectDetail from "./ProjectDetail";
 
 @connect((store) => {
 	return store;
@@ -14,6 +18,16 @@ export class ProjectListRow extends Component{
      */
     constructor(props){
         super(props);
+        this.state = {
+        	editOpen:  false,
+			addFormOpen: false,
+			detailOpen: false
+		};
+
+		this.handleAddForm = this.handleAddForm.bind(this);
+		this.handleProjectClick = this.handleProjectClick.bind(this);
+		this.handleEditClick = this.handleEditClick.bind(this);
+		this.handleDeleteProject = this.handleDeleteProject.bind(this);
     }
 
 
@@ -23,34 +37,24 @@ export class ProjectListRow extends Component{
      */
     handleProjectClick(projectId)
     {
-		ProjectsActions.get(projectId)
 		/*
 		 TODO
 		 Show modal with new Form
 		 */
-    }
+		document.location.href="/#/projects/" + projectId;
+
+	}
 
 	/**
 	 * Will open form list for projectId
 	 * @param projectId Project ID
 	 */
-	handleEditClick(projectId)
+	handleEditClick()
 	{
-
+		this.setState({ editOpen: true});
 	}
 
 
-	/**
-     * Adds form to specified project
-     * @param projectId Project Id
-     */
-    handleAddProject()
-    {
-		/*
-		 TODO
-		 Show modal with new Project
-		 */
-    }
 
 	/**
 	 * Adds form to specified project
@@ -66,7 +70,8 @@ export class ProjectListRow extends Component{
 
     handleDeleteProject(projectId)
     {
-		ProjectsActions.del(projectId);
+    	console.log("[DELETE] Project: ", projectId);
+		this.props.dispatch(ProjectsActions.del(projectId));
     }
 
     /**
@@ -78,7 +83,7 @@ export class ProjectListRow extends Component{
         return (
             <tr>
                 <td>
-                    <a href="#" onClick={() => this.handleProjectClick(this.props.project.id)}>
+                    <a onClick={() => this.handleProjectClick(this.props.project.id)}>
                         {this.props.project.projectName}
                     </a>
                 </td>
@@ -88,30 +93,24 @@ export class ProjectListRow extends Component{
                 <td>
                     <button type="button" className="btn btn-default btn-md" onClick={ () => this.handleAddForm(this.props.project.id)}>
 						<span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-plus" aria-hidden="true"/>
-
 					</button>
                 </td>
 				<td>
-					<button type="button" className="btn btn-default btn-md" onClick={ () => this.handleEditClick(this.props.project.id)}>
+					<button type="button" className="btn btn-default btn-md" onClick={ () => this.handleEditClick()}>
 						<span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-edit" aria-hidden="true"/>
 					</button>
+					<ModalWrapper title="Edit Project" open={this.state.editOpen}  >
+						<ProjectEdit project={this.props.project} />
+					</ModalWrapper>
 				</td>
-                <td>
-                    <button type="button" className="btn btn-default btn-md"	 onClick={ () => this.handleDeleteProject(this.props.project.id)}>
-                    <span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-trash" aria-hidden="true"/>
-					</button>
-                </td>
-
+				<td>
+               		<ButtonDelete item={this.props.project} handleDelete={this.handleDeleteProject} />
+				</td>
             </tr>
         );
     }
-
 }
 
-
-/**
- *
- */
 
 @connect((store) => {
 	return store;
@@ -131,12 +130,17 @@ export class ProjectListTable extends Component{
     	let userId = this.props.user.userId;
     	userId = localStorage.getItem('userId');
     	console.log('User id: ', userId);
-		this.props.dispatch(ProjectsActions.fetchAll(userId));
+		if(this.props.projects.reload) {
+			this.props.dispatch(ProjectsActions.fetchAll(userId));
+		}
 	}
 
 
     render(){
-
+		let userId = localStorage.getItem('userId');
+		if(this.props.projects.reload) {
+			this.props.dispatch(ProjectsActions.fetchAll(userId));
+		}
 		this.rows = [];
 		const projects = this.props.projects.projects;
 		console.log("Projects: ", projects);
@@ -167,7 +171,6 @@ export class ProjectListTable extends Component{
             </div>
         );
     }
-
 }
 
 export default ProjectListTable;

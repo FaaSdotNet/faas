@@ -9,7 +9,9 @@ import {
 
 const initialState = {
 	projects: [],
-	statusText: null
+	statusText: null,
+	project: null,
+	reload: true
 };
 
 export function projectsReducer(state, action){
@@ -20,24 +22,23 @@ export function projectsReducer(state, action){
 	switch (type){
 		case Projects.FetchSucc:
 			console.info("[PROJECTS] setting projects:", payload);
-			return {...state, projects: payload};
+			return {...state, projects: payload, reload: false};
 		case Projects.Fail:
 			console.error("[PROJECTS] FAIL:", payload);
-			return {...state, statusText: "[FAIL]: "+ payload};
+			return {...state, statusText: "[FAIL]: "+ payload, reload: true};
 		case Projects.CreateSucc:
 			console.info("[PROJECTS] create:", payload);
-			return {...state, projects: Object.assign({}, state.projects, payload)};
+			return {...state, reload: true, project: payload};
 		case Projects.GetSucc:
 			console.info("[PROJECTS] get:", payload);
-			return {...state, currentProject: payload.Id};
+			return {...state, project: payload};
 		case Projects.DeleteSucc:
 			console.info("[PROJECTS] delete:", payload);
-			return {...state};
+			return {...state, reload: true};
 		case Projects.UpdateSucc:
 			console.info("[PROJECTS] update:", payload);
-			return {...state, projects: Object.assign({}, state.projects, payload)};
+			return {...state, project: payload, reload:true};
 	}
-
 	return state;
 }
 
