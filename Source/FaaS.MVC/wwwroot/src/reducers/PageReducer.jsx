@@ -18,7 +18,6 @@ const initialState = {
 export function pageReducer(state, action){
 	state = state || initialState;
 	const payload = action.payload;
-	console.log("[REDUCER] Page:", action);
 	switch (action.type){
 		case Pages.PageSet:
 			return {...state, page: payload};

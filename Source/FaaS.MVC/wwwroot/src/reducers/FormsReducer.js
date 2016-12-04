@@ -19,8 +19,6 @@ export function formsReducer(state, action){
 	const type = action.type;
 	const payload = action.payload;
 	state= state || initialState;
-
-	console.log("[REDUCER] Forms: ", action);
 	switch (type)
 	{
 		case Forms.FetchSucc:

@@ -20,7 +20,6 @@ export function elementsReducer(state, action){
 	const type = action.type;
 	const payload = action.payload;
 	state= state || initialState;
-	console.log("[REDUCER] Elements: ", action);
 	switch (type)
 	{
 		case Elements.FetchSucc:

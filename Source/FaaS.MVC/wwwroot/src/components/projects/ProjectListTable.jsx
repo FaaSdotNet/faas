@@ -14,18 +14,20 @@ export class ProjectListRow extends Component{
      */
     constructor(props){
         super(props);
-        console.log("Project List Row: ", this.props);
     }
-
 
 
     /**
      * Will open form list for projectId
      * @param projectId Project ID
      */
-    handleFormClick(projectId)
+    handleProjectClick(projectId)
     {
-
+		ProjectsActions.get(projectId)
+		/*
+		 TODO
+		 Show modal with new Form
+		 */
     }
 
 	/**
@@ -42,14 +44,29 @@ export class ProjectListRow extends Component{
      * Adds form to specified project
      * @param projectId Project Id
      */
-    handleAddForm(projectId)
+    handleAddProject()
     {
-
+		/*
+		 TODO
+		 Show modal with new Project
+		 */
     }
+
+	/**
+	 * Adds form to specified project
+	 * @param projectId Project Id
+	 */
+    handleAddForm(projectId){
+    	/*
+    	TODO
+    	 Show modal with new Form
+    	*/
+
+	}
 
     handleDeleteProject(projectId)
     {
-
+		ProjectsActions.del(projectId);
     }
 
     /**
@@ -61,7 +78,7 @@ export class ProjectListRow extends Component{
         return (
             <tr>
                 <td>
-                    <a href="#" onClick={() => this.handleFormClick(this.props.project.id)}>
+                    <a href="#" onClick={() => this.handleProjectClick(this.props.project.id)}>
                         {this.props.project.projectName}
                     </a>
                 </td>
@@ -69,9 +86,10 @@ export class ProjectListRow extends Component{
                     {this.props.project.numForms}
                 </td>
                 <td>
-                    <button onClick={ () => this.handleAddForm(this.props.project.id)}>
-                        Add Form
-                    </button>
+                    <button type="button" className="btn btn-default btn-md" onClick={ () => this.handleAddForm(this.props.project.id)}>
+						<span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-plus" aria-hidden="true"/>
+
+					</button>
                 </td>
 				<td>
 					<button type="button" className="btn btn-default btn-md" onClick={ () => this.handleEditClick(this.props.project.id)}>

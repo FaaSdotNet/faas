@@ -14,8 +14,6 @@ const initialState = {
 
 export function projectsReducer(state, action){
 	state = state || initialState;
-	console.log("[REDUCER] Projects: ", action);
-
 	const payload = action.payload;
 	const type = action.type;
 
