@@ -27,26 +27,6 @@ export class ProjectCreateComponent extends Component {
 		};
 
 		this.props.dispatch(ProjectActions.create(this.props.user, payload));
-
-		/*const result = fetch('/api/v1.0/projects', {
-		 method: 'POST',
-		 headers: {
-		 'Content-Type': 'application/json',
-		 },
-		 credentials: "same-origin",
-		 body: JSON.stringify()
-		 });
-
-		 result.then((res) =>
-		 {
-		 if (res.ok) {
-		 res.json()
-		 .then((js) =>
-		 {
-		 console.log(js);
-		 });
-		 }
-		 });*/
 	}
 
 	render()

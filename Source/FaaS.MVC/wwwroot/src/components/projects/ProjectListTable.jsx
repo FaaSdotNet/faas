@@ -5,6 +5,7 @@ import {ButtonDelete} from "../table/ButtonDelete";
 import {ModalWrapper} from "../table/ModalWrapper";
 import ProjectEdit from "./ProjectEdit";
 import ProjectDetail from "./ProjectDetail";
+import FormCreate from "../forms/FormCreate";
 
 @connect((store) => {
 	return store;
@@ -20,7 +21,7 @@ export class ProjectListRow extends Component{
         super(props);
         this.state = {
         	editOpen:  {open: false},
-			addFormOpen: {open: false},
+			addForm: {open: false},
 			detailOpen: {open: false}
 		};
 
@@ -61,10 +62,8 @@ export class ProjectListRow extends Component{
 	 * @param projectId Project Id
 	 */
     handleAddForm(projectId){
-    	/*
-    	TODO
-    	 Show modal with new Form
-    	*/
+		this.setState({ addForm: { open: true }});
+
 
 	}
 
@@ -94,6 +93,9 @@ export class ProjectListRow extends Component{
                     <button type="button" className="btn btn-default btn-md" onClick={ () => this.handleAddForm(this.props.project.id)}>
 						<span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-plus" aria-hidden="true"/>
 					</button>
+					<ModalWrapper title="Edit Project" open={this.state.addForm}  >
+						<FormCreate project={this.props.project} />
+					</ModalWrapper>
                 </td>
 				<td>
 					<button type="button" className="btn btn-default btn-md" onClick={ () => this.handleEditClick()}>

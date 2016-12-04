@@ -75,35 +75,6 @@ export class ProjectEdit extends Component {
 		};
 
 		this.props.dispatch(ProjectsActions.update(payload));
-
-		{/*const result = fetch('/api/v1.0/projects', {*/}
-			{/*method: 'PUT',*/}
-			{/*credentials: "same-origin",*/}
-			{/*headers: {*/}
-		// 		'Accept': 'application/json',
-		// 		'Content-Type': 'application/json',
-		// 	},
-		// 	body: JSON.stringify({
-		// 		Id: this.props.project.id,
-		// 		projectName: projectName,
-		// 		Description: description,
-		// 		Created: this.state.created
-		// 	})
-		// });
-		// result.then((res) =>
-		// {
-		// 	if (res.ok) {
-		// 		res.json()
-		// 			.then((js) =>
-		// 			{
-		// 				document.location.href = "/#/dashboard";
-		// 			});
-		// 	}
-		// });
-	}
-
-	handleCancel(event)
-	{
 	}
 
 	render()
@@ -131,11 +102,6 @@ export class ProjectEdit extends Component {
 					   value="Save"
 					   className="btn btn-primary col-md-offset-5"/>
 
-				<input type="button"
-					   id="cancelButton"
-					   onClick={this.handleCancel}
-					   value="Cancel"
-					   className="btn btn-default"/>
 			</div>
 		);
 	}
