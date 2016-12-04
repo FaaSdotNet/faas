@@ -25,6 +25,7 @@ import ElementCreate from "./components/elements/ElementCreate";
 import ElementEdit from "./components/elements/ElementEdit";
 import ElementDetail from "./components/elements/ElementDetail";
 import ElementDelete from "./components/elements/ElementDelete";
+import Form from "./components/Form"
 
 @connect((store) => {
     console.log(store);
@@ -64,6 +65,7 @@ export class Root extends Component {
                     <Route path="elements/:elementid" component={ElementDetail} />
                     <Route path="elements/edit/:elementid" component={ElementEdit} />
                     <Route path="elements/delete/:elementid" component={ElementDelete} />
+                    <Route path="form/:formid" component={Form} />
                     <IndexRoute component={Index} />
                 </Route>
             </Router>

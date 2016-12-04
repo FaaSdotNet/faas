@@ -5,7 +5,6 @@ var webpack = require("webpack");
 module.exports = {
     entry: {
         app: "./src/app.js",
-        form: "./src/form.js"
     },
     output: {
         path: path.join(__dirname, "out"), // All of the output filles will be generated to out directory
