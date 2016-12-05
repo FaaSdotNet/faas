@@ -1,28 +1,45 @@
-﻿import React, { Component } from "react";
-import MyViewTable from "../table/MyViewTable"
-
+﻿import React, {Component} from "react";
+import {ProjectListTable} from "./ProjectListTable";
+import ProjectCreate from "./ProjectCreate";
+import {ModalWrapper} from "../table/ModalWrapper";
 
 export class ProjectListComponent extends Component {
 
-    constructor(props) {
-        super(props);
-    }
+	constructor(props)
+	{
+		super(props);
+		this.handleAdd = this.handleAdd.bind(this);
+		this.state = {
+			createOpen: {open: false}
+		}
+	}
 
-    static handleAdd(event) {
-        document.location.href = "/#/projects/create/";
-    }
+	handleAdd()
+	{
+		this.setState({createOpen: {open: true}});
+	}
 
-    render() {
-        return (
-            <div>
-                <div className="row">
-                    <MyViewTable url="projects" name="projects" propName="projectName" />
-                </div>
-                <button onClick={() => {this.handleAdd()}}
-                            type="button" className="btn btn-primary btn-md" role="button">Add New Project</button>
-            </div>
-        );
-    }
+	render()
+	{
+		return (
+			<div>
+				<div className="row">
+					<ProjectListTable />
+				</div>
+				<button onClick={() =>
+				{
+					this.handleAdd()
+				}}
+						type="button"
+						className="btn btn-primary btn-md" role="button">
+					Add New Project
+				</button>
+				<ModalWrapper title="Create project" open={this.state.createOpen}>
+					<ProjectCreate  />
+				</ModalWrapper>
+			</div>
+		);
+	}
 }
 
 export default ProjectListComponent;

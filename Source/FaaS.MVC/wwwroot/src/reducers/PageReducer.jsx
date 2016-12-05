@@ -15,14 +15,19 @@ const initialState = {
 	page: PagesLoc.Dashboard
 };
 
-export default createReducer(initialState, {
-	[Pages.PageSet]: (state, payload) => {
-		return {...state, page: payload};
-	},
-	[Pages.FormSet]: (state, payload) => {
-		return {...state, selectedForm: payload};
-	},
-	[Pages.ProjectSet]: (state, payload) => {
-		return {...state, selectedProject: payload};
+export function pageReducer(state, action){
+	state = state || initialState;
+	const payload = action.payload;
+	switch (action.type){
+		case Pages.PageSet:
+			return {...state, page: payload};
+		case Pages.FormSet:
+			return {...state, selectedForm: payload};
+		case Pages.ProjectSet:
+			return {...state, selectedProject: payload};
 	}
-});
+
+	return state;
+}
+
+export default pageReducer;

@@ -13,10 +13,7 @@ import UserDetail from "./components/users/UserDetail";
 import UserEdit from "./components/users/UserEdit";
 import UserDelete from "./components/users/UserDelete";
 import ProjectList from "./components/projects/ProjectList";
-import ProjectCreate from "./components/projects/ProjectCreate";
 import ProjectDetail from "./components/projects/ProjectDetail";
-import ProjectEdit from "./components/projects/ProjectEdit";
-import ProjectDelete from "./components/projects/ProjectDelete";
 import FormCreate from "./components/forms/FormCreate";
 import FormEdit from "./components/forms/FormEdit";
 import FormDetail from "./components/forms/FormDetail";
@@ -53,10 +50,7 @@ export class Root extends Component {
                     <Route path="users/delete/:userid" component={UserDelete} />
                     <Route path="users" component={UserList} />
                     <Route path="projects" component={ProjectList} />
-                    <Route path="projects/create" component={ProjectCreate} />
                     <Route path="projects/:projectid" component={ProjectDetail} />
-                    <Route path="projects/edit/:projectid" component={ProjectEdit} />
-                    <Route path="projects/delete/:projectid" component={ProjectDelete} />
                     <Route path="forms/create/:projectId" component={FormCreate} />
                     <Route path="forms/:formid" component={FormDetail} />
                     <Route path="forms/edit/:formid" component={FormEdit} />

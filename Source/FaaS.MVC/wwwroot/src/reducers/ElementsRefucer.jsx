@@ -12,29 +12,32 @@ import {
 import {createReducer} from "../utils/index";
 
 const initialState = {
-	elements: {},
+	elements: [],
 	statusText: null
 };
 
-export default createReducer(initialState, {
-	
-	[Elements.FetchSucc]: (state, payload) => {
-		return {...state, elements: payload};
-	},
-	[Elements.Fail]: (state, payload) => {
-		return {...state, statusText: "[FAIL] Elements: "+ payload};
-	},
-	[Elements.CreateSucc]: (state, payload) => {
-		return {...state, elements: Object.assign({}, state.elements, payload)};
-	},
-	[Elements.DeleteSucc]: (state, payload) => {
-		return state;
-	},
-	[Elements.GetSucc]: (state, payload) => {
-		return {...state}
-	},
-	[Elements.UpdateSucc]: (state, payload) => {
-		return {...state, elements: Object.assign({}, state.elements, payload)};
+export function elementsReducer(state, action){
+	const type = action.type;
+	const payload = action.payload;
+	state= state || initialState;
+	switch (type)
+	{
+		case Elements.FetchSucc:
+			return {...state, elements: payload};
+		case Elements.Fail:
+			return {...state, statusText: "[FAIL] Elements: "+ payload};
+		case Elements.CreateSucc:
+			return {...state, elements: Object.assign({}, state.elements, payload)};
+		case Elements.DeleteSucc:
+			return {...state};
+		case Elements.GetSucc:
+			return {...state};
+		case Elements.UpdateSucc:
+			return {...state, elements: Object.assign({}, state.elements, payload)};
 	}
-});
+	return state;
+}
+
+
+export default elementsReducer;
 

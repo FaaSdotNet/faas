@@ -1,8 +1,12 @@
 import React, { Component } from "react";
 import MyInput from "../form/MyInput"
 import MySubmit from "../form/MySubmit"
+import {connect} from "react-redux";
+import {FormsActions} from "../../actions/formsActions";
 
-
+@connect((store) => {
+  return store;
+})
 export class FormCreateComponent extends Component {
 
     constructor(props) {
@@ -10,37 +14,20 @@ export class FormCreateComponent extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleSubmit(event) {
+    handleSubmit() {
         const formName = this.refs.formName.state.value;
         const formDesc = this.refs.formDescription.state.value;
 
-        var result = fetch('/api/v1.0/forms', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: "same-origin",
-            body: JSON.stringify({
-                FormName: formName,
-                Description: formDesc,
-                SelectedProjectId: this.props.params.projectId
-            })
-        });
+        const payload = {
+			FormName: formName,
+			Description: formDesc,
+			SelectedProjectId: this.props.project.id
+		};
 
-        result.then( (res) =>  {
-            if (res.ok) {
-                res.json()
-                    .then((js) => {
-                        
-                        document.location.href =`/#/projects/${this.props.params.projectId}/`;
-                    });
-            }
-        });
+        this.props.dispatch(FormsActions.create(this.props.project.id, payload));
+
     }
 
-    handleCancel(event) {
-        document.location.href = "/#/forms";
-    }
 
     render() {
         return (
@@ -54,12 +41,6 @@ export class FormCreateComponent extends Component {
                         onClick={this.handleSubmit}
                         value="Create" 
                         className="btn btn-primary col-md-offset-5"/>
-
-                <input type="button" 
-                        id="cancelButton"
-                        onClick={this.handleCancel}
-                        value="Cancel" 
-                        className="btn btn-default"/>
             </div>
         );
     }

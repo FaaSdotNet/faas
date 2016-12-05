@@ -70,8 +70,7 @@ export class MyTableRow extends Component {
                     </button>
                 </td>
                 <td>
-                    <button onClick={this.openModal}
-                            type="button" className="btn btn-default btn-md">
+                    <button onClick={this.openModal} type="button" className="btn btn-default btn-md">
                         <span style={{ fontSize: 1.5 + 'em' }} className="glyphicon glyphicon-trash" aria-hidden="true"
 ></span>
                     </button>

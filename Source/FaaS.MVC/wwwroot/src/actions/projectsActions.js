@@ -18,21 +18,22 @@ export class ProjectsActions {
 			apiClient.get(URL_ELEM)
 				.then((res) => {
 					console.log(`[FETCH] ${COLL_NAME}: `, res);
-					dispatch ({type: COLL_TYPE.FetchSucc, payload: res});
+					dispatch({type: COLL_TYPE.FetchSucc, payload: res.data});
 				})
 				.catch((err) => {
 					console.error(`[ERROR] ${COLL_NAME}: `, err);
-					dispatch ({type: FAIL_TYPE, payload: err});
+					dispatch({type: FAIL_TYPE, payload: err});
 				});
 		};
 	}
 
 	static del(id){
+		console.log("[ACTION] Project delete: ", id);
 		return (dispatch) => {
 			apiClient.delete(URL_ELEM + id)
 				.then((res) => {
 					console.log(`[DELETE] ${COLL_NAME}: `, res);
-					dispatch({type: COLL_TYPE.DeleteSucc, payload: res});
+					dispatch({type: COLL_TYPE.DeleteSucc, payload: res.data});
 
 				})
 				.catch((err) => {
@@ -49,7 +50,7 @@ export class ProjectsActions {
 					console.log(`[UPDATE] ${COLL_NAME}: `, res);
 					dispatch({
 						type: COLL_TYPE.UpdateSucc,
-						payload: res
+						payload: res.data
 					});
 				}).catch((err) =>{
 				console.error(`[ERROR] ${COLL_NAME}: `, err);
@@ -64,7 +65,7 @@ export class ProjectsActions {
 					console.log(`[GET] ${COLL_NAME}: `, res);
 					dispatch({
 						type: COLL_TYPE.GetSucc,
-						payload: res
+						payload: res.data
 					});
 				}).catch((err) =>{
 				console.log(`[ERROR] ${COLL_NAME}: `, err);
