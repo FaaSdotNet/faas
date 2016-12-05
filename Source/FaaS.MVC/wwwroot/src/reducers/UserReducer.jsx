@@ -16,8 +16,6 @@ export function userReducer(state, action)
 	state = state || initialState;
 	const payload = action.payload;
 	const type = action.type;
-	console.log("[REDUCER] User: ", action);
-
 	switch (type){
 		case User.LoginReq:
 			return Object.assign({}, state, {

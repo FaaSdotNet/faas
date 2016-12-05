@@ -9,7 +9,7 @@ export class LoginComponent extends Component {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
         if (localStorage.getItem("user") != null) {
-            document.location.href = "/#/dashboard";
+            document.location.href = "/#/projects";
         }
     }
 
@@ -35,7 +35,7 @@ export class LoginComponent extends Component {
                             cookie.save("userId", js.id);
                             localStorage.setItem("userId", js.id);
                             localStorage.setItem("user", JSON.stringify(js));
-                            document.location.href ="/#/dashboard";
+                            document.location.href ="/#/projects";
                         });
                 }
         });

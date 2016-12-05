@@ -22,6 +22,8 @@ export function elementsReducer(state, action){
 	state= state || initialState;
 	switch (type)
 	{
+		case Elements.Reset:
+			return {...initialState};
 		case Elements.FetchSucc:
 			return {...state, elements: payload};
 		case Elements.Fail:
@@ -35,7 +37,7 @@ export function elementsReducer(state, action){
 		case Elements.UpdateSucc:
 			return {...state, elements: Object.assign({}, state.elements, payload)};
 	}
-	return state;
+	return {...state};
 }
 
 

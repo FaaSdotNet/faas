@@ -13,6 +13,13 @@ const COLL_NAME = "projects";
 const URL_ELEM = `/${COLL_NAME}/`;
 
 export class ProjectsActions {
+
+	static reset(){
+		return (dispatch) => {
+			dispatch({type: COLL_TYPE.Reset})
+		}
+	}
+
 	static fetchAll(userId) {
 		return (dispatch) => {
 			apiClient.get(URL_ELEM)

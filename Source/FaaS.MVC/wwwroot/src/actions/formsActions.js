@@ -13,12 +13,19 @@ const COLL_NAME = "forms";
 const URL_ELEM = `/${COLL_NAME}/`;
 
 export class FormsActions {
+
+	static reset(){
+		return (dispatch) => {
+			dispatch({type: COLL_TYPE.Reset})
+		}
+	}
+
 	static fetchAll(projectId) {
 		return (dispatch) => {
-			apiClient.get(URL_ELEM)
+			apiClient.get(URL_ELEM + "?projectId="+ projectId)
 				.then((res) => {
-					console.log(`[FETCH] ${COLL_NAME}: `, res);
-					dispatch ({type: COLL_TYPE.FetchSucc, payload: res});
+					console.log(`[FETCH] ${COLL_NAME}: `, res.data);
+					dispatch ({type: COLL_TYPE.FetchSucc, payload: res.data});
 				})
 				.catch((err) => {
 					console.error(`[ERROR] ${COLL_NAME}: `, err);
@@ -32,7 +39,7 @@ export class FormsActions {
 			apiClient.delete(URL_ELEM + id)
 				.then((res) => {
 					console.log(`[DELETE] ${COLL_NAME}: `, res);
-					dispatch({type: COLL_TYPE.DeleteSucc, payload: res});
+					dispatch({type: COLL_TYPE.DeleteSucc, payload: res.data});
 
 				})
 				.catch((err) => {
@@ -49,7 +56,7 @@ export class FormsActions {
 					console.log(`[UPDATE] ${COLL_NAME}: `, res);
 					dispatch({
 						type: COLL_TYPE.UpdateSucc,
-						payload: res
+						payload: res.data
 					});
 				}).catch((err) =>{
 				console.error(`[ERROR] ${COLL_NAME}: `, err);
@@ -64,7 +71,7 @@ export class FormsActions {
 					console.log(`[GET] ${COLL_NAME}: `, res);
 					dispatch({
 						type: COLL_TYPE.GetSucc,
-						payload: res
+						payload: res.data
 					});
 				}).catch((err) =>{
 				console.log(`[ERROR] ${COLL_NAME}: `, err);
@@ -81,7 +88,7 @@ export class FormsActions {
 					console.log(`[CREATE] ${COLL_NAME}: `, res);
 					dispatch({
 						type: COLL_TYPE.CreateSucc,
-						payload: res
+						payload: res.data
 					});
 				}).catch((err) =>{
 				console.log(`[ERROR] ${COLL_NAME}: `, err);

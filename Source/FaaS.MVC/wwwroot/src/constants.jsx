@@ -8,13 +8,12 @@ export const REQUEST = {
 };
 
 export const PagesLoc = {
-	Dashboard: "dashboard",
 	Projects: "projects",
 	Forms: "forms",
 	Project: "project",
 	Form: "form",
 	Elements: "elements",
-	Element: "element"
+	Element: "element",
 };
 
 export const Projects = {
@@ -25,6 +24,7 @@ export const Projects = {
 	UpdateSucc: 'PROJECTS_UPDATE_SUCC',
 	CreateSucc: 'PROJECTS_CREATE_SUCC',
 	GetSucc: 'PROJECTS_GET_SUCC',
+	Reset: 'PROJECTS_RESET'
 };
 
 export const Forms = {
@@ -35,6 +35,8 @@ export const Forms = {
 	UpdateSucc: 'FORMS_UPDATE_SUCC',
 	CreateSucc: 'FORMS_CREATE_SUCC',
 	GetSucc: 'FORMS_GET_SUCC',
+	Reset: 'FORMS_RESET'
+
 };
 
 export const User = {
@@ -51,7 +53,8 @@ export const User = {
 export const Pages = {
 	PageSet: 'PAGE_SET',
 	FormSet: 'FORM_SET',
-	ProjectSet: 'PROJECT_SET'
+	ProjectSet: 'PROJECT_SET',
+	ElementSet: 'ELEMENT_SET'
 };
 
 export const Elements = {
@@ -61,5 +64,7 @@ export const Elements = {
 	DeleteSucc: 'ELEMENTS_DELETE_SUCC',
 	UpdateSucc: 'ELEMENTS_UPDATE_SUCC',
 	CreateSucc: 'ELEMENTS_CREATE_SUCC',
-	GetSucc: 'ELEMENTS_GET_SUCC'
+	GetSucc: 'ELEMENTS_GET_SUCC',
+	Reset: 'ELEMENTS_RESET'
+
 };
