@@ -13,6 +13,13 @@ const COLL_NAME = "elements";
 const URL_ELEM = `/${COLL_NAME}/`;
 
 export class ElementsActions {
+
+	static reset(){
+		return (dispatch) => {
+			dispatch({type: COLL_TYPE.Reset})
+		}
+	}
+
 	static fetchAll(formId) {
 		return (dispatch) => {
 			apiClient.get(URL_ELEM)

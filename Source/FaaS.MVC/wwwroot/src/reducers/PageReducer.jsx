@@ -10,8 +10,9 @@ import {
 import {createReducer} from "../utils/index";
 
 const initialState = {
-	selectedProject: null,
-	selectedForm: null,
+	projectId: null,
+	formId: null,
+	elementId: null,
 	page: PagesLoc.Dashboard
 };
 
@@ -22,10 +23,13 @@ export function pageReducer(state, action){
 		case Pages.PageSet:
 			return {...state, page: payload};
 		case Pages.FormSet:
-			return {...state, selectedForm: payload};
+			return {...state, formId: payload};
 		case Pages.ProjectSet:
-			return {...state, selectedProject: payload};
+			return {...state, projectId: payload};
+		case Pages.ElementSet:
+			return {...state, elementId: payload};
 	}
+
 
 	return state;
 }

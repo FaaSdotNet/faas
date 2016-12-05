@@ -21,10 +21,10 @@ export class FormCreateComponent extends Component {
         const payload = {
 			FormName: formName,
 			Description: formDesc,
-			SelectedProjectId: this.props.project.id
+			SelectedProjectId: this.props.project
 		};
 
-        this.props.dispatch(FormsActions.create(this.props.project.id, payload));
+        this.props.dispatch(FormsActions.create(this.props.project, payload));
 
     }
 

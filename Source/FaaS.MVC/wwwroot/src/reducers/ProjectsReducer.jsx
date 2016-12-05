@@ -20,6 +20,8 @@ export function projectsReducer(state, action){
 	const type = action.type;
 
 	switch (type){
+		case Projects.Reset:
+			return {...initialState};
 		case Projects.FetchSucc:
 			console.info("[PROJECTS] setting projects:", payload);
 			return {...state, projects: payload, reload: false};
@@ -39,7 +41,7 @@ export function projectsReducer(state, action){
 			console.info("[PROJECTS] update:", payload);
 			return {...state, project: payload, reload:true};
 	}
-	return state;
+	return {...state};
 }
 
 export default projectsReducer;

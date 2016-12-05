@@ -10,7 +10,7 @@ import {
 import {createReducer} from "../utils/index";
 
 const initialState = {
-	forms: {},
+	forms: [],
 	statusText: null,
 	form: null,
 	reload: true
@@ -21,22 +21,29 @@ export function formsReducer(state, action){
 	const type = action.type;
 	const payload = action.payload;
 	state= state || initialState;
-	switch (type)
-	{
+	switch (type){
+		case Forms.Reset:
+			return {...initialState};
 		case Forms.FetchSucc:
-			return {...state, forms: payload};
+			console.info("[FORMS] Fetch Success:", payload);
+			return {...state, forms: payload, reload: false};
 		case Forms.Fail:
-			return {...state, statusText: "[FAIL] Elements: "+ payload};
+			console.error("[FORMS] FAIL:", payload);
+			return {...state, statusText: "[FAIL]: "+ payload, reload: true};
 		case Forms.CreateSucc:
-			return {...state, forms: Object.assign({}, state.forms, payload)};
-		case Forms.DeleteSucc:
-			return {...state};
+			console.info("[FORMS] create:", payload);
+			return {...state, reload: true, form: payload};
 		case Forms.GetSucc:
-			return {...state};
+			console.info("[FORMS] get:", payload);
+			return {...state, project: payload};
+		case Forms.DeleteSucc:
+			console.info("[FORMS] delete:", payload);
+			return {...state, reload: true};
 		case Forms.UpdateSucc:
-			return {...state, forms: Object.assign({}, state.forms, payload)};
+			console.info("[FORMS] update:", payload);
+			return {...state, form: payload, reload:true};
 	}
-	return state;
+	return {...state};
 }
 
 

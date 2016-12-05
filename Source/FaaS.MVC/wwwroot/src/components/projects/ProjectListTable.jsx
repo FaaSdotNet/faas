@@ -4,8 +4,9 @@ import {ProjectsActions} from "../../actions/projectsActions";
 import {ButtonDelete} from "../table/ButtonDelete";
 import {ModalWrapper} from "../table/ModalWrapper";
 import ProjectEdit from "./ProjectEdit";
-import ProjectDetail from "./ProjectDetail";
 import FormCreate from "../forms/FormCreate";
+import {PagesActions} from "../../actions/pagesActions";
+import {FormsActions} from "../../actions/formsActions";
 
 @connect((store) => {
 	return store;
@@ -42,7 +43,9 @@ export class ProjectListRow extends Component{
 		 TODO
 		 Show modal with new Form
 		 */
-		document.location.href="/#/projects/" + projectId;
+		this.props.dispatch(FormsActions.reset());
+		this.props.dispatch(PagesActions.setProject(projectId));
+		document.location.href="/#/forms/";
 
 	}
 
@@ -128,16 +131,6 @@ export class ProjectListTable extends Component{
 		this.rows = [];
     }
 
-	componentWillMount(){
-    	let userId = this.props.user.userId;
-    	userId = localStorage.getItem('userId');
-    	console.log('User id: ', userId);
-		if(this.props.projects.reload) {
-			this.props.dispatch(ProjectsActions.fetchAll(userId));
-		}
-	}
-
-
     render(){
 		let userId = localStorage.getItem('userId');
 		if(this.props.projects.reload) {
@@ -151,10 +144,7 @@ export class ProjectListTable extends Component{
 		});
 
         return (
-            <div className="row" id="projects">
-                <h1>
-                    Projects
-                </h1>
+            <div className="row" id="projects-list">
                 <table className="table table-striped row">
                     <thead>
 						<tr>
