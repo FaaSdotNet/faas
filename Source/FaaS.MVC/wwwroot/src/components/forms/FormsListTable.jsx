@@ -37,7 +37,7 @@ export class FormListRow extends Component{
 
 	/**
 	 * Will open form list for projectId
-	 * @param projectId Project ID
+	 * @param formId Project ID
 	 */
 	handleFormClick(formId)
 	{
@@ -87,7 +87,7 @@ export class FormListRow extends Component{
 		return (
             <tr>
                 <td>
-                    <a onClick={() => this.handleFormClick(this.props.forms.id)}>
+                    <a onClick={() => this.handleFormClick(this.props.form.id)}>
 						{this.props.form.formName}
                     </a>
                 </td>

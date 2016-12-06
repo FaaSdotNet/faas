@@ -78,3 +78,18 @@ export const Elements = {
 	GetSucc: 'ELEMENTS_GET_SUCC',
 	Reset: 'ELEMENTS_RESET'
 };
+
+export const ElementType = {
+	to_text: [
+		'CheckBox',
+		'Date',
+		'Radio',
+		'Range',
+		'Text'
+	],
+	CheckBox: 0,
+	Date: 1,
+	Radio: 2,
+	Range: 3,
+	Text: 4
+};

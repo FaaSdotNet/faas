@@ -4,6 +4,7 @@ import {ElementsActions} from "../../actions/elementsActions";
 import {ButtonDelete} from "../table/ButtonDelete";
 import {ModalWrapper} from "../table/ModalWrapper";
 import ElementEdit from "./ElementEdit";
+import {ElementType} from "../../constants";
 import ElementDetail from "./ElementDetail";
 
 @connect((store) => {
@@ -59,7 +60,7 @@ export class ElementListRow extends Component{
 	 * Adds form to specified project
 	 * @param projectId Project Id
 	 */
-	handleAddElement(elementId){
+	handleAddElement(){
 		this.setState({ addElement: { open: true }});
 	}
 
@@ -75,15 +76,17 @@ export class ElementListRow extends Component{
 	 */
 
 	render(){
+		console.log( "[ELEMENT_ROW] :", this.props.element);
 		return (
 			<tr>
 				<td>
 					<a onClick={() => this.handleElementClick(this.props.element.id)}>
 						{this.props.element.description}
 					</a>
+
 				</td>
 				<td>
-					{this.props.element.type}
+					{ElementType.to_text[this.props.element.type]}
 				</td>
 				<td>
 					<button type="button" className="btn btn-default btn-md" onClick={ () => this.handleEditClick()}>
@@ -112,35 +115,31 @@ export class ElementsListTable extends Component{
 	 */
 	constructor(props){
 		super(props);
-		console.log("Project List Table: ", this.props);
+		console.log("Elements list table: ", this.props);
 		this.rows = [];
 	}
 
 
 
 	render(){
-		let userId = localStorage.getItem('userId');
+		const formId = this.props.page.formId;
 		if(this.props.elements.reload) {
-			this.props.dispatch(ElementsActions.fetchAll(this.props.page.formId));
+			this.props.dispatch(ElementsActions.fetchAll(formId));
 		}
 		this.rows = [];
 		const elements = this.props.elements.elements;
 		console.log("Elements: ", elements);
 		elements.forEach( (element) => {
-			this.rows.push(<ElementListRow key={element.id} form={element} />)
+			this.rows.push(<ElementListRow key={element.id} element={element} />)
 		});
 
 		return (
 			<div className="row" id="forms">
-				<h1>
-					Elements
-				</h1>
 				<table className="table table-striped row">
 					<thead>
 					<tr>
 						<th>Element description</th>
 						<th>Element type</th>
-						<th>View element</th>
 						<th>Edit</th>
 						<th>Delete</th>
 					</tr>

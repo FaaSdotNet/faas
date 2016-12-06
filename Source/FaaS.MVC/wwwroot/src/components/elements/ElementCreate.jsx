@@ -64,21 +64,22 @@ export class ElementCreateComponent extends Component {
             required: event.target.value});
     }
 
-    handleSubmit(event)
+    handleSubmit()
 	{
 		const description = this.state.description;
 		const options = this.state.options;
 		const type = this.state.type;
 		const required = this.state.required;
+
 		const payload = {
-			Id: this.props.params.element.id,
 			Description: description,
 			Options: options,
 			Type: type,
 			Required: required,
 			FormId: this.props.page.formId
 		};
-		this.dispatch(ElementsActions.create(null, payload));
+
+		this.props.dispatch(ElementsActions.create(null, payload));
 
 	}
 
@@ -87,11 +88,11 @@ export class ElementCreateComponent extends Component {
         {
             return;
         }
-        var options = {};
+        let options = {};
         if (this.state.options)
         {
             options = JSON.parse(this.state.options);
-            var optionsCount = Object.keys(options).length + 1;
+            const optionsCount = Object.keys(options).length + 1;
 
             options[optionsCount] = "";
         }
@@ -108,13 +109,13 @@ export class ElementCreateComponent extends Component {
     }
 
     handleRemove(event) {
-        var id = event.target.id.substr(1);
+        const id = event.target.id.substr(1);
 
-        var options = JSON.parse(this.state.options);
+        let options = JSON.parse(this.state.options);
         delete options[id];
-        var optionsArray = Object.keys(options).map(key => options[key]);
-        options = {}
-        for (var i = 1; i <= optionsArray.length; i++)
+        const optionsArray = Object.keys(options).map(key => options[key]);
+        options = {};
+        for (let i = 1; i <= optionsArray.length; i++)
         {
             options[i] = optionsArray[i-1];
         }
@@ -126,13 +127,13 @@ export class ElementCreateComponent extends Component {
     }
 
     render() {
-        var optionElements = [];
+        let optionElements = [];
         if (this.state.options)
         {
-            var options = JSON.parse(this.state.options);
-            var optionsCount = Object.keys(options).length;
+            const options = JSON.parse(this.state.options);
+            const optionsCount = Object.keys(options).length;
 
-            for (var i = 1; i <= optionsCount; i++)
+            for (let i = 1; i <= optionsCount; i++)
             {
                 optionElements.push(<div key={"option" + i} id={"option" + i}>
                     <span>Option {i}: </span>
