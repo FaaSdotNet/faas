@@ -6,6 +6,8 @@ import {ModalWrapper} from "../table/ModalWrapper";
 import FormEdit from "./FormEdit";
 import FormDetail from "./FormDetail";
 import ElementCreate from "../elements/ElementCreate";
+import {ElementsActions} from "../../actions/elementsActions";
+import {PagesActions} from "../../actions/pagesActions";
 
 @connect((store) => {
 	return store;
@@ -30,12 +32,13 @@ export class FormListRow extends Component{
 		this.handleFormClick = this.handleFormClick.bind(this);
 		this.handleEditClick = this.handleEditClick.bind(this);
 		this.handleDeleteForm = this.handleDeleteForm.bind(this);
+		this.handleViewForm = this.handleViewForm.bind(this);
 	}
 
 
 	/**
 	 * Will open form list for projectId
-	 * @param projectId Project ID
+	 * @param formId Project ID
 	 */
 	handleFormClick(formId)
 	{
@@ -44,6 +47,9 @@ export class FormListRow extends Component{
          Show modal with new Form
          */
 
+		this.props.dispatch(ElementsActions.reset());
+		this.props.dispatch(PagesActions.setForm(formId));
+		document.location.href="/#/elements/";
 	}
 
 	/**
@@ -63,8 +69,11 @@ export class FormListRow extends Component{
 	 */
 	handleAddForm(){
 		this.setState({ addElement: { open: true }});
+	}
 
 
+	handleViewForm(formId){
+		document.location.href=`/#/form/${formId}`;
 	}
 
 	handleDeleteForm(formId)
@@ -82,7 +91,7 @@ export class FormListRow extends Component{
 		return (
             <tr>
                 <td>
-                    <a onClick={() => this.handleFormClick(this.props.forms.id)}>
+                    <a onClick={() => this.handleFormClick(this.props.form.id)}>
 						{this.props.form.formName}
                     </a>
                 </td>
@@ -90,19 +99,16 @@ export class FormListRow extends Component{
 					{this.props.form.numElems}
                 </td>
 				<td>
-					<button type="button" className="btn btn-default btn-md" onClick={ () => this.handleAddForm(this.props.forms.id)}>
+					<button type="button" className="btn btn-default btn-md" onClick={ () => this.handleViewForm(this.props.form.id)}>
 						<span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-search" aria-hidden="true"/>
 					</button>
-					<ModalWrapper title="View Form" open={this.state.viewForm}  >
-						<div form={this.props.form} />
-					</ModalWrapper>
 				</td>
                 <td>
                     <button type="button" className="btn btn-default btn-md" onClick={ () => this.handleAddForm(this.props.forms.id)}>
                         <span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-plus" aria-hidden="true"/>
                     </button>
                     <ModalWrapper title="Create element" open={this.state.addElement}  >
-                        <ElementCreate form={this.props.form} />
+                        <ElementCreate formId={this.props.form.id} />
                     </ModalWrapper>
                 </td>
                 <td>

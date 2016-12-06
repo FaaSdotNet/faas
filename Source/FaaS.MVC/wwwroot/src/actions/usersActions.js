@@ -2,17 +2,17 @@
  * Created by Wermington on 27.11.16.
  */
 import {
-	Elements
+	Users
 } from '../constants';
 
 import {apiClient} from "../utils";
 
-const COLL_TYPE = Elements;
+const COLL_TYPE = Users;
 const FAIL_TYPE = COLL_TYPE.Fail;
-const COLL_NAME = "elements";
+const COLL_NAME = "users";
 const URL_ELEM = `/${COLL_NAME}/`;
 
-export class ElementsActions {
+export class UsersActions {
 
 	static reset(){
 		return (dispatch) => {
@@ -20,16 +20,16 @@ export class ElementsActions {
 		}
 	}
 
-	static fetchAll(formId) {
+	static fetchAll() {
 		return (dispatch) => {
-			apiClient.get(URL_ELEM +"?formId="+ formId)
+			apiClient.get(URL_ELEM)
 				.then((res) => {
 					console.log(`[FETCH] ${COLL_NAME}: `, res);
-					dispatch ({type: COLL_TYPE.FetchSucc, payload: res.data});
+					dispatch({type: COLL_TYPE.FetchSucc, payload: res.data});
 				})
 				.catch((err) => {
 					console.error(`[ERROR] ${COLL_NAME}: `, err);
-					dispatch ({type: FAIL_TYPE, payload: err});
+					dispatch({type: FAIL_TYPE, payload: err});
 				});
 		};
 	}
@@ -49,11 +49,11 @@ export class ElementsActions {
 		};
 	}
 
-	static update(element){
+	static update(user){
 		return (dispatch) => {
-			apiClient.put(URL_ELEM, element)
+			apiClient.put(URL_ELEM, user)
 				.then(res => {
-					console.log(`[UPDATE] ${COLL_NAME}: `, res.data);
+					console.log(`[UPDATE] ${COLL_NAME}: `, res);
 					dispatch({
 						type: COLL_TYPE.UpdateSucc,
 						payload: res.data
@@ -80,15 +80,15 @@ export class ElementsActions {
 		}
 	}
 
-	static create(formId, element)
+	static create(user)
 	{
 		return (dispatch) => {
-			apiClient.post(URL_ELEM, element)
+			apiClient.post(URL_ELEM, user)
 				.then(res => {
 					console.log(`[CREATE] ${COLL_NAME}: `, res);
 					dispatch({
 						type: COLL_TYPE.CreateSucc,
-						payload: res.data
+						payload: res
 					});
 				}).catch((err) =>{
 				console.log(`[ERROR] ${COLL_NAME}: `, err);
@@ -98,4 +98,4 @@ export class ElementsActions {
 	}
 }
 
-export default ElementsActions;
+export default UsersActions;

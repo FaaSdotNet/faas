@@ -7,8 +7,6 @@ import {
 	Forms
 } from '../constants';
 
-import {createReducer} from "../utils/index";
-
 const initialState = {
 	forms: [],
 	statusText: null,

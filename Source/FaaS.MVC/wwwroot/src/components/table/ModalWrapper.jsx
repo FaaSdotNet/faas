@@ -24,8 +24,6 @@ export class ModalWrapper extends Component {
 
 	openModal()
 	{
-		console.log("Open called!");
-
 		this.setState({
 			isOpen: true
 		});
@@ -39,14 +37,11 @@ export class ModalWrapper extends Component {
 			isOpen: false
 		});
 		this.props.open.open = false;
-
 	};
 
 	componentWillUpdate(nextProps, nextState)
 	{
-		console.log("[State] ", this.props.open.open, this.state.isOpen);
 		if(this.props.open.open && this.state.isOpen == false) {
-			console.log("Open should be called");
 			this.openModal();
 		}
 	}
