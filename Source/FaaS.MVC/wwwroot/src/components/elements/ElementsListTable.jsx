@@ -36,13 +36,13 @@ export class ElementListRow extends Component{
 	 * Will open form list for elementId
 	 * @param elementId Project ID
 	 */
-	handleElementClick(elementId)
+	handleElementClick()
 	{
 		/*
 		 TODO
 		 Show modal with new Form
 		 */
-
+		this.setState({detailOpen: {open: true}});
 	}
 
 	/**
@@ -80,10 +80,12 @@ export class ElementListRow extends Component{
 		return (
 			<tr>
 				<td>
-					<a onClick={() => this.handleElementClick(this.props.element.id)}>
+					<a onClick={() => this.handleElementClick()}>
 						{this.props.element.description}
 					</a>
-
+					<ModalWrapper title="Element Detail" open={this.state.detailOpen}>
+						<ElementDetail element={this.props.element}/>
+					</ModalWrapper>
 				</td>
 				<td>
 					{ElementType.to_text[this.props.element.type]}
