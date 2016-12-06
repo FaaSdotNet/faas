@@ -6,11 +6,11 @@ export class UserDetail extends Component {
     constructor(props) {
         super(props);
 
-        this.state = null;
+        this.state = {};
     }
 
     componentWillMount() {
-        const result = fetch('/api/v1.0/users/' + this.props.params.userid,
+        const result = fetch('/api/v1.0/users/' + this.props.userPassed.id,
         {
             method: "GET",
             credentials: "same-origin",
@@ -29,29 +29,23 @@ export class UserDetail extends Component {
         });
     }
 
-    handleBack(event) {
-        document.location.href = "/#/dashboard";
-    }
-
     render() {
-        var rows =[];
-        var state = this.state;
-        if (state) {
-            rows.push(<p key={state.userName}><b>User Name: </b>{state.userName}</p>);
-            rows.push(<p key={state.googleId}><b>Google ID: </b>{state.googleId}</p>);
-            rows.push(<p key={state.registered}><b>Registered: </b>{state.registered}</p>);
-        }
-
+        const state = this.state;
         return (
             <div>
                 <h2>User Details</h2>
-                {rows}
+                <div>
+                    <p>
+                        <b>User Name: </b> {state.userName}
+                    </p>
+                    <p>
+                        <b>Google ID: </b> {state.googleId}
+                    </p>
+                    <p>
+                        <b>Registered: </b>{state.registered}
+                    </p>
 
-                <input type="button" 
-                        id="backButton"
-                        onClick={this.handleBack}
-                        value="Back" 
-                        className="btn btn-default"/>
+                </div>
             </div>
         );
     }

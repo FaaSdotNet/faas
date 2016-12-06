@@ -15,16 +15,16 @@ export class FormListComponent extends Component {
     }
 
     handleAdd(event) {
-        document.location.href = `/#/forms/create/${this.props.projectid}`;
+        document.location.href = `/#/forms/create/${this.props.projectId}`;
                     }
 
 
 
     render() {
-        const url = `forms/?projectId=${this.props.projectid}`;
+        const url = `forms/?projectId=${this.props.projectId}`;
         return (
             <div className="row">
-                <MyViewTable url={url} name="forms" propName="formName" parent={this.props.projectid}/>
+                <MyViewTable url={url} name="forms" propName="formName" parent={this.props.projectId}/>
                 <button onClick={() => { this.handleAdd() }}
                         type="button" className="btn btn-primary btn-md" role="button">Add New Form</button>
             </div>

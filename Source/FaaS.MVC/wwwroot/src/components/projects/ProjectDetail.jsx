@@ -10,13 +10,13 @@ export class ProjectDetail extends Component {
 
     constructor(props) {
         super(props);
-        this.projectid = this.props.params.projectid;
+        this.projectId = this.props.project.id;
 
-        this.state = null;
+        this.state = {};
     }
 
     componentWillMount() {
-        const result = fetch(`/api/v1.0/projects/${this.projectid}`,
+        const result = fetch(`/api/v1.0/projects/${this.projectId}`,
         {
             method: "GET",
             credentials: "same-origin",
@@ -36,18 +36,35 @@ export class ProjectDetail extends Component {
     }
 
     render() {
-        let rows =[];
         const state = this.state;
-        if (state) {
-            rows.push(<h2 key={state.projectName}><b>Project: </b> {state.projectName} </h2>);
-            rows.push(<div key={state.description}>{state.description}</div>);
-            rows.push(<p key={state.created}><b>Created: </b>{state.created}</p>);
-        }
-
         return (
             <div>
-                {rows}
-                <FormList projectid={this.projectid} />
+                <table className="table table-condensed">
+                    <tr>
+                        <td>
+                            <strong>Project</strong>
+                        </td>
+                        <td>
+							{state.projectName}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Description</strong>
+                        </td>
+                        <td>
+							{state.description}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Created</strong>
+                        </td>
+                        <td>
+							{state.created}
+                        </td>
+                    </tr>
+                </table>
             </div>
        );
     }

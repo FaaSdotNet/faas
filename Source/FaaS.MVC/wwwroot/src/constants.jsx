@@ -16,6 +16,17 @@ export const PagesLoc = {
 	Element: "element",
 };
 
+export const Users = {
+	Fetch: 'USERS_FETCH',
+	FetchSucc: 'USERS_FETCH_SUCC',
+	Fail: 'USERS_ANY_FAIL',
+	DeleteSucc: 'USERS_DELETE_SUCC',
+	UpdateSucc: 'USERS_UPDATE_SUCC',
+	CreateSucc: 'USERS_CREATE_SUCC',
+	GetSucc: 'USERS_GET_SUCC',
+	Reset: 'USERS_RESET'
+};
+
 export const Projects = {
 	Fetch: 'PROJECTS_FETCH',
 	FetchSucc: 'PROJECTS_FETCH_SUCC',
@@ -66,5 +77,4 @@ export const Elements = {
 	CreateSucc: 'ELEMENTS_CREATE_SUCC',
 	GetSucc: 'ELEMENTS_GET_SUCC',
 	Reset: 'ELEMENTS_RESET'
-
 };

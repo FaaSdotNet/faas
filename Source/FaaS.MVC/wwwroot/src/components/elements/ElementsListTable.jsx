@@ -116,13 +116,6 @@ export class ElementsListTable extends Component{
 		this.rows = [];
 	}
 
-	componentWillMount(){
-		let userId = localStorage.getItem('userId');
-		console.log('User id: ', userId);
-		if(this.props.elements.reload) {
-			this.props.dispatch(ProjectsActions.fetchAll(userId));
-		}
-	}
 
 
 	render(){

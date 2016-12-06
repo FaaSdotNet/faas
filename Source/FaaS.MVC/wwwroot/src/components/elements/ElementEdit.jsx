@@ -1,5 +1,11 @@
 import React, { Component } from "react";
+import {connect} from "react-redux";
+import {ElementsActions} from "../../actions/elementsActions";
 
+
+@connect((store)=> {
+    return store;
+})
 class ElementEdit extends Component {
 
     constructor() {
@@ -13,11 +19,12 @@ class ElementEdit extends Component {
         this.handleRemove = this.handleRemove.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
 
-        this.state = {};
-        this.state.description = "";
-        this.state.options = "";
-        this.state.type = "";
-        this.state.required = "";
+        this.state = {
+        	description: "",
+			options: "",
+			type: "",
+			required: ""
+		};
     }
 
     handleDescriptionChange(event) {
@@ -28,9 +35,9 @@ class ElementEdit extends Component {
     }
 
     handleOptionsChange(event) {
-        var id = event.target.id.substr(5);
+        const id = event.target.id.substr(5);
 
-        var options = JSON.parse(this.state.options);
+        const options = JSON.parse(this.state.options);
         options[id] = event.target.value;
 
         this.setState({description: this.state.description,
@@ -59,7 +66,7 @@ class ElementEdit extends Component {
     }
 
     componentWillMount() {
-        const result = fetch(`/api/v1.0/elements/${this.props.params.elementid}`,
+        const result = fetch(`/api/v1.0/elements/${this.props.element.id}`,
         {
             method: "GET",
             credentials: "same-origin",
@@ -83,46 +90,30 @@ class ElementEdit extends Component {
         const options = this.state.options;
         const type = this.state.type;
         const required = this.state.required;
-        var result = fetch('/api/v1.0/elements', {
-            method: 'PUT',
-            credentials: "same-origin",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                Id: this.props.params.elementid,
-                Description: description,
-                Options: options,
-                Type: type,
-                Required: required
-            })
-        });
-        
-        result.then( (res) =>  {
-            if (res.ok) {
-                res.json()
-                    .then((js) => {
-                        document.location.href =`/#/elements/${this.props.params.elementid}`;
-                    });
-            }
-        });
+
+        const payload = {
+			Id: this.props.element.id,
+			Description: description,
+			Options: options,
+			Type: type,
+			Required: required
+		};
+
+        this.props.dispatch(ElementsActions.update(payload));
+
     }
 
-    handleCancel(event) {
-        document.location.href = `/#/elements/${this.props.params.elementid}`;
-    }
 
     handleAdd(event) {
         if (this.state.type != "0" && this.state.type != "2")
         {
             return;
         }
-        var options = {};
+        let options = {};
         if (this.state.options)
         {
             options = JSON.parse(this.state.options);
-            var optionsCount = Object.keys(options).length + 1;
+            const optionsCount = Object.keys(options).length + 1;
 
             options[optionsCount] = "";
         }
@@ -139,7 +130,7 @@ class ElementEdit extends Component {
     }
 
     handleRemove(event) {
-        var id = event.target.id.substr(1);
+        const id = event.target.id.substr(1);
 
         var options = JSON.parse(this.state.options);
         delete options[id];
@@ -225,11 +216,6 @@ class ElementEdit extends Component {
                         value="Save" 
                         className="btn btn-primary col-md-offset-5"/>
 
-                <input type="button" 
-                        id="cancelButton"
-                        onClick={this.handleCancel}
-                        value="Cancel" 
-                        className="btn btn-default"/>
             </div>
         );
     }

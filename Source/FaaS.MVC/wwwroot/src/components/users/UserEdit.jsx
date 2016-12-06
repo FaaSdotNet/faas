@@ -1,5 +1,10 @@
 ﻿import React, { Component } from "react";
+import {connect} from "react-redux";
+import {UsersActions} from "../../actions/usersActions";
 
+@connect((store) => {
+    return store;
+})
 class UserEdit extends Component {
 
     constructor() {
@@ -27,7 +32,7 @@ class UserEdit extends Component {
     }
 
     componentWillMount() {
-        const result = fetch('/api/v1.0/users/' + this.props.params.userid,
+        const result = fetch('/api/v1.0/users/' + this.props.userPassed.id,
         {
             method: "GET",
             credentials: "same-origin",
@@ -49,28 +54,15 @@ class UserEdit extends Component {
     handleSubmit(event) {
         const googleId = this.state.googleId;
         const userName = this.state.userName;
-        var result = fetch('/api/v1.0/users', {
-            method: 'PUT',
-            credentials: "same-origin",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                Id: this.props.params.userid,
-                GoogleId: googleId,
-                UserName: userName,
-                Registered: this.state.registered
-            })
-        });
-        result.then( (res) =>  {
-            if (res.ok) {
-                res.json()
-                    .then((js) => {
-                        document.location.href ="/#/login";
-                    });
-            }
-        });
+
+        const payload = {
+			Id: this.props.userPassed.id,
+			GoogleId: googleId,
+			UserName: userName,
+			Registered: this.state.registered
+		};
+
+        this.props.dispatch(UsersActions.update(payload));
     }
 
     render() {
@@ -97,11 +89,6 @@ class UserEdit extends Component {
                         value="Save" 
                         className="btn btn-primary col-md-offset-5"/>
 
-                <input type="button" 
-                        id="cancelButton"
-                        onClick={this.handleCancel}
-                        value="Cancel" 
-                        className="btn btn-default"/>
             </div>
         );
     }
