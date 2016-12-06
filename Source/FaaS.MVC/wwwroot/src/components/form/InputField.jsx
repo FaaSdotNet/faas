@@ -98,7 +98,7 @@ export default class InputField extends React.Component {
                 return(
                     <div key={this.props.elementId}>
                         <label>{this.state.value}</label>
-                        <input type="range" name={this.state.elementId} onChange={this.onValueChanged.bind(this)} min="0" max="10" />
+                        <input type="range" name={this.state.elementId} onChange={this.onValueChanged.bind(this)} min={this.state.options.min} max={this.state.options.max} />
                     </div>
                 );
             case 4:
@@ -106,7 +106,13 @@ export default class InputField extends React.Component {
                     <div key={this.props.elementId}>
                         <input type="text" name={this.state.elementId} onChange={this.onValueChanged.bind(this)}/>
                     </div>
-                );                    
+                );   
+            case 5:
+                return(
+                    <div key={this.props.elementId}>
+                        <textarea rows="5" cols="58" name={this.state.elementId} onChange={this.onValueChanged.bind(this)}/>
+                    </div>
+                );              
         }
     };
 }

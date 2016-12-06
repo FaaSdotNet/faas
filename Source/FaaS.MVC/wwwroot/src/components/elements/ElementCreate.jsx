@@ -18,12 +18,14 @@ export class ElementCreateComponent extends Component {
         this.handleRequiredChange = this.handleRequiredChange.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
+        this.handleRangeChange = this.handleRangeChange.bind(this); 
 
         this.state = {};
         this.state.description = "";
         this.state.options = "";
         this.state.type = "0";
         this.state.required = "";
+        this.state.range = {min: "0", max: "100"};
     }
 
     handleDescriptionChange(event) {
@@ -42,32 +44,41 @@ export class ElementCreateComponent extends Component {
         this.setState({description: this.state.description,
             options: JSON.stringify(options),
             type: this.state.type,
-            required: this.state.required});
+            required: this.state.required
+        });
     }
 
     handleTypeChange(event) {
-        if (event.target.value != "0" && event.target.value != "2")
-        {
+        if (event.target.value != "0" && event.target.value != "2") {
             this.state.options = "";
         }
 
-        this.setState({description: this.state.description,
+        this.setState({
+            description: this.state.description,
             options: this.state.options,
             type: event.target.value,
-            required: this.state.required});
+            required: this.state.required
+        });
     }
 
     handleRequiredChange(event) {
-        this.setState({description: this.state.description,
+        this.setState({
+            description: this.state.description,
             options: this.state.options,
             type: this.state.type,
-            required: event.target.value});
+            required: event.target.value
+        });
     }
 
     handleSubmit()
 	{
 		const description = this.state.description;
-		const options = this.state.options;
+        var options;
+        if(this.state.type != "3"){
+		    options = this.state.options;
+        } else {
+            options = JSON.stringify(this.state.range);
+        }
 		const type = this.state.type;
 		const required = this.state.required;
 
@@ -126,6 +137,13 @@ export class ElementCreateComponent extends Component {
             required: this.state.required});
     }
 
+    handleRangeChange(event){
+        const id = event.target.id;
+        var newRange = this.state.range;
+        newRange[id] = event.target.value;
+        this.setState({range: newRange});
+    }
+
     render() {
         let optionElements = [];
         if (this.state.options)
@@ -145,6 +163,42 @@ export class ElementCreateComponent extends Component {
                 </div>);
             }
         }
+
+        var optionsDiv;
+
+        if(this.state.type != "3"){
+            optionsDiv =
+                <div>
+                    <label htmlFor="options" className="col-md-5 control-label">
+                        Options
+                    </label>
+                    <br />
+                    <div className="col-md-offset-5">
+                        {optionElements}
+                        <a id="add" onClick={this.handleAdd}
+                            href="javascript:void(0)">
+                            <i id="i" className="glyphicon glyphicon-plus-sign"></i>
+                        </a>
+                    </div>
+                </div>
+        } else {
+            optionsDiv =
+                <div>
+                    <label htmlFor="options" className="col-md-5 control-label">
+                        Range
+                    </label>
+                    <div className="col-xs-6">
+                        <span>Min: </span>
+                        <input id={"min"} onChange={this.handleRangeChange}
+                            type="number" className="form-horizontal" value={this.state.range.min} />
+                        <br />
+                        <span>Max: </span>
+                        <input id={"max"} onChange={this.handleRangeChange}
+                            type="number" className="form-horizontal" value={this.state.range.max} />
+                        <br />
+                    </div>
+                </div>
+        }
         return (
             <div className="form-horizontal">
                 <h4>Create New Element</h4>
@@ -156,17 +210,8 @@ export class ElementCreateComponent extends Component {
                        onChange={this.handleDescriptionChange} className="form-control"
                        value={this.state.description} />
 
-                <label htmlFor="options" className="col-md-5 control-label">
-                        Options
-                </label>
-                <br/>
-                <div className="col-md-offset-5">
-                    {optionElements}
-                    <a id="add" onClick={this.handleAdd}
-                        href="javascript:void(0)">
-                        <i id="i" className="glyphicon glyphicon-plus-sign"></i>
-                    </a>
-                </div>
+
+                {optionsDiv}
                 <br/>
                 
                 <label htmlFor="type" className="col-md-5 control-label">

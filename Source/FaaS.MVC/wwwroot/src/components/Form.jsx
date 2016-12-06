@@ -23,6 +23,9 @@ class Form extends React.Component {
     };
 
     redirectToHome(){
+        this.updateState({
+            isOpen: false
+        });
         document.location.href = "/#/index";
     }
 
@@ -118,7 +121,7 @@ class Form extends React.Component {
                 {elementsList}
                 <MySubmit onClick={this.handleSubmit.bind(this)} id="formButton" value="Submit"/>
 
-                <Modal isOpen={this.state.isOpen} onRequestHide={this.hideModal}>
+                <Modal isOpen={this.state.isOpen} onRequestHide={this.redirectToHome}>
                     <ModalHeader>
                         <ModalClose onClick={this.hideModal}/>
                         <ModalTitle>Form has been submitted, you can die in peace now</ModalTitle>

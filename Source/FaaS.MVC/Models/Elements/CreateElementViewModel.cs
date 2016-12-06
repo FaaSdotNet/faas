@@ -12,7 +12,8 @@ namespace FaaS.MVC.Models
         Date,
         Radio,
         Range,
-        Text
+        Text,
+        TextArea
     }
 
     public class CreateElementViewModel : IValidatableObject
