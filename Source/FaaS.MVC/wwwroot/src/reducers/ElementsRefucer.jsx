@@ -11,7 +11,7 @@ const initialState = {
 	elements: [],
 	statusText: null,
 	element: null,
-	reload: true
+	reload: true,
 };
 
 
@@ -27,7 +27,7 @@ export function elementsReducer(state, action){
 			return {...state, elements: payload, reload: false};
 		case Elements.Fail:
 			console.error("[FORMS] FAIL:", payload);
-			return {...state, statusText: "[FAIL]: "+ payload, reload: true};
+			return {...state, statusText: "[FAIL]: "+ payload, reload: false};
 		case Elements.CreateSucc:
 			console.info("[FORMS] create:", payload);
 			return {...state, reload: true, element: payload};

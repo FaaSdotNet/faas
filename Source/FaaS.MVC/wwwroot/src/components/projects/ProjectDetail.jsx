@@ -10,7 +10,7 @@ export class ProjectDetail extends Component {
 
     constructor(props) {
         super(props);
-        this.projectId = this.props.project.id;
+        this.projectId = this.props.projectId;
 
         this.state = {};
     }

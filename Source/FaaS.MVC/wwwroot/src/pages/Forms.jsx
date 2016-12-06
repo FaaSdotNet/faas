@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {FormsListTable} from "../components/forms/FormsListTable";
 import FormCreate from "../components/forms/FormCreate";
+import ProjectDetail from "../components/projects/ProjectDetail";
 import {ModalWrapper} from "../components/table/ModalWrapper";
 import {connect} from "react-redux";
 
@@ -26,9 +27,17 @@ export class Forms extends Component {
 
 	render()
 	{
+		if(!this.props.page.projectId) {
+			document.location.href="/#/projects";
+		}
+
 		return (
 			<div>
 				<div className="row">
+
+					<div>
+						<ProjectDetail projectId={this.props.page.projectId}/>
+					</div>
 
 					<FormsListTable projectId={this.props.page.projectId} />
 				</div>

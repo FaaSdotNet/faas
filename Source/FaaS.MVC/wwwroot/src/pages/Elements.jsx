@@ -26,6 +26,9 @@ export class Elements extends Component {
 
 	render()
 	{
+		if(!this.props.page.formId) {
+			document.location.href="/#/forms";
+		}
 		return (
 			<div>
 				<h1>

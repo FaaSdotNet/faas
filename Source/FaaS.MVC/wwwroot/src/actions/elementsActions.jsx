@@ -22,7 +22,7 @@ export class ElementsActions {
 
 	static fetchAll(formId) {
 		return (dispatch) => {
-			apiClient.get(URL_ELEM)
+			apiClient.get(URL_ELEM +"?formId="+ formId)
 				.then((res) => {
 					console.log(`[FETCH] ${COLL_NAME}: `, res);
 					dispatch ({type: COLL_TYPE.FetchSucc, payload: res.data});
