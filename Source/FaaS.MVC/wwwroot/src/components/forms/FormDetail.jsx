@@ -1,16 +1,15 @@
 import React, { Component } from "react";
-import ElementList from "../elements/ElementList"
 
 export class FormDetail extends Component {
 
     constructor(props) {
         super(props);
 
-        this.state = null;
+        this.state = {};
     }
 
     componentWillMount() {
-        const result = fetch('/api/v1.0/forms/' + this.props.params.formid,
+        const result = fetch('/api/v1.0/forms/' + this.props.formId,
         {
             method: "GET",
             credentials: "same-origin",
@@ -30,20 +29,18 @@ export class FormDetail extends Component {
     }
 
     render() {
-        var rows =[];
-        var state = this.state;
-        if (state) {
-            rows.push(<p key={state.formName}><b>Form Name: </b>{state.formName}</p>);
-            rows.push(<p key={state.description}><b>Description: </b>{state.description}</p>);
-            rows.push(<p key={state.created}><b>Created: </b>{state.created}</p>);
-        }
-
+        const state = this.state;
         return (
             <div>
-                <h2>Form Details</h2>
-                {rows}
-                <ElementList formid={this.props.params.formid} />
-            </div>
+				<h1>
+					<strong>Form:</strong> {state.formName}
+				</h1>
+				<pre>
+                        {state.description}
+					<p><emph>(Created: {state.created})</emph></p>
+                    </pre>
+
+			</div>
        );
     }
 }

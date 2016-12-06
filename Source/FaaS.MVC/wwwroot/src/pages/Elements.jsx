@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {ElementsListTable} from "../components/elements/ElementsListTable";
+import {FormDetail} from "../components/forms/FormDetail";
 import {ElementCreateComponent} from "../components/elements/ElementCreate";
 import {ModalWrapper} from "../components/table/ModalWrapper";
 import {connect} from "react-redux";
@@ -31,13 +32,13 @@ export class Elements extends Component {
 		}
 		return (
 			<div>
-				<h1>
-					Elements
-				</h1>
-				<div className="row">
 
+
+				<div className="row">
+					<FormDetail formId={this.props.page.formId} />
 					<ElementsListTable />
 				</div>
+
 				<button onClick={() =>
 				{
 					this.handleAddElement()
@@ -47,7 +48,7 @@ export class Elements extends Component {
 					Add New Element
 				</button>
 				<ModalWrapper title="Create element" open={this.state.createOpen}>
-					<ElementCreateComponent form={this.props.page.formId}/>
+					<ElementCreateComponent formId={this.props.page.formId}/>
 				</ModalWrapper>
 			</div>
 		);

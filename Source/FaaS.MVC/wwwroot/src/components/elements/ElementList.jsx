@@ -13,7 +13,7 @@ export class ElementListComponent extends Component {
     }
 
     render() {
-        const url = `elements/?formId=${this.props.formid}`;
+        const url = `elements/?${this.props.formid}`;
         return (
             <div className="row">
                 <MyViewTable url={url} name="elements" propName="description"/>

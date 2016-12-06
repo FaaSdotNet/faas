@@ -76,7 +76,7 @@ export class ElementCreateComponent extends Component {
 			Options: options,
 			Type: type,
 			Required: required,
-			FormId: this.props.page.formId
+			FormId: this.props.formId
 		};
 
 		this.props.dispatch(ElementsActions.create(null, payload));

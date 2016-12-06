@@ -1,5 +1,4 @@
 ﻿import React, { Component } from "react";
-import FormList from "../forms/FormList"
 import {connect} from "react-redux";
 
 
@@ -39,32 +38,16 @@ export class ProjectDetail extends Component {
         const state = this.state;
         return (
             <div>
-                <table className="table table-condensed">
-                    <tr>
-                        <td>
-                            <strong>Project</strong>
-                        </td>
-                        <td>
-							{state.projectName}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>Description</strong>
-                        </td>
-                        <td>
-							{state.description}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>Created</strong>
-                        </td>
-                        <td>
-							{state.created}
-                        </td>
-                    </tr>
-                </table>
+                <div>
+                    <h1>
+                        <strong>Project:</strong> {state.projectName}
+                    </h1>
+                    <pre>
+                        {state.description}
+                        <p><emph>(Created: {state.created})</emph></p>
+                    </pre>
+
+                </div>
             </div>
        );
     }

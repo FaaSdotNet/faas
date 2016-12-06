@@ -32,6 +32,7 @@ export class FormListRow extends Component{
 		this.handleFormClick = this.handleFormClick.bind(this);
 		this.handleEditClick = this.handleEditClick.bind(this);
 		this.handleDeleteForm = this.handleDeleteForm.bind(this);
+		this.handleViewForm = this.handleViewForm.bind(this);
 	}
 
 
@@ -68,8 +69,11 @@ export class FormListRow extends Component{
 	 */
 	handleAddForm(){
 		this.setState({ addElement: { open: true }});
+	}
 
 
+	handleViewForm(formId){
+		document.location.href=`/#/form/${formId}`;
 	}
 
 	handleDeleteForm(formId)
@@ -95,19 +99,16 @@ export class FormListRow extends Component{
 					{this.props.form.numElems}
                 </td>
 				<td>
-					<button type="button" className="btn btn-default btn-md" onClick={ () => this.handleAddForm(this.props.forms.id)}>
+					<button type="button" className="btn btn-default btn-md" onClick={ () => this.handleViewForm(this.props.form.id)}>
 						<span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-search" aria-hidden="true"/>
 					</button>
-					<ModalWrapper title="View Form" open={this.state.viewForm}  >
-						<div form={this.props.form} />
-					</ModalWrapper>
 				</td>
                 <td>
                     <button type="button" className="btn btn-default btn-md" onClick={ () => this.handleAddForm(this.props.forms.id)}>
                         <span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-plus" aria-hidden="true"/>
                     </button>
                     <ModalWrapper title="Create element" open={this.state.addElement}  >
-                        <ElementCreate form={this.props.form} />
+                        <ElementCreate formId={this.props.form.id} />
                     </ModalWrapper>
                 </td>
                 <td>

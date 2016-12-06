@@ -97,7 +97,7 @@ export class ProjectListRow extends Component{
 						<span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-plus" aria-hidden="true"/>
 					</button>
 					<ModalWrapper title="Edit Project" open={this.state.addForm}  >
-						<FormCreate project={this.props.project} />
+						<FormCreate projectId={this.props.project.id} />
 					</ModalWrapper>
                 </td>
 				<td>

@@ -50,7 +50,7 @@ export class Forms extends Component {
 					Add New Form
 				</button>
 				<ModalWrapper title="Create form" open={this.state.createOpen}>
-					<FormCreate project={this.props.page.projectId} />
+					<FormCreate projectId={this.props.page.projectId} />
 				</ModalWrapper>
 			</div>
 		);
