@@ -8,6 +8,7 @@
 /// <reference path="out/form.out.js" />
 /// <reference path="src/actions/formsActions.js" />
 /// <reference path="src/actions/projectsActions.js" />
+/// <reference path="src/actions/usersactions.js" />
 /// <reference path="src/app.js" />
 /// <reference path="src/middleware/index.js" />
 /// <reference path="src/reducers/FormsReducer.js" />

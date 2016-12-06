@@ -1,12 +1,17 @@
 import React, { Component } from "react";
+import {connect} from "react-redux";
+import {ElementsActions} from "../../actions/elementsActions";
 
+
+@connect((store)=> {
+	return store;
+})
 export class ElementCreateComponent extends Component {
 
     constructor(props) {
         super(props);
 
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleCancel = this.handleCancel.bind(this);
         this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
         this.handleOptionsChange = this.handleOptionsChange.bind(this);
         this.handleTypeChange = this.handleTypeChange.bind(this);
@@ -29,9 +34,9 @@ export class ElementCreateComponent extends Component {
     }
 
     handleOptionsChange(event) {
-        var id = event.target.id.substr(5);
+        const id = event.target.id.substr(5);
 
-        var options = JSON.parse(this.state.options);
+        let options = JSON.parse(this.state.options);
         options[id] = event.target.value;
 
         this.setState({description: this.state.description,
@@ -59,42 +64,23 @@ export class ElementCreateComponent extends Component {
             required: event.target.value});
     }
 
-    handleSubmit(event) {
-        const description = this.state.description;
-        const options = this.state.options;
-        const type = this.state.type;
-        const required = this.state.required;
-        var result = fetch('/api/v1.0/elements', {
-            method: 'POST',
-            credentials: "same-origin",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                Id: this.props.params.elementid,
-                Description: description,
-                Options: options,
-                Type: type,
-                Required: required,
-                FormId: this.props.params.formid
-            })
-        });
+    handleSubmit(event)
+	{
+		const description = this.state.description;
+		const options = this.state.options;
+		const type = this.state.type;
+		const required = this.state.required;
+		const payload = {
+			Id: this.props.params.element.id,
+			Description: description,
+			Options: options,
+			Type: type,
+			Required: required,
+			FormId: this.props.page.formId
+		};
+		this.dispatch(ElementsActions.create(null, payload));
 
-        result.then( (res) =>  {
-            if (res.ok) {
-                res.json()
-                    .then((js) => {
-                        console.log(js);
-                        document.location.href = `/#/forms/${this.props.params.formid}`;
-                    });
-            }
-        });
-    }
-
-    handleCancel(event) {
-        document.location.href = `/#/forms/${this.props.params.formid}`;
-    }
+	}
 
     handleAdd(event) {
         if (this.state.type != "0" && this.state.type != "2")
@@ -208,11 +194,6 @@ export class ElementCreateComponent extends Component {
                         value="Create" 
                         className="btn btn-primary col-md-offset-5"/>
 
-                <input type="button" 
-                        id="cancelButton"
-                        onClick={this.handleCancel}
-                        value="Cancel" 
-                        className="btn btn-default"/>
             </div>
         );
     }

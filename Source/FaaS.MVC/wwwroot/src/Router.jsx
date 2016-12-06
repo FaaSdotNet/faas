@@ -1,19 +1,16 @@
 ﻿import React, { Component } from "react";
 import { Router, Route, IndexRoute } from "react-router";
-import {connect} from "react-redux";
 import Index from "./components/Index";
 import App from "./components/App";
 import Login from "./components/Login";
 import Register from "./components/Register";
-
-import UserList from "./components/users/UserList";
-import UserDetail from "./components/users/UserDetail";
-import UserEdit from "./components/users/UserEdit";
-import UserDelete from "./components/users/UserDelete";
 import Form from "./components/Form";
 import Projects from "./pages/Projects";
 import Forms from "./pages/Forms";
 import Elements from "./pages/Elements";
+import Users from "./pages/Users";
+import About from "./pages/About";
+import FAQ from "./pages/FAQ";
 
 
 export class Root extends Component {
@@ -34,10 +31,9 @@ export class Root extends Component {
 					<Route path="elements" component={Elements} />
 					<Route path="login" component={Login} />
                     <Route path="register" component={Register} />
-                    <Route path="users/:userid" component={UserDetail} />
-                    <Route path="users/edit/:userid" component={UserEdit} />
-                    <Route path="users/delete/:userid" component={UserDelete} />
-                    <Route path="users" component={UserList} />
+                    <Route path="users" component={Users} />
+                    <Route path="about" component={About} />
+                    <Route path="faq" component={FAQ} />
                     <Route path="form/:formid" component={Form} />
                     <IndexRoute component={Index} />
                 </Route>

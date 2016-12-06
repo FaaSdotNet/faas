@@ -6,6 +6,8 @@ import {ModalWrapper} from "../table/ModalWrapper";
 import FormEdit from "./FormEdit";
 import FormDetail from "./FormDetail";
 import ElementCreate from "../elements/ElementCreate";
+import {ElementsActions} from "../../actions/elementsActions";
+import {PagesActions} from "../../actions/pagesActions";
 
 @connect((store) => {
 	return store;
@@ -44,6 +46,9 @@ export class FormListRow extends Component{
          Show modal with new Form
          */
 
+		this.props.dispatch(ElementsActions.reset());
+		this.props.dispatch(PagesActions.setForm(formId));
+		document.location.href="/#/elements/";
 	}
 
 	/**
