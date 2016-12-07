@@ -41,7 +41,6 @@ export class MyTableRow extends Component {
             if (res.ok) {
                 res.json()
                     .then((js) => {
-                        console.log(js)
                         document.location.href = "/#/dashboard";
                     });
             }

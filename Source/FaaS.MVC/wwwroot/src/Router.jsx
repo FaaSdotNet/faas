@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Form from "./components/Form";
 import Projects from "./pages/Projects";
+import Sessions from "./pages/Sessions";
 import Forms from "./pages/Forms";
 import Elements from "./pages/Elements";
 import Users from "./pages/Users";
@@ -32,6 +33,7 @@ export class Root extends Component {
 					<Route path="login" component={Login} />
                     <Route path="register" component={Register} />
                     <Route path="users" component={Users} />
+                    <Route path="sessions" component={Sessions} />
                     <Route path="about" component={About} />
                     <Route path="faq" component={FAQ} />
                     <Route path="form/:formid" component={Form} />

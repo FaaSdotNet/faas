@@ -14,6 +14,7 @@ export const PagesLoc = {
 	Form: "form",
 	Elements: "elements",
 	Element: "element",
+	Sessions: "sessions"
 };
 
 export const Users = {
@@ -36,6 +37,17 @@ export const Projects = {
 	CreateSucc: 'PROJECTS_CREATE_SUCC',
 	GetSucc: 'PROJECTS_GET_SUCC',
 	Reset: 'PROJECTS_RESET'
+};
+
+export const Sessions = {
+	Fetch: 'SESSIONS_FETCH',
+	FetchSucc: 'SESSIONS_FETCH_SUCC',
+	Fail: 'SESSIONS_ANY_FAIL',
+	DeleteSucc: 'SESSIONS_DELETE_SUCC',
+	UpdateSucc: 'SESSIONS_UPDATE_SUCC',
+	CreateSucc: 'SESSIONS_CREATE_SUCC',
+	GetSucc: 'SESSIONS_GET_SUCC',
+	Reset: 'SESSIONS_RESET'
 };
 
 export const Forms = {
@@ -65,7 +77,8 @@ export const Pages = {
 	PageSet: 'PAGE_SET',
 	FormSet: 'FORM_SET',
 	ProjectSet: 'PROJECT_SET',
-	ElementSet: 'ELEMENT_SET'
+	ElementSet: 'ELEMENT_SET',
+	SessionSet: 'SESSION_SET'
 };
 
 export const Elements = {

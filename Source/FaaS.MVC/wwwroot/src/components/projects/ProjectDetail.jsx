@@ -25,7 +25,7 @@ export class ProjectDetail extends Component {
         });
 
         result.then( (res) =>  {
-            if(res.ok) {
+            if (res.ok) {
                 res.json()
                     .then((js) => {
                         this.setState(js);

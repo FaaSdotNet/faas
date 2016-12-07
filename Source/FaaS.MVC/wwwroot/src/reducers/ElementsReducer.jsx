@@ -23,22 +23,22 @@ export function elementsReducer(state, action){
 		case Elements.Reset:
 			return {...initialState};
 		case Elements.FetchSucc:
-			console.info("[FORMS] Fetch Success:", payload);
+			console.info("[ELEMENTS] Fetch Success:", payload);
 			return {...state, elements: payload, reload: false};
 		case Elements.Fail:
-			console.error("[FORMS] FAIL:", payload);
+			console.error("[ELEMENTS] FAIL:", payload);
 			return {...state, statusText: "[FAIL]: "+ payload, reload: false};
 		case Elements.CreateSucc:
-			console.info("[FORMS] create:", payload);
+			console.info("[ELEMENTS] create:", payload);
 			return {...state, reload: true, element: payload};
 		case Elements.GetSucc:
-			console.info("[FORMS] get:", payload);
+			console.info("[ELEMENTS] get:", payload);
 			return {...state, project: payload};
 		case Elements.DeleteSucc:
-			console.info("[FORMS] delete:", payload);
+			console.info("[ELEMENTS] delete:", payload);
 			return {...state, reload: true};
 		case Elements.UpdateSucc:
-			console.info("[FORMS] update:", payload);
+			console.info("[ELEMENTS] update:", payload);
 			return {...state, element: payload, reload:true};
 	}
 	return {...state};

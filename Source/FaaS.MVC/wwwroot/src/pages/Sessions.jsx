@@ -1,10 +1,10 @@
 import React, {Component} from "react";
-import {UserListTable} from "../components/users/UsersListTable";
+import {SessionListTable} from "../components/sessions/SessionsListTable";
 import {connect} from "react-redux";
 @connect((store) => {
 	return store;
 })
-export class Users extends Component {
+export class Sessions extends Component {
 
 	constructor(props)
 	{
@@ -16,14 +16,14 @@ export class Users extends Component {
 		return (
 			<div>
 				<h1>
-					Statistics
+					Sessions
 				</h1>
 				<div className="row">
-					<StatisticsListsTable />
+					<SessionsListTable />
 				</div>
 			</div>
 		);
 	}
 }
 
-export default Users;
+export default Sessions;

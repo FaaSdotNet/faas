@@ -64,7 +64,6 @@ export class ElementListRow extends Component{
 
 	handleElementDelete(elementId)
 	{
-		console.log("[DELETE] Element: ", elementId);
 		this.props.dispatch(ElementsActions.del(elementId));
 	}
 
@@ -81,8 +80,7 @@ export class ElementListRow extends Component{
 	 * @returns {XML}
 	 */
 
-	render(){
-		console.log( "[ELEMENT_ROW] :", this.props.element);
+	render() {
 		return (
 			<tr>
 				<td>
@@ -117,26 +115,23 @@ export class ElementListRow extends Component{
 	return store;
 })
 export class ElementsListTable extends Component{
+	
 	/**
 	 * @param props
 	 * @property {Array} projects
 	 */
-	constructor(props){
+	constructor(props) {
 		super(props);
-		console.log("Elements list table: ", this.props);
 		this.rows = [];
 	}
 
-
-
 	render(){
 		const formId = this.props.page.formId;
-		if(this.props.elements.reload) {
+		if (this.props.elements.reload) {
 			this.props.dispatch(ElementsActions.fetchAll(formId));
 		}
 		this.rows = [];
 		const elements = this.props.elements.elements;
-		console.log("Elements: ", elements);
 		elements.forEach( (element) => {
 			this.rows.push(<ElementListRow key={element.id} element={element} />)
 		});

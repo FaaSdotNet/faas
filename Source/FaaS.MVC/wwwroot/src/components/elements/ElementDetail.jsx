@@ -27,7 +27,7 @@ export class ElementDetail extends Component {
                     <strong>Type:</strong>{ElementType.to_text[state.type]}
 				</p>
 				<p>
-                    <strong>Required:</strong>{state.required}
+                    <strong>Required:</strong>{state.required.toString()}
 				</p>
             </div>
        );

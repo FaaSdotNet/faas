@@ -209,6 +209,7 @@ export class ElementCreateComponent extends Component {
                     <option value="2">Radio</option>
                     <option value="3">Range</option>
                     <option value="4">Text</option>
+                    <option value="5">Text Area</option>
                 </select>
 
                 <label htmlFor="required" className="col-md-5 control-label">

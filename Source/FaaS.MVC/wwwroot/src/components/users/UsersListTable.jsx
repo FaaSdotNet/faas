@@ -100,7 +100,6 @@ export class UserListTable extends Component {
 	constructor(props)
 	{
 		super(props);
-		console.log("User List Table: ", this.props);
 		this.rows = [];
 	}
 
@@ -112,7 +111,7 @@ export class UserListTable extends Component {
 		}
 		this.rows = [];
 		const users = this.props.users.users;
-		console.log("Users: ", users);
+
 		users.forEach((user) =>
 		{
 			this.rows.push(<UserListRow key={user.id} userPassed={user}/>)

@@ -19,7 +19,7 @@ export class FormListRow extends Component{
 	 * @param props
 	 * @property {Object} project
 	 */
-	constructor(props){
+	constructor(props) {
 		super(props);
 		this.state = {
 			editOpen:  {open: false},
@@ -61,24 +61,21 @@ export class FormListRow extends Component{
 		this.setState({ editOpen: { open: true }});
 	}
 
-
-
 	/**
 	 * Adds form to specified project
 	 * @param projectId Project Id
 	 */
-	handleAddForm(){
+	handleAddForm() {
 		this.setState({ addElement: { open: true }});
 	}
 
 
-	handleViewForm(formId){
+	handleViewForm(formId) {
 		document.location.href=`/#/form/${formId}`;
 	}
 
 	handleDeleteForm(formId)
 	{
-		console.log("[DELETE] Project: ", formId);
 		this.props.dispatch(FormsActions.del(formId));
 	}
 
@@ -94,7 +91,6 @@ export class FormListRow extends Component{
 	 *
 	 * @returns {XML}
 	 */
-
 	render(){
 		return (
             <tr>
@@ -139,30 +135,27 @@ export class FormListRow extends Component{
 @connect((store) => {
 	return store;
 })
-export class FormsListTable extends Component{
+export class FormsListTable extends Component {
+	
 	/**
 	 * @param props
 	 * @property {Array} forms
 	 */
 	constructor(props){
 		super(props);
-		console.log("Forms List Table: ", this.props);
 		this.rows = [];
 	}
 
-
-
-	render(){
+	render() {
 		let userId = localStorage.getItem('userId');
 
-		if(this.props.forms.reload) {
+		if (this.props.forms.reload) {
 			this.props.dispatch(FormsActions.fetchAll(this.props.page.projectId));
 		}
 
 		this.rows = [];
 		const forms = this.props.forms.forms;
-		console.log("Forms: ", forms);
-		if(forms) {
+		if (forms) {
 			forms.forEach((form) =>
 			{
 				this.rows.push(<FormListRow key={form.id} form={form}/>)

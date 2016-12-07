@@ -17,7 +17,11 @@ namespace FaaS.MVC.Controllers.Api
         protected readonly IUrlHelperFactory urlHelperFactory;
         protected readonly IMapper mapper;
 
-        public DefaultController(IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, IMapper mapper)
+        public DefaultController(IRandomIdService randomId,
+            IActionContextAccessor actionContextAccessor,
+            IHttpContextAccessor httpContextAccessor,
+            IUrlHelperFactory urlHelperFactory,
+            IMapper mapper)
         {
             this.randomId = randomId;
             this.actionContextAccessor = actionContextAccessor;

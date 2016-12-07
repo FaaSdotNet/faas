@@ -28,7 +28,6 @@ export class FormCreateComponent extends Component {
         this.props.closeModal();
     }
 
-
     render() {
         return (
             <div className="form-horizontal">

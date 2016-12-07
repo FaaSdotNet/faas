@@ -32,7 +32,6 @@ export class ProjectListRow extends Component{
 		this.handleDeleteProject = this.handleDeleteProject.bind(this);
     }
 
-
     /**
      * Will open form list for projectId
      * @param projectId Project ID
@@ -67,7 +66,6 @@ export class ProjectListRow extends Component{
 
     handleDeleteProject(projectId)
     {
-    	console.log("[DELETE] Project: ", projectId);
 		this.props.dispatch(ProjectsActions.del(projectId));
     }
 
@@ -122,25 +120,25 @@ export class ProjectListRow extends Component{
 @connect((store) => {
 	return store;
 })
-export class ProjectListTable extends Component{
-    /**
+export class ProjectListTable extends Component {
+    
+	/**
      * @param props
      * @property {Array} projects
      */
-    constructor(props){
+    constructor(props) {
         super(props);
-		console.log("Project List Table: ", this.props);
 		this.rows = [];
     }
 
-    render(){
+    render() {
 		let userId = localStorage.getItem('userId');
 		if (this.props.projects.reload) {
 			this.props.dispatch(ProjectsActions.fetchAll(userId));
 		}
 		this.rows = [];
 		const projects = this.props.projects.projects;
-		console.log("Projects: ", projects);
+
 		projects.forEach( (project) => {
 			this.rows.push(<ProjectListRow key={project.id} project={project} />)
 		});

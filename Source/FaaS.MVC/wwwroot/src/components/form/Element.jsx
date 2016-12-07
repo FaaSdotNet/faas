@@ -3,11 +3,12 @@ import ReactDOM from "react-dom";
 import InputField from './InputField.jsx'
 
 class Element extends React.Component {
+
     constructor(props) {
         super(props);
 
         var options;
-        if(this.props.content.options != null && this.props.content.options != ""){
+        if (this.props.content.options != null && this.props.content.options != "") {
             options = JSON.parse(this.props.content.options);
         }
 		
@@ -17,10 +18,9 @@ class Element extends React.Component {
                         type: this.props.content.type,
                         requiredLabel: false
                      };
-
     };
 
-    setRequiredLabel(value){
+    setRequiredLabel(value) {
         this.setState({requiredLabel: value})
         this.refs["label" + this.state.id].setVisible(value);
     };
@@ -46,18 +46,17 @@ class Asterisk extends React.Component{
         };        
     };
 
-    setVisible(value){
-        //this.setState({visible: value});
+    setVisible(value) {
         this.updateState({visible: value});
         this.forceUpdate();
     };
 
-    render(){
-        if(!this.state.visible)
+    render() {
+        if (!this.state.visible)
             return(
                 <div/>
             );
-        else{
+        else {
             return(
                 <font color="red">
                     *
@@ -76,17 +75,17 @@ class RequiredLabel extends React.Component{
         };        
     };
 
-    setVisible(value){
+    setVisible(value) {
         this.setState({visible: value});
     };
 
-    render(){
-        if(!this.state.visible)
+    render() {
+        if (!this.state.visible)
             return(
                 <div>
                 </div>
             );
-        else{
+        else {
             return(
                 <div>
                     <font color="red">

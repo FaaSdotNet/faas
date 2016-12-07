@@ -13,7 +13,6 @@ export class Forms extends Component {
 	constructor(props)
 	{
 		super(props);
-		console.log("[FORMS] Props: ", this.props);
 		this.handleAdd = this.handleAdd.bind(this);
 		this.state = {
 			createOpen: {open: false}

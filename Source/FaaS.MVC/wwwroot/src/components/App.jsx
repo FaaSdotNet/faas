@@ -9,14 +9,12 @@ import { Grid, Row, Col } from "react-bootstrap";
 import {connect} from "react-redux";
 
 @connect((store) =>  {
-	console.log("AppComp: ", store);
 	return store;
 })
 class AppComponent extends Component {
 
     constructor(props){
         super(props);
-		console.log(this.props);
     }
 
     render() {

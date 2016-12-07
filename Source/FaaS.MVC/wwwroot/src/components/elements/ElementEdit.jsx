@@ -61,7 +61,7 @@ class ElementEdit extends Component {
 
     handleRequiredChange(event) {
         this.setState({
-            required: event.target.value
+            required: event.target.checked
         });
     }
 
@@ -80,6 +80,10 @@ class ElementEdit extends Component {
                 res.json()
                     .then((js) => {
                         this.setState(js);
+                        if (this.state.required)
+                        {
+                            this.refs.editRequired.checked = true;
+                        }
                     });
             }
         });
@@ -247,8 +251,7 @@ class ElementEdit extends Component {
                     Required
                 </label>
                 <input ref="editRequired" type="checkbox" id="Required"
-                       onChange={this.handleRequiredChange} className="form-control"
-                       value={this.state.required} />
+                       onChange={this.handleRequiredChange} className="form-control" />
 
                 <br/>
                 <input type="button" 
