@@ -5,10 +5,15 @@ import InputField from './InputField.jsx'
 class Element extends React.Component {
     constructor(props) {
         super(props);
+
+        var options;
+        if(this.props.content.options != null && this.props.content.options != ""){
+            options = JSON.parse(this.props.content.options);
+        }
 		
         this.state = {  id: this.props.content.id,
                         description: this.props.content.description,
-                        options: JSON.parse(this.props.content.options),
+                        options: options,
                         type: this.props.content.type,
                         requiredLabel: false
                      };
