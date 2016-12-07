@@ -56,13 +56,14 @@ namespace FaaS.Entities.Repositories
             }
 
             Element elementType = _context.Elements.SingleOrDefault(e => e.Id == element.Id);
-            elementType.Form = _context.Forms.SingleOrDefault(f => f.Id == elementType.FormId);
-            Session elementSession = _context.Sessions.SingleOrDefault(s => s.Id == session.Id);
-
             if (elementType == null)
             {
                 throw new ArgumentException("element not in DB");
             }
+
+            elementType.Form = _context.Forms.SingleOrDefault(f => f.Id == elementType.FormId);
+            Session elementSession = _context.Sessions.SingleOrDefault(s => s.Id == session.Id);
+
             if (elementSession == null)
             {
                 throw new ArgumentException("session not in DB");

@@ -22,6 +22,13 @@ export class Projects extends Component {
 		this.setState({createOpen: {open: true}});
 	}
 
+	closeModal()
+	{
+		this.setState({
+			createOpen: false
+		});
+	}
+
 	render()
 	{
 		return (
@@ -42,7 +49,7 @@ export class Projects extends Component {
 					Add New Project
 				</button>
 				<ModalWrapper title="Create project" open={this.state.createOpen}>
-					<ProjectCreate  />
+					<ProjectCreate closeModal={this.closeModal.bind(this)} />
 				</ModalWrapper>
 			</div>
 		);

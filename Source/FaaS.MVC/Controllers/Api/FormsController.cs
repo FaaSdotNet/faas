@@ -121,13 +121,13 @@ namespace FaaS.MVC.Controllers.Api
 
         // POST forms
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateFormViewModel form)
+        public async Task<IActionResult> Post([FromBody] FormViewModel form)
         {
             try
             {
                 form.Created = DateTime.Now;
-                var formDto = mapper.Map<CreateFormViewModel, Form>(form);
-                var projectId = form.SelectedProjectId;
+                var formDto = mapper.Map<FormViewModel, Form>(form);
+                var projectId = form.ProjectId;
                 var projectDto = await projectService.Get(projectId);
                 var result = await formService.Add(projectDto, formDto);
 

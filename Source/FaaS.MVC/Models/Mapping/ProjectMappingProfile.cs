@@ -18,17 +18,6 @@ namespace FaaS.MVC.Models.Mapping
                .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.Created))
                .ForMember(dst => dst.Description, opt => opt.MapFrom(src => src.Description))
                .ForMember(dst => dst.User, opt => opt.Ignore());
-
-            CreateMap<DataTransferModels.Project, ProjectDetailsViewModel>()
-                .IncludeBase<DataTransferModels.Project, ProjectViewModel>()
-                .ForMember(dst => dst.UserId, opt => opt.MapFrom(src => src.User.Id));
-
-            CreateMap<CreateProjectViewModel, DataTransferModels.Project>()
-                .ForMember(dst => dst.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(dst => dst.ProjectName, opt => opt.MapFrom(src => src.ProjectName))
-                .ForMember(dst => dst.Created, opt => opt.MapFrom(src => src.Created))
-                .ForMember(dst => dst.User, opt => opt.Ignore())
-                .ForMember(dst => dst.Description, opt => opt.MapFrom(src => src.Description));
         }
     }
 }

@@ -20,15 +20,15 @@ class UserEdit extends Component {
     }
 
     handleUserNameChange(event) {
-        this.setState({userName: event.target.value,
-            googleId: this.state.googleId,
-            registered: this.state.registered});
+        this.setState({
+            userName: event.target.value
+        });
     }
 
     handleGoogleIdChange(event) {
-        this.setState({userName: this.state.userName,
-            googleId: event.target.value,
-            registered: this.state.registered});
+        this.setState({
+            googleId: event.target.value
+        });
     }
 
     componentWillMount() {

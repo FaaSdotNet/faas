@@ -54,8 +54,6 @@ export class ElementListRow extends Component{
 		this.setState({ editOpen: { open: true }});
 	}
 
-
-
 	/**
 	 * Adds form to specified project
 	 * @param projectId Project Id
@@ -68,6 +66,14 @@ export class ElementListRow extends Component{
 	{
 		console.log("[DELETE] Element: ", elementId);
 		this.props.dispatch(ElementsActions.del(elementId));
+	}
+
+	closeModal()
+	{
+		this.setState({
+			addElement: false,
+			editOpen: false
+		});
 	}
 
 	/**
@@ -94,8 +100,8 @@ export class ElementListRow extends Component{
 					<button type="button" className="btn btn-default btn-md" onClick={ () => this.handleEditClick()}>
 						<span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-edit" aria-hidden="true"/>
 					</button>
-					<ModalWrapper title="Edit Project" open={this.state.editOpen}  >
-						<ElementEdit element={this.props.element} />
+					<ModalWrapper title="Edit Element" open={this.state.editOpen}  >
+						<ElementEdit element={this.props.element} closeModal={this.closeModal.bind(this)} />
 					</ModalWrapper>
 				</td>
 				<td>

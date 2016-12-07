@@ -21,12 +21,12 @@ export class ProjectCreateComponent extends Component {
 		const projectDesc = this.refs.projectDescription.state.value;
 
 		const payload = {
-
 			ProjectName: projectName,
 			Description: projectDesc
 		};
 
 		this.props.dispatch(ProjectActions.create(this.props.user, payload));
+		this.props.closeModal();
 	}
 
 	render()

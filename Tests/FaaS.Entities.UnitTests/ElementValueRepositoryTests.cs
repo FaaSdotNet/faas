@@ -241,6 +241,20 @@ namespace FaaS.Entities.UnitTests
         /// </summary>
         public ElementValueRepositoryTests()
         {
+            // Mock forms
+            Form testForm1 = GetTestFormWithoutElements(1);
+            Form testForm2 = GetTestFormWithoutElements(2);
+            Form testForm3 = GetTestFormWithoutElements(3);
+            Form testForm4 = GetTestFormWithoutElements(4);
+
+            var formsData = new List<Form>
+            {
+                testForm1,
+                testForm2,
+                testForm3,
+                testForm4
+            };
+
             // Mock element values
             ElementValue testElementValue1 = GetTestElementValueWithoutElementAndSession(1);
             ElementValue testElementValue2 = GetTestElementValueWithoutElementAndSession(2);
@@ -283,6 +297,19 @@ namespace FaaS.Entities.UnitTests
                 testElement4
             };
 
+            testForm1.Elements = new List<Element>
+            {
+                testElement1
+            };
+            testForm2.Elements = new List<Element>
+            {
+                testElement2,
+                testElement3
+            };
+            testElement1.FormId = testForm1.Id;
+            testElement2.FormId = testForm2.Id;
+            testElement3.FormId = testForm2.Id;
+
             // Mock sessions
             Session testSession1 = GetTestSessionWithoutElementValues(1);
 
@@ -292,11 +319,13 @@ namespace FaaS.Entities.UnitTests
             };
 
             // Mock context
+            var formsSubstitute = SubstituteQueryable(formsData);
             var elementsSubstitute = SubstituteQueryable(elementsData);
             var optionsSubstitute = SubstituteQueryable(elementValuesData);
             var sessionsSubstitute = SubstituteQueryable(sessionsData);
 
             var contextSubsitute = Substitute.For<FaaSContext>();
+            contextSubsitute.Forms.Returns(formsSubstitute);
             contextSubsitute.Elements.Returns(elementsSubstitute);
             contextSubsitute.ElementValues.Returns(optionsSubstitute);
             contextSubsitute.Sessions.Returns(sessionsSubstitute);

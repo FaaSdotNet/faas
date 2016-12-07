@@ -30,10 +30,8 @@ class ElementEdit extends Component {
 
     handleDescriptionChange(event) {
         this.setState({
-            description: event.target.value,
-            options: this.state.options,
-            type: this.state.type,
-            required: this.state.required});
+            description: event.target.value
+        });
     }
 
     handleOptionsChange(event) {
@@ -42,10 +40,8 @@ class ElementEdit extends Component {
         const options = JSON.parse(this.state.options);
         options[id] = event.target.value;
 
-        this.setState({description: this.state.description,
-            options: JSON.stringify(options),
-            type: this.state.type,
-            required: this.state.required
+        this.setState({
+            options: JSON.stringify(options)
         });
     }
 
@@ -54,23 +50,17 @@ class ElementEdit extends Component {
             this.state.options = "";
         }
 
-        if(event.target.value == "3" && event.target.currentTarger != "3"){
+        if (event.target.value == "3" && event.target.currentTarger != "3") {
             this.setState({range: {min: "0", max: "100"}});
         }
 
         this.setState({
-            description: this.state.description,
-            options: this.state.options,
-            type: event.target.value,
-            required: this.state.required
+            type: event.target.value
         });
     }
 
     handleRequiredChange(event) {
         this.setState({
-            description: this.state.description,
-            options: this.state.options,
-            type: this.state.type,
             required: event.target.value
         });
     }
@@ -94,7 +84,7 @@ class ElementEdit extends Component {
             }
         });
 
-        if(this.state.type == "3"){
+        if (this.state.type == "3") {
             this.setState({range: JSON.parse(this.state.options)});
         } else {
             this.setState({range: {min: "0", max: "100"}});
@@ -104,7 +94,7 @@ class ElementEdit extends Component {
     handleSubmit(event) {
         const description = this.state.description;
         var options;
-        if(this.state.type != "3"){
+        if (this.state.type != "3") {
 		    options = this.state.options;
         } else {
             options = JSON.stringify(this.state.range);
@@ -117,13 +107,13 @@ class ElementEdit extends Component {
 			Description: description,
 			Options: options,
 			Type: type,
-			Required: required
+			Required: required,
+            FormId: this.props.formId
 		};
 
         this.props.dispatch(ElementsActions.update(payload));
-
+        this.props.closeModal();
     }
-
 
     handleAdd(event) {
         if (this.state.type != "0" && this.state.type != "2")
@@ -143,10 +133,7 @@ class ElementEdit extends Component {
             options[1] = "";
         }
         this.setState({
-            description: this.state.description,
-            options: JSON.stringify(options),
-            type: this.state.type,
-            required: this.state.required
+            options: JSON.stringify(options)
         });
     }
 
@@ -162,10 +149,9 @@ class ElementEdit extends Component {
             options[i] = optionsArray[i-1];
         }
         
-        this.setState({description: this.state.description,
-            options: JSON.stringify(options),
-            type: this.state.type,
-            required: this.state.required});
+        this.setState({
+            options: JSON.stringify(options)
+        });
     }
 
     handleRangeChange(event){
@@ -195,10 +181,9 @@ class ElementEdit extends Component {
             }
         }
 
-
         var optionsDiv;
 
-        if(this.state.type != "3"){
+        if (this.state.type != "3") {
             optionsDiv =
                 <div>
                     <label htmlFor="options" className="col-md-5 control-label">
@@ -234,7 +219,6 @@ class ElementEdit extends Component {
 
         return (
             <div className="form-horizontal">
-                <h4>Edit Element</h4>
 
                 <label htmlFor="description" className="col-md-5 control-label">
                     Description

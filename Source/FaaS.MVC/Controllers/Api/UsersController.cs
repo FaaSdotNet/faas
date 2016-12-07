@@ -27,13 +27,18 @@ namespace FaaS.MVC.Controllers.Api
 
         private readonly ILogger<UsersController> logger;
 
-
-        public UsersController(IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, IMapper mapper, IUserService userService, ILogger<UsersController> logger) : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
+        public UsersController(IRandomIdService randomId,
+            IActionContextAccessor actionContextAccessor,
+            IHttpContextAccessor httpContextAccessor,
+            IUrlHelperFactory urlHelperFactory,
+            IMapper mapper,
+            IUserService userService,
+            ILogger<UsersController> logger)
+            : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
         {
             this.userService = userService;
             this.logger = logger;
         }
-
 
         // GET users
         [HttpGet]
@@ -49,9 +54,7 @@ namespace FaaS.MVC.Controllers.Api
                 return Unauthorized();
             }
 
-
             var users = await userService.GetAll();
-
 
             // Apply limit
             if (limit > 0)
@@ -106,12 +109,12 @@ namespace FaaS.MVC.Controllers.Api
 
         // POST projects
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]CreateUserViewModel user)
+        public async Task<IActionResult> Post([FromBody] UserViewModel user)
         {
             try
             {
                 user.Registered = DateTime.Now;
-                var userDto = mapper.Map<CreateUserViewModel, User>(user);
+                var userDto = mapper.Map<UserViewModel, User>(user);
                 var result = await userService.Add(userDto);
 
                 var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);

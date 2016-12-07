@@ -46,7 +46,6 @@ export class ProjectListRow extends Component{
 		this.props.dispatch(FormsActions.reset());
 		this.props.dispatch(PagesActions.setProject(projectId));
 		document.location.href="/#/forms/";
-
 	}
 
 	/**
@@ -58,16 +57,12 @@ export class ProjectListRow extends Component{
 		this.setState({ editOpen: { open: true }});
 	}
 
-
-
 	/**
 	 * Adds form to specified project
 	 * @param projectId Project Id
 	 */
     handleAddForm(projectId){
 		this.setState({ addForm: { open: true }});
-
-
 	}
 
     handleDeleteProject(projectId)
@@ -76,11 +71,18 @@ export class ProjectListRow extends Component{
 		this.props.dispatch(ProjectsActions.del(projectId));
     }
 
-    /**
+	closeModal()
+	{
+		this.setState({
+			addForm: false,
+			editOpen: false
+		});
+	}
+
+	/**
      *
      * @returns {XML}
      */
-
     render(){
         return (
             <tr>
@@ -96,8 +98,8 @@ export class ProjectListRow extends Component{
                     <button type="button" className="btn btn-default btn-md" onClick={ () => this.handleAddForm(this.props.project.id)}>
 						<span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-plus" aria-hidden="true"/>
 					</button>
-					<ModalWrapper title="Edit Project" open={this.state.addForm}  >
-						<FormCreate projectId={this.props.project.id} />
+					<ModalWrapper title="Add Form" open={this.state.addForm}  >
+						<FormCreate projectId={this.props.project.id} closeModal={this.closeModal.bind(this)} />
 					</ModalWrapper>
                 </td>
 				<td>
@@ -105,7 +107,7 @@ export class ProjectListRow extends Component{
 						<span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-edit" aria-hidden="true"/>
 					</button>
 					<ModalWrapper title="Edit Project" open={this.state.editOpen}  >
-						<ProjectEdit project={this.props.project} />
+						<ProjectEdit project={this.props.project} closeModal={this.closeModal.bind(this)} />
 					</ModalWrapper>
 				</td>
 				<td>
@@ -133,7 +135,7 @@ export class ProjectListTable extends Component{
 
     render(){
 		let userId = localStorage.getItem('userId');
-		if(this.props.projects.reload) {
+		if (this.props.projects.reload) {
 			this.props.dispatch(ProjectsActions.fetchAll(userId));
 		}
 		this.rows = [];

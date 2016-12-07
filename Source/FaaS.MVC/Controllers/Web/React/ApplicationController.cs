@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using AutoMapper;
-using FaaS.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FaaS.MVC.Controllers.Web.React
 {

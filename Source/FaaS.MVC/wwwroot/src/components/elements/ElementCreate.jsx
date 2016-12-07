@@ -29,10 +29,9 @@ export class ElementCreateComponent extends Component {
     }
 
     handleDescriptionChange(event) {
-        this.setState({description: event.target.value,
-            options: this.state.options,
-            type: this.state.type,
-            required: this.state.required});
+        this.setState({
+            description: event.target.value,
+        });
     }
 
     handleOptionsChange(event) {
@@ -41,10 +40,8 @@ export class ElementCreateComponent extends Component {
         let options = JSON.parse(this.state.options);
         options[id] = event.target.value;
 
-        this.setState({description: this.state.description,
+        this.setState({
             options: JSON.stringify(options),
-            type: this.state.type,
-            required: this.state.required
         });
     }
 
@@ -54,18 +51,12 @@ export class ElementCreateComponent extends Component {
         }
 
         this.setState({
-            description: this.state.description,
-            options: this.state.options,
-            type: event.target.value,
-            required: this.state.required
+            type: event.target.value
         });
     }
 
     handleRequiredChange(event) {
         this.setState({
-            description: this.state.description,
-            options: this.state.options,
-            type: this.state.type,
             required: event.target.value
         });
     }
@@ -74,7 +65,7 @@ export class ElementCreateComponent extends Component {
 	{
 		const description = this.state.description;
         var options;
-        if(this.state.type != "3"){
+        if (this.state.type != "3") {
 		    options = this.state.options;
         } else {
             options = JSON.stringify(this.state.range);
@@ -91,7 +82,7 @@ export class ElementCreateComponent extends Component {
 		};
 
 		this.props.dispatch(ElementsActions.create(null, payload));
-
+        this.props.closeModal();
 	}
 
     handleAdd(event) {
@@ -112,10 +103,7 @@ export class ElementCreateComponent extends Component {
             options[1] = "";
         }
         this.setState({
-            description: this.state.description,
-            options: JSON.stringify(options),
-            type: this.state.type,
-            required: this.state.required
+            options: JSON.stringify(options)
         });
     }
 
@@ -131,10 +119,9 @@ export class ElementCreateComponent extends Component {
             options[i] = optionsArray[i-1];
         }
         
-        this.setState({description: this.state.description,
-            options: JSON.stringify(options),
-            type: this.state.type,
-            required: this.state.required});
+        this.setState({
+            options: JSON.stringify(options)
+        });
     }
 
     handleRangeChange(event){
@@ -166,7 +153,7 @@ export class ElementCreateComponent extends Component {
 
         var optionsDiv;
 
-        if(this.state.type != "3"){
+        if (this.state.type != "3") {
             optionsDiv =
                 <div>
                     <label htmlFor="options" className="col-md-5 control-label">
@@ -201,8 +188,6 @@ export class ElementCreateComponent extends Component {
         }
         return (
             <div className="form-horizontal">
-                <h4>Create New Element</h4>
-
                 <label htmlFor="description" className="col-md-5 control-label">
                     Description
                 </label>

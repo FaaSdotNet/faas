@@ -14,5 +14,7 @@ namespace FaaS.MVC.Models
         public DateTime Created { get; set; }
 
         public string Description { get; set; }
+
+        public Guid ProjectId { get; set; }
     }
 }

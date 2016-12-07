@@ -120,7 +120,7 @@ namespace FaaS.MVC.Controllers.Api
 
         // POST projects
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]CreateProjectViewModel project)
+        public async Task<IActionResult> Post([FromBody] ProjectViewModel project)
         {
             try
             {
@@ -136,7 +136,7 @@ namespace FaaS.MVC.Controllers.Api
 
 
                 project.Created = DateTime.Now;
-                var projectDto = mapper.Map<CreateProjectViewModel, Project>(project);
+                var projectDto = mapper.Map<ProjectViewModel, Project>(project);
                 if (projectDto == null)
                 {
                     logger.LogError("Mapping problem!!!!");

@@ -82,6 +82,14 @@ export class FormListRow extends Component{
 		this.props.dispatch(FormsActions.del(formId));
 	}
 
+	closeModal()
+	{
+		this.setState({
+			addElement: false,
+			editOpen: false
+		});
+	}
+
 	/**
 	 *
 	 * @returns {XML}
@@ -107,8 +115,8 @@ export class FormListRow extends Component{
                     <button type="button" className="btn btn-default btn-md" onClick={ () => this.handleAddForm(this.props.forms.id)}>
                         <span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-plus" aria-hidden="true"/>
                     </button>
-                    <ModalWrapper title="Create element" open={this.state.addElement}  >
-                        <ElementCreate formId={this.props.form.id} />
+                    <ModalWrapper title="Create Element" open={this.state.addElement}  >
+                        <ElementCreate formId={this.props.form.id} closeModal={this.closeModal.bind(this)} />
                     </ModalWrapper>
                 </td>
                 <td>
@@ -116,7 +124,7 @@ export class FormListRow extends Component{
                         <span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-edit" aria-hidden="true"/>
                     </button>
                     <ModalWrapper title="Edit Project" open={this.state.editOpen}  >
-                        <FormEdit form={this.props.form} />
+                        <FormEdit form={this.props.form} closeModal={this.closeModal.bind(this)} />
                     </ModalWrapper>
                 </td>
                 <td>

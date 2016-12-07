@@ -25,6 +25,13 @@ export class Forms extends Component {
 		this.setState({createOpen: {open: true}});
 	}
 
+	closeModal()
+	{
+		this.setState({
+			createOpen: false
+		});
+	}
+
 	render()
 	{
 		if(!this.props.page.projectId) {
@@ -50,7 +57,7 @@ export class Forms extends Component {
 					Add New Form
 				</button>
 				<ModalWrapper title="Create form" open={this.state.createOpen}>
-					<FormCreate projectId={this.props.page.projectId} />
+					<FormCreate projectId={this.props.page.projectId} closeModal={this.closeModal.bind(this)} />
 				</ModalWrapper>
 			</div>
 		);

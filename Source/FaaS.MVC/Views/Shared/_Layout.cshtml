@@ -18,111 +18,18 @@
     </environment>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">FaaS</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="ApplicationContoller" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="ApplicationContoller" asp-action="Index">React </a></li>
-                    <li class="dropdown-toggle" style="display:@(ViewData["userName"] == null ? "none" : "inline")">
-                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" asp-controller="Projects" asp-action="Index">
-                            Projects
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a asp-controller="Projects" asp-action="Create">Create a new Project</a></li>
-                            @if (ViewBag.ProjectDictionary != null)
-                            {
-                                foreach (var item in ViewBag.ProjectDictionary)
-                                {
-                                    if (ViewData["projectName"] == item.Value)
-                                    {
-                                        <li>
-                                            <a asp-controller="Projects" asp-action="Index" asp-route-id="@item.Key">
-                                                <span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;@item.Value
-                                            </a>
-                                        </li>
-                                    }
-                                    else
-                                    {
-                                        <li>
-                                            <a asp-controller="Projects" asp-action="Index" asp-route-id="@item.Key">@item.Value</a>
-                                        </li>
-                                    }
-                                }
-                            }
-                        </ul>
-                    </li>
-                    <li class="dropdown-toggle" style="display:@(ViewData["projectName"] == null ? "none" : "inline")">
-                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" asp-controller="Forms" asp-action="Index">
-                            Forms
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a asp-controller="Forms" asp-action="Create">Create a new Form</a></li>
-                            @if (ViewBag.FormDictionary != null)
-                            {
-                                foreach (var item in ViewBag.FormDictionary)
-                                {
-                                    if (ViewData["formName"] == item.Value)
-                                    {
-                                        <li>
-                                            <a asp-controller="Forms" asp-action="Index" asp-route-id="@item.Key">
-                                                <span class="glyphicon glyphicon-ok"></span>&nbsp;&nbsp;@item.Value
-                                            </a>
-                                        </li>
-                                    }
-                                    else
-                                    {
-                                        <li>
-                                            <a asp-controller="Forms" asp-action="Index" asp-route-id="@item.Key">@item.Value</a>
-                                        </li>
-                                    }
-                                }
-                            }
-                        </ul>
-                    </li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-                <ul class="nav navbar-nav" style="float:right">
-                    <li class="dropdown-toggle" style="display:@(ViewData["userName"] == null ? "none" : "inline")">
-                        <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" asp-controller="Users" asp-action="Index">
-                            <img style="display:inline" class="img-responsive img-circle" src="~/images/default_user.png" alt="defaut_user" height="24" width="24" />
-                            &nbsp;@ViewData["userName"]
-                            <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a asp-controller="Users" asp-action="Details">Details</a></li>
-                            <li><a asp-controller="Home" asp-action="LogOut">Log Out</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2016 - Form as a Service</p>
-        </footer>
     </div>
+    <hr />
+    <footer>
+        <p style="padding-left:5em">&copy; 2016 - Form as a Service</p>
+    </footer>
 
     <environment names="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
-        <script src="~/js/Element.js"></script>
     </environment>
     <environment names="Staging,Production">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"

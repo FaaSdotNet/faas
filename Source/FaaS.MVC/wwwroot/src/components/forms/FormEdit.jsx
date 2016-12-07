@@ -69,10 +69,12 @@ class FormEdit extends Component {
 			Id: this.props.form.id,
 			formName: formName,
 			Description: description,
-			Created: this.state.created
+			Created: this.state.created,
+			ProjectId: this.props.projectId
 		};
 
 		this.props.dispatch(FormsActions.update(payload));
+		this.props.closeModal();
 	}
 
 	render()

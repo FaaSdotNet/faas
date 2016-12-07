@@ -3,6 +3,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FaaS.MVC.Models
 {
+    public enum InputType
+    {
+        CheckBox,
+        Date,
+        Radio,
+        Range,
+        Text,
+        TextArea
+    }
+
     public class ElementViewModel
     {
         [Display(Name = "ID")]
@@ -15,5 +25,7 @@ namespace FaaS.MVC.Models
         public InputType Type { get; set; }
 
         public bool Required { get; set; }
+
+        public Guid FormId { get; set; }
     }
 }

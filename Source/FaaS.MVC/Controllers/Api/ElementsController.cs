@@ -121,11 +121,11 @@ namespace FaaS.MVC.Controllers.Api
 
         // POST elements
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateElementViewModel element)
+        public async Task<IActionResult> Post([FromBody] ElementViewModel element)
         {
             try
             {
-                var elementDto = mapper.Map<CreateElementViewModel, Element>(element);
+                var elementDto = mapper.Map<ElementViewModel, Element>(element);
                 var formId = element.FormId;
                 var formDto = await formService.Get(formId);
                 var result = await elementService.Add(formDto, elementDto);

@@ -24,18 +24,14 @@ export class ProjectEdit extends Component {
 	handleProjectNameChange(event)
 	{
 		this.setState({
-			projectName: event.target.value,
-			description: this.state.description,
-			created: this.state.created
+			projectName: event.target.value
 		});
 	}
 
 	handleDescriptionChange(event)
 	{
 		this.setState({
-			projectName: this.state.projectName,
-			description: event.target.value,
-			created: this.state.created
+			description: event.target.value
 		});
 	}
 
@@ -75,13 +71,13 @@ export class ProjectEdit extends Component {
 		};
 
 		this.props.dispatch(ProjectsActions.update(payload));
+		this.props.closeModal();
 	}
 
 	render()
 	{
 		return (
 			<div className="form-horizontal">
-				<h4>Edit Project</h4>
 				<label htmlFor="projectName" className="col-md-5 control-label">
 					Project Name
 				</label>
