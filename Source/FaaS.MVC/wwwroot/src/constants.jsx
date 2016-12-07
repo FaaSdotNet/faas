@@ -85,11 +85,13 @@ export const ElementType = {
 		'Date',
 		'Radio',
 		'Range',
-		'Text'
+		'Text',
+        'TextArea'
 	],
 	CheckBox: 0,
 	Date: 1,
 	Radio: 2,
 	Range: 3,
-	Text: 4
+	Text: 4,
+    TextArea: 5
 };

@@ -5,7 +5,6 @@
 /// <reference path="lib/jquery-validation/dist/jquery.validate.js" />
 /// <reference path="lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js" />
 /// <reference path="out/app.out.js" />
-/// <reference path="out/form.out.js" />
 /// <reference path="src/actions/formsActions.js" />
 /// <reference path="src/actions/projectsActions.js" />
 /// <reference path="src/actions/usersactions.js" />
