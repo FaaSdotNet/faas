@@ -146,11 +146,9 @@ export class FormsListTable extends Component {
 		this.rows = [];
 	}
 
-	render() {
-		let userId = localStorage.getItem('userId');
-
-		if (this.props.forms.reload) {
-			this.props.dispatch(FormsActions.fetchAll(this.props.page.projectId));
+	render(){
+		if(this.props.forms.reload) {
+			this.props.dispatch(FormsActions.fetchAll(this.props.page.projectId, this.props.user.userId));
 		}
 
 		this.rows = [];

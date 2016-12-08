@@ -10,7 +10,7 @@ namespace FaaS.Services
     public interface IUserService
     {
         /// <summary>
-        /// Adds a new user to the database
+        /// Adds a new user to the database, if user exists, it updates the google token
         /// </summary>
         /// <param name="user">new user</param>
         /// <returns>Newly created user</returns>
@@ -24,11 +24,18 @@ namespace FaaS.Services
         Task<User> Get(Guid id);
 
         /// <summary>
-        /// Gets user with given google id
+        /// Gets user with given email
         /// </summary>
-        /// <param name="googleId">google id of the user</param>
-        /// <returns>user with given google id</returns>
-        Task<User> Get(string googleId);
+        /// <param name="email">email of the user</param>
+        /// <returns>user with given email</returns>
+        Task<User> Get(string email);
+
+        /// <summary>
+        /// Gets user with given token
+        /// </summary>
+        /// <param name="token">user token</param>
+        /// <returns>user with given token</returns>
+        Task<User> GetByToken(string token);
 
         /// <summary>
         /// Gets all users

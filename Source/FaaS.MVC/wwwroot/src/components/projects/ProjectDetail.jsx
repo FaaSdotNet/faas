@@ -15,7 +15,7 @@ export class ProjectDetail extends Component {
     }
 
     componentWillMount() {
-        const result = fetch(`/api/v1.0/projects/${this.projectId}`,
+        const result = fetch(`/api/v1.0/projects/${this.projectId}?userId=${this.props.user.userId}`,
         {
             method: "GET",
             credentials: "same-origin",

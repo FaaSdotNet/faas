@@ -11,6 +11,7 @@ const COLL_TYPE = Projects;
 const FAIL_TYPE = COLL_TYPE.Fail;
 const COLL_NAME = "projects";
 const URL_ELEM = `/${COLL_NAME}/`;
+const URL_ELEM_QUERY = `/${COLL_NAME}?`
 
 export class ProjectsActions {
 
@@ -22,7 +23,7 @@ export class ProjectsActions {
 
 	static fetchAll(userId) {
 		return (dispatch) => {
-			apiClient.get(URL_ELEM)
+			apiClient.get(URL_ELEM_QUERY + "userId=" + userId)
 				.then((res) => {
 					console.log(`[FETCH] ${COLL_NAME}: `, res);
 					dispatch({type: COLL_TYPE.FetchSucc, payload: res.data});
@@ -65,9 +66,9 @@ export class ProjectsActions {
 			});
 		}
 	}
-	static get(id){
+	static get(id, userId){
 		return (dispatch) => {
-			apiClient.get(URL_ELEM + id)
+			apiClient.get(URL_ELEM + id + "?userId=" + userId)
 				.then(res => {
 					console.log(`[GET] ${COLL_NAME}: `, res);
 					dispatch({

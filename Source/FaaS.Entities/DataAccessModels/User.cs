@@ -11,10 +11,16 @@ namespace FaaS.Entities.DataAccessModels
         public string Name { get; set; }
 
         [Required]
-        public string GoogleId { get; set; }
+        public string GoogleToken { get; set; }
+        
+        [Required]
+        public string Email { get; set; }
 
         [Required]
         public DateTime Registered { get; set; }
+
+        [Required]
+        public string AvatarUrl { get; set; }
 
         /// <summary>
         /// Collection of all projects for user. Effectively creating 1:N relation.

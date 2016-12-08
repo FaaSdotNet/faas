@@ -64,19 +64,19 @@ namespace FaaS.Entities.UnitTests
         {
             var newUser = new DataTransferModels.User
             {
-                GoogleId = "104560124403688998123",
+                GoogleToken = "104560124403688998123",
                 Registered = DateTime.Now
             };
             DataTransferModels.User actualUser = await _UserRepository.Add(newUser);
 
             // Checks returned value
             Assert.NotNull(actualUser);
-            Assert.Equal(newUser.GoogleId, actualUser.GoogleId);
+            Assert.Equal(newUser.GoogleToken, actualUser.GoogleToken);
             Assert.Equal(newUser.Registered, actualUser.Registered);
             Assert.NotEqual(Guid.Empty, actualUser.Id);
 
             // Check storage is persistant
-            Assert.NotNull(_UserRepository.Get(newUser.GoogleId));
+            Assert.NotNull(_UserRepository.Get(newUser.GoogleToken));
         }
 
         [Fact]
@@ -90,7 +90,7 @@ namespace FaaS.Entities.UnitTests
         {
             var newUser = new DataTransferModels.User
             {
-                GoogleId = "NotInDatabaseGoogleId",
+                GoogleToken = "NotInDatabaseGoogleId",
                 Registered = DateTime.Now
             };
 
@@ -102,14 +102,14 @@ namespace FaaS.Entities.UnitTests
         {
             var actualUser = await _UserRepository.Get("TestGoogleId1");
 
-            actualUser.GoogleId = "NotHisPreviousGoogleId";
+            actualUser.GoogleToken = "NotHisPreviousGoogleId";
 
             actualUser = await _UserRepository.Update(actualUser);
             actualUser = await _UserRepository.Get("NotHisPreviousGoogleId");
 
             // Checks returned value
             Assert.NotNull(actualUser);
-            Assert.Equal("NotHisPreviousGoogleId", actualUser.GoogleId);
+            Assert.Equal("NotHisPreviousGoogleId", actualUser.GoogleToken);
             Assert.NotEqual(Guid.Empty, actualUser.Id);
         }
 
@@ -124,7 +124,7 @@ namespace FaaS.Entities.UnitTests
         {
             var newUser = new DataTransferModels.User
             {
-                GoogleId = "NotInDatabaseGoogleId",
+                GoogleToken = "NotInDatabaseGoogleId",
                 Registered = DateTime.Now
             };
 
@@ -140,7 +140,7 @@ namespace FaaS.Entities.UnitTests
            
             // Checks returned value
             Assert.NotNull(actualUser);
-            Assert.Equal("TestGoogleId1", actualUser.GoogleId);
+            Assert.Equal("TestGoogleId1", actualUser.GoogleToken);
             Assert.NotEqual(Guid.Empty, actualUser.Id);
 
             actualUser = await _UserRepository.Get("TestGoogleId1");
@@ -155,7 +155,7 @@ namespace FaaS.Entities.UnitTests
         {
             var newUser = new DataTransferModels.User
             {
-                GoogleId = "104560124403688998123",
+                GoogleToken = "104560124403688998123",
                 Registered = DateTime.Now,
             };
             var projects = new[]
@@ -169,12 +169,12 @@ namespace FaaS.Entities.UnitTests
 
             // Checks returned value
             Assert.NotNull(actualUser);
-            Assert.Equal(newUser.GoogleId, actualUser.GoogleId);
+            Assert.Equal(newUser.GoogleToken, actualUser.GoogleToken);
             Assert.Equal(newUser.Registered, actualUser.Registered);
             Assert.NotEqual(Guid.Empty, actualUser.Id);
 
             // Checks storage is persistant
-            Assert.NotNull(_UserRepository.Get(newUser.GoogleId));
+            Assert.NotNull(_UserRepository.Get(newUser.GoogleToken));
         }
 
         /// <summary>

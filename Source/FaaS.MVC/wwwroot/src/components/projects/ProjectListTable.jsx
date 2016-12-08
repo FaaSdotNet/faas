@@ -131,9 +131,9 @@ export class ProjectListTable extends Component {
 		this.rows = [];
     }
 
-    render() {
-		let userId = localStorage.getItem('userId');
-		if (this.props.projects.reload) {
+    render(){
+        let userId = this.props.user.userId;
+		if(this.props.projects.reload) {
 			this.props.dispatch(ProjectsActions.fetchAll(userId));
 		}
 		this.rows = [];

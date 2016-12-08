@@ -51,13 +51,13 @@ namespace FaaS.MVC.Controllers.Api
         [HttpGet]
         public async Task<IActionResult> GetAllProjects(
             [FromQuery(Name = "limit")]int limit,
-            [FromQuery(Name = "attributes")]string[] attributes)
+            [FromQuery(Name = "attributes")]string[] attributes,
+            [FromQuery(Name = "userId")]string userId)
         {
-            var userId = HttpContext.Session.GetString("userId");
             logger.LogInformation("User id: {}", userId);
             logger.LogInformation("User id: {}", HttpContext.Session.ToJson());
 
-            if (string.IsNullOrEmpty(userId))
+            if (String.IsNullOrEmpty(userId))
             {
                 Response.StatusCode = 401;
                 return Unauthorized();
@@ -95,12 +95,10 @@ namespace FaaS.MVC.Controllers.Api
             return Ok(projects);
         }
 
-        // GET project/{id}/
+        // GET project/{id}
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProject(Guid id)
+        public async Task<IActionResult> GetProject(Guid id, [FromQuery(Name ="userId")]string userId)
         {
-            var userId = HttpContext.Session.GetString("userId");
-
             if (string.IsNullOrEmpty(userId))
             {
                 Response.StatusCode = 401;
@@ -113,7 +111,6 @@ namespace FaaS.MVC.Controllers.Api
             {
                 return NotFound("Cannot find project with id: " + id.ToString());
             }
-            HttpContext.Session.SetString("projectId", project.Id.ToString());
 
             return Ok(project);
         }

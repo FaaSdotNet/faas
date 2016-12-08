@@ -13,23 +13,8 @@ export class MainMenu extends Component {
 		const isLoggedIn = this.props.user.isAuthenticated;
 		return(
 			<Nav>
-				<NavItem href="/#/About">
-					About
-				</NavItem>
-				<NavItem href="/#/Contact">
-					Contact
-				</NavItem>
-				<NavItem href="/#/FAQ">
-					FAQ
-				</NavItem>
-				{ isLoggedIn ? (
-					<UserMenu user={this.props.user}/>
-				) : (
-					<LoginMenu/>
-				)}
-
-				{ isLoggedIn && <LoggedInUser user={this.props.user}/> }
-
+				<UserMenu user={this.props.user}/>
+                <LoggedInUser user={this.props.user}/>
 			</Nav>
 		);
 	}

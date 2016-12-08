@@ -37,20 +37,26 @@ namespace FaaS.Services
         {
             logger.LogInformation("Add operation called");
 
-            var existingUser = await userRepository.Get(user.GoogleId);
+            var existingUser = await userRepository.Get(user.Email);
             if (existingUser == null)
+            {
+                // Set registered date and add a new user
+                user.Registered = DateTime.Now;
                 return await userRepository.Add(user);
-
-            var errorMessage = $"User with Google ID = [{user.GoogleId}] already exists.";
-            logger.LogError(errorMessage);
-            throw new InvalidOperationException(errorMessage);
+            }
+            else
+            {
+                // Set new token, update existing user
+                existingUser.GoogleToken = user.GoogleToken;
+                return await userRepository.Update(existingUser);
+            }
         }
 
-        public async Task<User> Get(string googleId)
+        public async Task<User> Get(string email)
         {
-            logger.LogInformation("Get [google id] operation called");
+            logger.LogInformation("Get [email] operation called");
 
-            return await userRepository.Get(googleId);
+            return await userRepository.Get(email);
         }
 
         public async Task<User> Get(Guid id)
@@ -58,6 +64,13 @@ namespace FaaS.Services
             logger.LogInformation("Get [guid] operation called");
 
             return await userRepository.Get(id);
+        }
+
+        public async Task<User> GetByToken(string token)
+        {
+            logger.LogInformation("GetByToken operation called");
+
+            return await userRepository.GetByToken(token);
         }
 
         public async Task<User[]> GetAll()

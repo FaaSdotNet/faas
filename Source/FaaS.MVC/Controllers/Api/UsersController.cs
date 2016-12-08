@@ -134,7 +134,7 @@ namespace FaaS.MVC.Controllers.Api
                 {
                     id = user.Id,
                 }, httpContextAccessor.HttpContext.Request.Scheme));
-                logger.LogInformation("Generated new user with name " + userDto.UserName);
+                logger.LogInformation("Generated new user with name " + userDto.Name);
 
                 return Created(newUrl, result);
             }

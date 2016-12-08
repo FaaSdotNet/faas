@@ -51,10 +51,9 @@ namespace FaaS.MVC.Controllers.Api
         public async Task<IActionResult> GetAllForms(
             [FromQuery(Name = "projectId")] Guid projectId,
             [FromQuery(Name = "limit")]int limit,
-            [FromQuery(Name = "attributes")]string[] attributes)
+            [FromQuery(Name = "attributes")]string[] attributes,
+            [FromQuery(Name = "userId")]string userId)
         {
-            var userId = HttpContext.Session.GetString("userId");
-
             if (string.IsNullOrEmpty(userId))
             {
                 Response.StatusCode = 401;
@@ -99,10 +98,8 @@ namespace FaaS.MVC.Controllers.Api
 
         // GET form/{id}/
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetForm(Guid id)
+        public async Task<IActionResult> GetForm(Guid id, [FromQuery(Name = "userId")]string userId)
         {
-            var userId = HttpContext.Session.GetString("userId");
-
             if (string.IsNullOrEmpty(userId))
             {
                 Response.StatusCode = 401;

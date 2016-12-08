@@ -9,10 +9,14 @@ namespace FaaS.MVC.Models
         public Guid Id { get; set; }
 
         [Display(Name = "User name")]
-        public string UserName { get; set; }
+        public string Name { get; set; }
 
-        public string GoogleId { get; set; }
+        public string GoogleToken { get; set; }
+
+        public string Email { get; set; }
 
         public DateTime Registered { get; set; }
+
+        public string AvatarUrl { get; set; }
     }
 }
