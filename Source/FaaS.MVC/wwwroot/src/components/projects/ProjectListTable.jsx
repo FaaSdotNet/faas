@@ -66,7 +66,7 @@ export class ProjectListRow extends Component{
 
     handleDeleteProject(projectId)
     {
-		this.props.dispatch(ProjectsActions.del(projectId));
+		this.props.dispatch(ProjectsActions.del(projectId, this.props.user.userId));
     }
 
 	closeModal()

@@ -25,7 +25,7 @@ export class ProjectCreateComponent extends Component {
 			Description: projectDesc
 		};
 
-		this.props.dispatch(ProjectActions.create(this.props.user, payload));
+		this.props.dispatch(ProjectActions.create(this.props.user.userId, payload));
 		this.props.closeModal();
 	}
 

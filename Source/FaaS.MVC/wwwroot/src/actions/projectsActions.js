@@ -35,10 +35,10 @@ export class ProjectsActions {
 		};
 	}
 
-	static del(id){
+	static del(id, userId){
 		console.log("[ACTION] Project delete: ", id);
 		return (dispatch) => {
-			apiClient.delete(URL_ELEM + id)
+		    apiClient.delete(URL_ELEM + `${id}?userId=${userId}`)
 				.then((res) => {
 					console.log(`[DELETE] ${COLL_NAME}: `, res);
 					dispatch({type: COLL_TYPE.DeleteSucc, payload: res.data});
@@ -51,9 +51,9 @@ export class ProjectsActions {
 		};
 	}
 
-	static update(project){
+	static update(project, userId){
 		return (dispatch) => {
-			apiClient.put(URL_ELEM, project)
+		    apiClient.put(URL_ELEM + `?userId=${userId}`, project)
 				.then(res => {
 					console.log(`[UPDATE] ${COLL_NAME}: `, res);
 					dispatch({
@@ -68,7 +68,7 @@ export class ProjectsActions {
 	}
 	static get(id, userId){
 		return (dispatch) => {
-			apiClient.get(URL_ELEM + id + "?userId=" + userId)
+		    apiClient.get(URL_ELEM + `${id}?userId=${userId}`)
 				.then(res => {
 					console.log(`[GET] ${COLL_NAME}: `, res);
 					dispatch({
@@ -85,7 +85,7 @@ export class ProjectsActions {
 	static create(userId, project)
 	{
 		return (dispatch) => {
-			apiClient.post(URL_ELEM, project)
+		    apiClient.post(URL_ELEM + `?userId=${userId}`, project)
 				.then(res => {
 					console.log(`[CREATE] ${COLL_NAME}: `, res);
 					dispatch({

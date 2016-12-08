@@ -52,7 +52,7 @@ export class ProjectEdit extends Component {
 			Created: this.state.created
 		};
 
-		this.props.dispatch(ProjectsActions.update(payload));
+		this.props.dispatch(ProjectsActions.update(payload, this.props.user.userId));
 		this.props.closeModal();
 	}
 

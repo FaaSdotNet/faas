@@ -53,15 +53,6 @@ namespace FaaS.MVC.Controllers.Api
             [FromQuery(Name = "limit")]int limit,
             [FromQuery(Name = "attributes")]string[] attributes)
         {
-            var userId = HttpContext.Session.GetString("userId");
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                Response.StatusCode = 401;
-                return Unauthorized();
-            }
-
-            //var formId = HttpContext.Session.GetString("formId");
             var formDto = await formService.Get(formId);
             if (formDto == null)
             {
@@ -102,14 +93,6 @@ namespace FaaS.MVC.Controllers.Api
         [HttpGet("{id}")]
         public async Task<IActionResult> GetElement(Guid id)
         {
-            var userId = HttpContext.Session.GetString("userId");
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                Response.StatusCode = 401;
-                return Unauthorized();
-            }
-
             var element = await elementService.Get(id);
             if (element == null)
             {

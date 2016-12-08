@@ -98,20 +98,13 @@ namespace FaaS.MVC.Controllers.Api
 
         // GET form/{id}/
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetForm(Guid id, [FromQuery(Name = "userId")]string userId)
+        public async Task<IActionResult> GetForm(Guid id)
         {
-            if (string.IsNullOrEmpty(userId))
-            {
-                Response.StatusCode = 401;
-                return Unauthorized();
-            }
-
             var form = await formService.Get(id);
             if (form == null)
             {
                 return NotFound("Cannot find form with guid: " + id);
             }
-            HttpContext.Session.SetString("formId", form.Id.ToString());
 
             return Ok(form);
         }
