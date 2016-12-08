@@ -26,11 +26,10 @@ export class LoggedInUser extends Component {
 		this.logout = this.logout.bind(this);
 	}
 
-
 	logout() {
 	    this.props.dispatch(UserActions.logout());
 		/** Clear all cookies starting with 'session' (to get all cookies, omit regex argument) */
-		document.location.reload();
+		document.location.href = "/welcome";
 	}
 
 	render() {
