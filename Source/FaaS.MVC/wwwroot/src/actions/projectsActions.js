@@ -11,7 +11,7 @@ const COLL_TYPE = Projects;
 const FAIL_TYPE = COLL_TYPE.Fail;
 const COLL_NAME = "projects";
 const URL_ELEM = `/${COLL_NAME}/`;
-const URL_ELEM_QUERY = `/${COLL_NAME}?`
+const URL_ELEM_QUERY = `/${COLL_NAME}?`;
 
 export class ProjectsActions {
 

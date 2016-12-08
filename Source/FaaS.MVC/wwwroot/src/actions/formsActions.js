@@ -10,7 +10,7 @@ import {apiClient} from "../utils";
 const COLL_TYPE = Forms;
 const FAIL_TYPE = COLL_TYPE.Fail;
 const COLL_NAME = "forms";
-const URL_ELEM = `/${COLL_NAME}`;
+const URL_ELEM = `/${COLL_NAME}/`;
 
 export class FormsActions {
 
@@ -34,9 +34,10 @@ export class FormsActions {
 		};
 	}
 
-	static del(id){
-		return (dispatch) => {
-			apiClient.delete(URL_ELEM + id)
+	static del(id, userId){
+	    return (dispatch) => {
+	        console.log("[ACTION] Form delete: ", id);
+		    apiClient.delete(URL_ELEM + `${id}?userId=${userId}`)
 				.then((res) => {
 					console.log(`[DELETE] ${COLL_NAME}: `, res);
 					dispatch({type: COLL_TYPE.DeleteSucc, payload: res.data});
@@ -49,9 +50,9 @@ export class FormsActions {
 		};
 	}
 
-	static update(element){
+	static update(form, userId){
 		return (dispatch) => {
-			apiClient.put(URL_ELEM, element)
+		    apiClient.put(URL_ELEM + `?userId=${userId}`, form)
 				.then(res => {
 					console.log(`[UPDATE] ${COLL_NAME}: `, res);
 					dispatch({
@@ -80,10 +81,10 @@ export class FormsActions {
 		}
 	}
 
-	static create(projectId, element)
+	static create(form)
 	{
 		return (dispatch) => {
-			apiClient.post(URL_ELEM, element)
+			apiClient.post(URL_ELEM, form)
 				.then(res => {
 					console.log(`[CREATE] ${COLL_NAME}: `, res);
 					dispatch({

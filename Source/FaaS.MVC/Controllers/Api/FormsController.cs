@@ -25,10 +25,18 @@ namespace FaaS.MVC.Controllers.Api
         private readonly IFormService formService;
 
         /// <summary>
+        /// User service
+        /// </summary>
+        private readonly IUserService userService;
+
+        /// <summary>
         /// Project service
         /// </summary>
         private readonly IProjectService projectService;
 
+        /// <summary>
+        /// Logger
+        /// </summary>
         private readonly ILogger<ProjectsController> logger;
 
         public FormsController(IRandomIdService randomId,
@@ -37,11 +45,13 @@ namespace FaaS.MVC.Controllers.Api
             IUrlHelperFactory urlHelperFactory,
             IMapper mapper,
             IFormService formService,
+            IUserService userService,
             IProjectService projectService,
             ILogger<ProjectsController> logger)
             : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
         {
             this.formService = formService;
+            this.userService = userService;
             this.projectService = projectService;
             this.logger = logger;
         }
@@ -139,12 +149,10 @@ namespace FaaS.MVC.Controllers.Api
         // PUT 
         [HttpPatch]
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] FormViewModel form)
+        public async Task<IActionResult> Put([FromBody] FormViewModel form, [FromQuery(Name = "userId")] string userId)
         {
             try
             {
-                var userId = HttpContext.Session.GetString("userId");
-
                 if (string.IsNullOrEmpty(userId))
                 {
                     Response.StatusCode = 401;
@@ -152,11 +160,21 @@ namespace FaaS.MVC.Controllers.Api
                 }
 
                 var formDto = mapper.Map<FormViewModel, Form>(form);
-                var result = await formService.Update(formDto);
-                logger.LogInformation("[UPDATE] form: {} ", formDto);
 
-
-                return Ok(result);
+                // Access validation
+                var formOwner = await userService.Get(new Guid(userId));
+                var formToBeUpdated = await formService.Get(formDto.Id);
+                if (formToBeUpdated.Project.User.Email == formOwner.Email)
+                {
+                    var result = await formService.Update(formDto);
+                    logger.LogInformation("[UPDATE] form: {} ", formDto);
+                    return Ok(result);
+                }
+                else
+                {
+                    Response.StatusCode = 401;
+                    return BadRequest("You tried to update the form that does not belong to you");
+                }
             }
             catch (Exception ex)
             {
@@ -166,24 +184,30 @@ namespace FaaS.MVC.Controllers.Api
 
         // DELETE forms/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id, [FromQuery(Name = "userId")] string userId)
         {
             try
             {
-                var userId = HttpContext.Session.GetString("userId");
-
                 if (string.IsNullOrEmpty(userId))
                 {
                     Response.StatusCode = 401;
                     return Unauthorized();
                 }
 
-                var form = await formService.Get(id);
-                var result = await formService.Remove(form);
-                logger.LogInformation("[DELETE] form: {} ", form);
-  
-
-                return Ok(result);
+                // Access validation
+                var formOwner = await userService.Get(new Guid(userId));
+                var formToBeDeleted = await formService.Get(id);
+                if (formToBeDeleted.Project.User.Email == formOwner.Email)
+                {
+                    var result = await formService.Remove(formToBeDeleted);
+                    logger.LogInformation("[DELETE] form: {} ", formToBeDeleted);
+                    return Ok(result);
+                }
+                else
+                {
+                    Response.StatusCode = 401;
+                    return BadRequest("You tried to update the form that does not belong to you");
+                }
             }
             catch (Exception ex)
             {

@@ -76,7 +76,7 @@ export class FormListRow extends Component{
 
 	handleDeleteForm(formId)
 	{
-		this.props.dispatch(FormsActions.del(formId));
+		this.props.dispatch(FormsActions.del(formId, this.props.user.userId));
 	}
 
 	closeModal()
