@@ -54,7 +54,6 @@ export function userReducer(state, action)
                 'avatarUrl': null,
 				'statusText': 'You have been successfully logged out.'
 			});
-
 	}
 
 	return state;

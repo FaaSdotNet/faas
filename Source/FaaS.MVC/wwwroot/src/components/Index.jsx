@@ -20,32 +20,6 @@ export class IndexComponent extends Component {
             this.props.dispatch(UserActions.logIn(payload));
             document.location.href = "/#/projects";
         }
-
-        /*
-        if (userToken) {
-            const result = fetch('/api/v1.0/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: "same-origin",
-
-                body: JSON.stringify({
-                    GoogleToken: userToken
-                })
-            });
-
-            result.then((res) =>{    
-                if (res.ok) {
-                    res.json()
-                        .then((js) => {
-                            this.props.dispatch(UserActions.loginSuccess(userToken));
-                            document.location.href ="/#/projects";
-                        });
-                }
-            });
-        }
-        */
     }
     render() {
                 return (

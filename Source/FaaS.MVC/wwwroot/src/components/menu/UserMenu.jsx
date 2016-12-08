@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Nav, Navbar, NavItem, NavDropdown, MenuItem, Header, Brand } from "react-bootstrap";
 import {connect} from "react-redux";
+import {UserActions} from "../../actions/userActions";
 
 export class UserMenu extends Component {
 	render() {
@@ -27,7 +28,7 @@ export class LoggedInUser extends Component {
 
 
 	logout() {
-	    this.props.dispatch(this.props.user.logout());
+	    this.props.dispatch(UserActions.logout());
 		/** Clear all cookies starting with 'session' (to get all cookies, omit regex argument) */
 		document.location.reload();
 	}

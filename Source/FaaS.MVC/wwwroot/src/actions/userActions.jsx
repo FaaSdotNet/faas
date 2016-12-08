@@ -30,15 +30,6 @@ export class UserActions {
         }
     }
 
-	static loginSuccess(googleToken){
-		return {
-			type: User.LoginSucc,
-			payload: {
-				googleToken: googleToken
-			}
-		}
-	}
-
 	static fail(){
 		localStorage.removeItem('GoogleToken');
 		return {
@@ -67,9 +58,9 @@ export class UserActions {
 	}
 
 	static logout() {
-		localStorage.removeItem('GoogleToken');
+	    localStorage.removeItem('GoogleToken');
 		return {
-			type: USER_LOGOUT
+			type: User.Logout
 		}
 	}
 }
