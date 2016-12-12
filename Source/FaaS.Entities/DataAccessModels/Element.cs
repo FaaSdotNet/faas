@@ -11,7 +11,7 @@ namespace FaaS.Entities.DataAccessModels
         public Guid FormId { get; set; }
 
         [Required]
-        public Form Form { get; set; }
+        public virtual Form Form { get; set; }
 
         public string Description { get; set; }
 

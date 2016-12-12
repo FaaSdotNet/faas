@@ -135,8 +135,6 @@ namespace FaaS.Entities.Repositories
         public async Task<DataTransferModels.Project> Get(Guid id)
         {
             Project project = await _context.Projects.SingleOrDefaultAsync(e => e.Id == id);
-            User user = _context.Users.SingleOrDefault(projectUser => projectUser.Id == project.UserId);
-            project.User = user;
 
             return _mapper.Map<DataTransferModels.Project>(project);
         }
