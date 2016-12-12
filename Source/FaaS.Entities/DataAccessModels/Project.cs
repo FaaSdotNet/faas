@@ -14,7 +14,7 @@ namespace FaaS.Entities.DataAccessModels
         public Guid UserId { get; set; }
         
         [Required]
-        public User User { get; set; }
+        public virtual User User { get; set; }
 
         [Required]
         public DateTime Created { get; set; }

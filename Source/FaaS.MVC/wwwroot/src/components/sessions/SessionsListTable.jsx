@@ -76,9 +76,6 @@ export class SessionsListTable extends Component {
 
 		return (
             <div className="row" id="sessions">
-                <h1>
-                    Sessions
-                </h1>
 				<table className="table table-striped row">
                     <thead>
                     <tr>

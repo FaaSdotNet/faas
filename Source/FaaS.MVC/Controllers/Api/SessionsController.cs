@@ -115,14 +115,6 @@ namespace FaaS.MVC.Controllers.Api
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSession(Guid id)
         {
-            var userId = HttpContext.Session.GetString("userId");
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                Response.StatusCode = 401;
-                return Unauthorized();
-            }
-
             var session = await sessionService.Get(id);
 
             if (session == null)

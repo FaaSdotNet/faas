@@ -110,12 +110,6 @@ namespace FaaS.Entities.Repositories
         public async Task<DataTransferModels.Element> Get(Guid id)
         {
             Element element = await _context.Elements.SingleOrDefaultAsync(e => e.Id == id);
-            Form form = _context.Forms.SingleOrDefault(elementForm => elementForm.Id == element.FormId);
-            Project project = _context.Projects.SingleOrDefault(formProject => formProject.Id == form.ProjectId);
-            User user = _context.Users.SingleOrDefault(projectUser => projectUser.Id == project.UserId);
-            element.Form = form;
-            project.User = user;
-            form.Project = project;
 
             return _mapper.Map<DataTransferModels.Element>(element);
         }

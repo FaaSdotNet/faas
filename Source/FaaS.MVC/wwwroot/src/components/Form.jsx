@@ -124,7 +124,7 @@ class Form extends React.Component {
                 <Modal isOpen={this.state.isOpen} onRequestHide={this.redirectToHome}>
                     <ModalHeader>
                         <ModalClose onClick={this.hideModal}/>
-                        <ModalTitle>Form has been submitted, you can die in peace now</ModalTitle>
+                        <ModalTitle>Form has been submitted</ModalTitle>
                     </ModalHeader>
                     <ModalBody>
                         <button className='btn btn-default' onClick={this.redirectToHome}>
