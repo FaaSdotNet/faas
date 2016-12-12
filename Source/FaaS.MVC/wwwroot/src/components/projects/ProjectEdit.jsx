@@ -37,25 +37,7 @@ export class ProjectEdit extends Component {
 
 	componentWillMount()
 	{
-		const result = fetch('/api/v1.0/projects/' + this.props.project.id,
-			{
-				method: "GET",
-				credentials: "same-origin",
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-
-		result.then((res) =>
-		{
-			if (res.ok) {
-				res.json()
-					.then((js) =>
-					{
-						this.setState(js);
-					});
-			}
-		});
+		this.setState(this.props.project);
 	}
 
 	handleSubmit(event)
@@ -70,7 +52,7 @@ export class ProjectEdit extends Component {
 			Created: this.state.created
 		};
 
-		this.props.dispatch(ProjectsActions.update(payload));
+		this.props.dispatch(ProjectsActions.update(payload, this.props.user.userId));
 		this.props.closeModal();
 	}
 

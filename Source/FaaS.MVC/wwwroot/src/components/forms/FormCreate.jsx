@@ -24,7 +24,7 @@ export class FormCreateComponent extends Component {
 			ProjectId: this.props.projectId
 		};
 
-        this.props.dispatch(FormsActions.create(this.props.project, payload));
+        this.props.dispatch(FormsActions.create(payload));
         this.props.closeModal();
     }
 

@@ -44,10 +44,10 @@ namespace FaaS.Services
         {
             logger.LogInformation("Add operation called");
 
-            var existingUser = await userRepository.Get(user.GoogleId);
+            var existingUser = await userRepository.Get(user.Id);
             if (existingUser == null)
             {
-                var message = $"User with Google ID = [{user.GoogleId}] does not exist.";
+                var message = $"User with Google ID = [{user.Id}] does not exist.";
                 logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
@@ -75,10 +75,10 @@ namespace FaaS.Services
         {
             logger.LogInformation("GetAll operation was called");
 
-            var existingUser = await userRepository.Get(user.GoogleId);
+            var existingUser = await userRepository.Get(user.Id);
             if (existingUser == null)
             {
-                var message = $"User with Google ID = [{user.GoogleId}] does not exist.";
+                var message = $"User with ID = [{user.Id}] does not exist.";
                 logger.LogError(message);
                 throw new InvalidOperationException(message);
             }

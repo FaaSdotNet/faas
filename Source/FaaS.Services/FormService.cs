@@ -49,14 +49,6 @@ namespace FaaS.Services
                 throw new InvalidOperationException(message);
             }
 
-            var existingForm = await formRepository.Get(form.Id);
-            if (existingForm != null)
-            {
-                var message = $"Form with ID = [{form.Id}] already exists.";
-                logger.LogError(message);
-                throw new InvalidOperationException(message);
-            }
-
             return await formRepository.Add(existingProject, form);
         }
 

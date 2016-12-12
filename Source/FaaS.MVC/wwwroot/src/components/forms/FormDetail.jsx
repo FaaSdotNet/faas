@@ -9,7 +9,7 @@ export class FormDetail extends Component {
     }
 
     componentWillMount() {
-        const result = fetch('/api/v1.0/forms/' + this.props.formId,
+        const result = fetch(`/api/v1.0/forms/${this.props.formId}`,
         {
             method: "GET",
             credentials: "same-origin",

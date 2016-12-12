@@ -22,13 +22,13 @@ namespace FaaS.Services.UnitTests
             // Ensures mapping from DTO user to DAO user is present
             var dataTransportUserModel = new FaaS.DataTransferModels.User
             {
-                UserName = "Display Name",
-                GoogleId = "TestGoogleId"
+                Name = "Display Name",
+                GoogleToken = "TestGoogleId"
             };
             var expectedDataAccessUserModel = new User
             {
                 Name = "Display Name",
-                GoogleId = "TestGoogleId"
+                GoogleToken = "TestGoogleId"
             };
 
             var actualDataAccessUserModel = GetMapper().Map<FaaS.DataTransferModels.User, User>(dataTransportUserModel);
@@ -43,12 +43,12 @@ namespace FaaS.Services.UnitTests
             var dataAccessUserModel = new User
             {
                 Name = "Display Name",
-                GoogleId = "TestGoogleId"
+                GoogleToken = "TestGoogleId"
             };
             var expectedDataTransportUserModel = new FaaS.DataTransferModels.User
             {
-                UserName = "Display Name",
-                GoogleId = "TestGoogleId"
+                Name = "Display Name",
+                GoogleToken = "TestGoogleId"
             };
 
             var actualDataTransportUserModel = GetMapper().Map<User, FaaS.DataTransferModels.User>(dataAccessUserModel);

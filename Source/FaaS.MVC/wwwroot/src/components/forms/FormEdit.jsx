@@ -40,25 +40,7 @@ class FormEdit extends Component {
 
 	componentWillMount()
 	{
-		const result = fetch('/api/v1.0/forms/' + this.props.form.id,
-			{
-				method: "GET",
-				credentials: "same-origin",
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			});
-
-		result.then((res) =>
-		{
-			if (res.ok) {
-				res.json()
-					.then((js) =>
-					{
-						this.setState(js);
-					});
-			}
-		});
+		this.setState(this.props.form);
 	}
 
 	handleSubmit(event)
@@ -73,7 +55,7 @@ class FormEdit extends Component {
 			ProjectId: this.props.projectId
 		};
 
-		this.props.dispatch(FormsActions.update(payload));
+		this.props.dispatch(FormsActions.update(payload, this.props.user.userId));
 		this.props.closeModal();
 	}
 

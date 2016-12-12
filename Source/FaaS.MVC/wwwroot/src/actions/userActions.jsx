@@ -1,25 +1,37 @@
 /**
  * Created by Wermington on 27.11.16.
  */
+import {
+    User
+} from '../constants';
 
-import { pushState } from 'redux-router';
-import {User} from '../constants';
-import {apiClient} from "../utils"
+import {apiClient} from '../utils';
 
+const COLL_TYPE = User;
+const FAIL_TYPE = COLL_TYPE.Fail;
+const COLL_NAME = "login";
+const URL_ELEM = `/${COLL_NAME}/`;
 
 export class UserActions {
-	static loginSuccess(token){
-		localStorage.setItem('token', token);
-		return {
-			type: User.LoginSucc,
-			payload: {
-				token: token
-			}
-		}
-	}
+
+    static logIn(user) {
+        return (dispatch) => {
+            apiClient.post(URL_ELEM, user)
+                .then(res => {
+                    console.log(`[POST] ${COLL_NAME}: `, res);
+                    dispatch({
+                        type: COLL_TYPE.LoginSucc,
+                        payload: res.data
+                    });
+                }).catch((err) => {
+                    console.log(`[ERROR] ${COLL_NAME}: `, err);
+                    dispatch({ type: FAIL_TYPE, payload: err });
+                });
+        }
+    }
 
 	static fail(){
-		localStorage.removeItem('token');
+		localStorage.removeItem('GoogleToken');
 		return {
 			type: User.Fail,
 			payload: {
@@ -46,9 +58,9 @@ export class UserActions {
 	}
 
 	static logout() {
-		localStorage.removeItem('token');
+	    localStorage.removeItem('GoogleToken');
 		return {
-			type: USER_LOGOUT
+			type: User.Logout
 		}
 	}
 }

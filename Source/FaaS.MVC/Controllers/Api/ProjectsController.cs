@@ -51,13 +51,13 @@ namespace FaaS.MVC.Controllers.Api
         [HttpGet]
         public async Task<IActionResult> GetAllProjects(
             [FromQuery(Name = "limit")]int limit,
-            [FromQuery(Name = "attributes")]string[] attributes)
+            [FromQuery(Name = "attributes")]string[] attributes,
+            [FromQuery(Name = "userId")]string userId)
         {
-            var userId = HttpContext.Session.GetString("userId");
             logger.LogInformation("User id: {}", userId);
             logger.LogInformation("User id: {}", HttpContext.Session.ToJson());
 
-            if (string.IsNullOrEmpty(userId))
+            if (String.IsNullOrEmpty(userId))
             {
                 Response.StatusCode = 401;
                 return Unauthorized();
@@ -95,12 +95,10 @@ namespace FaaS.MVC.Controllers.Api
             return Ok(projects);
         }
 
-        // GET project/{id}/
+        // GET project/{id}
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetProject(Guid id)
+        public async Task<IActionResult> GetProject(Guid id, [FromQuery(Name ="userId")]string userId)
         {
-            var userId = HttpContext.Session.GetString("userId");
-
             if (string.IsNullOrEmpty(userId))
             {
                 Response.StatusCode = 401;
@@ -113,27 +111,28 @@ namespace FaaS.MVC.Controllers.Api
             {
                 return NotFound("Cannot find project with id: " + id.ToString());
             }
-            HttpContext.Session.SetString("projectId", project.Id.ToString());
 
             return Ok(project);
         }
 
         // POST projects
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ProjectViewModel project)
+        public async Task<IActionResult> Post([FromBody] ProjectViewModel project, [FromQuery(Name = "userId")] string userId)
         {
             try
             {
-                var stringGuid = HttpContext.Session.GetString("userId");
-                if (string.IsNullOrEmpty(stringGuid))
+                if (string.IsNullOrEmpty(userId))
                 {
                     Response.StatusCode = 401;
                     return Unauthorized();
                 }
-
-                var userId = new Guid(stringGuid);
-                var userDto = await userService.Get(userId);
-
+                
+                var userDto = await userService.Get(new Guid(userId));
+                if(userDto == null)
+                {
+                    Response.StatusCode = 401;
+                    return Unauthorized();
+                }
 
                 project.Created = DateTime.Now;
                 var projectDto = mapper.Map<ProjectViewModel, Project>(project);
@@ -167,12 +166,10 @@ namespace FaaS.MVC.Controllers.Api
         // PUT
         [HttpPatch]
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] ProjectViewModel project)
+        public async Task<IActionResult> Put([FromBody] ProjectViewModel project, [FromQuery(Name="userId")] string userId)
         {
             try
             {
-                var userId = HttpContext.Session.GetString("userId");
-
                 if (string.IsNullOrEmpty(userId))
                 {
                     Response.StatusCode = 401;
@@ -180,11 +177,21 @@ namespace FaaS.MVC.Controllers.Api
                 }
 
                 var projectDto = mapper.Map<ProjectViewModel, Project>(project);
-                var result = await projectService.Update(projectDto);
-                logger.LogInformation("[UPDATE] Project: " + project);
 
-
-                return Ok(result);
+                // Access validation
+                var projectOwner = await userService.Get(new Guid(userId));
+                var projectToBeUpdated = await projectService.Get(projectDto.Id);
+                if (projectToBeUpdated.User.Email == projectOwner.Email)
+                {
+                    var result = await projectService.Update(projectDto);
+                    logger.LogInformation("[UPDATE] Project: " + project);
+                    return Ok(result);
+                }
+                else
+                {
+                    Response.StatusCode = 401;
+                    return BadRequest("You tried to update the project that does not belong to you");
+                }
             }
             catch (Exception ex)
             {
@@ -194,23 +201,30 @@ namespace FaaS.MVC.Controllers.Api
 
         // DELETE projects/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id, [FromQuery(Name = "userId")] string userId)
         {
             try
             {
-                var userId = HttpContext.Session.GetString("userId");
-
                 if (string.IsNullOrEmpty(userId))
                 {
                     Response.StatusCode = 401;
                     return Unauthorized();
                 }
 
-                var project = await projectService.Get(id);
-                logger.LogInformation("[DELETE] Project: " + project);
-                var result = await projectService.Remove(project);
-
-                return Ok(result);
+                // Access validation
+                var projectOwner = await userService.Get(new Guid(userId));
+                var projectToBeDeleted = await projectService.Get(id);
+                if (projectToBeDeleted.User.Email == projectOwner.Email)
+                {
+                    var result = await projectService.Remove(projectToBeDeleted);
+                    logger.LogInformation("[UPDATE] Project: " + projectToBeDeleted);
+                    return Ok(result);
+                }
+                else
+                {
+                    Response.StatusCode = 401;
+                    return BadRequest("You tried to delete the project that does not belong to you");
+                }
             }
             catch (Exception ex)
             {

@@ -67,7 +67,8 @@ namespace FaaS.Entities.Repositories
                 throw new ArgumentException("User not in db!");
             }
 
-            oldUser.Name = updatedUser.UserName;
+            oldUser.Name = updatedUser.Name;
+            oldUser.GoogleToken = updatedUser.GoogleToken;
             _context.Entry(oldUser).State = EntityState.Modified;
 
             await _context.SaveChangesAsync();
@@ -102,11 +103,22 @@ namespace FaaS.Entities.Repositories
             return _mapper.Map<DataTransferModels.User>(user);
         }
 
-        public async Task<DataTransferModels.User> Get(string googleId)
+        public async Task<DataTransferModels.User> Get(string email)
         {
             User user = await _context
                                 .Users
-                                .Where(u => u.GoogleId == googleId)
+                                .Where(u => u.Email == email)
+                                .SingleOrDefaultAsync();
+
+            return _mapper.Map<DataTransferModels.User>(user);
+        }
+
+
+        public async Task<DataTransferModels.User> GetByToken(string token)
+        {
+            User user = await _context
+                                .Users
+                                .Where(u => u.GoogleToken == token)
                                 .SingleOrDefaultAsync();
 
             return _mapper.Map<DataTransferModels.User>(user);

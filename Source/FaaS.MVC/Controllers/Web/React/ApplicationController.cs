@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace FaaS.MVC.Controllers.Web.React
 {
-    [Route("")]
+    [Route("/")]
     public class ApplicationController : Controller
     {
 

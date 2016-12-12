@@ -8,13 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
 
 namespace FaaS.MVC.Controllers.Api
 {
     [Route(RoutePrefix + RouteController)]
-    public class LoginController : Controller
+    public class LoginController : DefaultController
     {
-        public const string RoutePrefix = "api/v1.0/";
         public const string RouteController = "login";
 
         /// <summary>
@@ -24,38 +24,32 @@ namespace FaaS.MVC.Controllers.Api
 
         private readonly ILogger<UsersController> logger;
 
-        public LoginController(IUserService userService, IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, ILogger<UsersController> logger)
+        public LoginController(IUserService userService, IRandomIdService randomId, IActionContextAccessor actionContextAccessor, IHttpContextAccessor httpContextAccessor, IUrlHelperFactory urlHelperFactory, IMapper mapper, ILogger<UsersController> logger) : base(null, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
         {
             this.userService = userService;
             this.logger = logger;
         }
 
-        // POST projects
+        // POST login
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> LogIn([Bind("GoogleId")][FromBody]UserViewModel user)
+        public async Task<IActionResult> Post([FromBody]UserViewModel userViewModel)
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    var existingUser = await userService.Get(user.GoogleId);
+                    var existingUser = await userService.GetByToken(userViewModel.GoogleToken);
                     if (existingUser == null)
                     {
-                        return NotFound("User not found : " + user.GoogleId);
+                        return NotFound("User not found : " + userViewModel.GoogleToken);
                     }
 
-                    HttpContext.Session.SetString("userId", existingUser.Id.ToString());
-                    logger.LogDebug("[LOGIN] User: " + user);
-
+                    logger.LogDebug("[LOGIN] User: " + existingUser);
                     return Ok(existingUser);
-                }
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return Unauthorized();
         }
 
     }

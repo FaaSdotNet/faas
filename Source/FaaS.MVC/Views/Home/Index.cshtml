@@ -1,0 +1,93 @@
+﻿@using FaaS.MVC.Controllers
+@model UserViewModel
+@{
+    ViewData["Title"] = "FaaS Welcome";
+    Layout = "~/Views/Home/_LayoutWelcome.cshtml";
+}
+
+<asp:ScriptManager ID="ScriptManager1" runat="server"
+                   EnablePageMethods="True">
+</asp:ScriptManager>
+
+<meta name="google-signin-client_id" content="YOUR_GOOGLE_CLIENT_ID_HERE">    
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+<div class="site-wrapper">
+
+    <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+            <div class="masthead clearfix">
+                <div class="inner">
+                    <h3 class="masthead-brand">FaaS</h3>
+                    <nav>
+
+                    </nav>
+                </div>
+            </div>
+
+            <div class="inner cover">
+                <img id="profileImage" class="img-circle" />
+                <h1 class="cover-heading" id="welcomeSign">Welcome to FaaS!</h1>
+                <p id="signedInLabel" class="lead" hidden>Enjoy your stay.</p>
+                <p id="signedOutLabel" class="lead">You have to sign in to enter the app.</p>
+                <div class="lead">
+                    <form asp-action="Login" id="login">
+                        @Html.Hidden("GoogleToken", Model.GoogleToken)
+                        @Html.Hidden("Name", Model.Name)
+                        @Html.Hidden("Email", Model.Email)
+                        @Html.Hidden("AvatarUrl", Model.AvatarUrl)
+                        <input type="submit" id="enterApp" href="#" class="btn btn-lg btn-default hide" value="Enter App" /><br />
+                        <a id="signOutLink" href="#" onclick="signOut();" hidden>Sign out</a>
+                        <div id="googleButton" class="g-signin2 inline" data-onsuccess="onSignIn"></div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="mastfoot">
+                <div class="inner">
+                    <p>&copy; 2016 - Form as a Service</p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    function onSignIn(googleUser) {
+        var profile = googleUser.getBasicProfile();
+        var id_token = googleUser.getAuthResponse().id_token;
+
+        document.getElementById('welcomeSign').textContent = "Welcome to FaaS, " + profile.getName() + "!";
+        document.getElementById('profileImage').src = profile.getImageUrl();
+
+        document.getElementById('GoogleToken').value = id_token;
+        localStorage.setItem('GoogleToken', id_token);
+        document.getElementById('Name').value = profile.getName();
+        document.getElementById('Email').value = profile.getEmail();
+        document.getElementById('AvatarUrl').value = profile.getImageUrl();
+
+        $("#enterApp").removeClass("hide");
+        document.getElementById('signOutLink').hidden = false;
+        document.getElementById('googleButton').hidden = true;
+        document.getElementById('signedInLabel').hidden = false;
+        document.getElementById('signedOutLabel').hidden = true;
+    }
+
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+                localStorage.clear();
+                location.reload();
+            });
+        }
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -10,7 +10,7 @@ export class Projects extends Component {
 
 	constructor(props)
 	{
-		super(props);
+	    super(props);
 		this.handleAdd = this.handleAdd.bind(this);
 		this.state = {
 			createOpen: {open: false}

@@ -15,8 +15,8 @@ class HeaderComponent extends Component {
             <Navbar>
                 <Navbar.Header>
                     <Navbar.Brand>
-                        <NavItem href="#">
-                            FaaS Home
+                        <NavItem href="/">
+                            FaaS
                         </NavItem>
                     </Navbar.Brand>
                 </Navbar.Header>

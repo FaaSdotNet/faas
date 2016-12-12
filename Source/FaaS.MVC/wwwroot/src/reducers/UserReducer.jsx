@@ -2,9 +2,11 @@ import {User} from '../constants';
 import {createReducer} from "../utils/index";
 
 const initialState = {
-	token: null,
-	userName: null,
+	GoogleToken: null,
+	name: null,
 	userId: null,
+	email: null,
+    avatarUrl: null,
 	isAuthenticated: false,
 	isAuthenticating: false,
 	statusText: null,
@@ -26,26 +28,32 @@ export function userReducer(state, action)
 			return Object.assign({}, state, {
 				'isAuthenticating': false,
 				'isAuthenticated': true,
-				'token': payload.token,
-				'userName': payload.userName,
+				'GoogleToken': payload.googleToken,
+				'name': payload.name,
+				'userId': payload.id,
+				'email': payload.email,
+                'avatarUrl': payload.avatarUrl,
 				'statusText': 'You have been successfully logged in.'
 			});
 		case User.Fail:
 			return Object.assign({}, state, {
 				'isAuthenticating': false,
 				'isAuthenticated': false,
-				'token': null,
-				'userName': null,
+				'GoogleToken': null,
+				'name': null,
+				'email': null,
+                'avatarUrl': null,
 				'statusText': `Authentication Error: ${payload.status} ${payload.statusText}`
 			});
 		case User.Logout:
 			return Object.assign({}, state, {
 				'isAuthenticated': false,
-				'token': null,
-				'userName': null,
+				'GoogleToken': null,
+				'name': null,
+				'email': null,
+                'avatarUrl': null,
 				'statusText': 'You have been successfully logged out.'
 			});
-
 	}
 
 	return state;
