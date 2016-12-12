@@ -19,7 +19,7 @@ const initialState = {
 export function pageReducer(state, action){
 	state = state || initialState;
 	const payload = action.payload;
-	switch (action.type){
+	switch (action.type) {
 		case Pages.PageSet:
 			return {...state, page: payload};
 		case Pages.FormSet:
@@ -28,6 +28,8 @@ export function pageReducer(state, action){
 			return {...state, projectId: payload};
 		case Pages.ElementSet:
 			return {...state, elementId: payload};
+		case Pages.SessionSet:
+			return {...state, formId: payload};
 	}
 
 

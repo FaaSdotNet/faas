@@ -127,8 +127,6 @@ namespace FaaS.MVC.Controllers.Api
                 var userDto = mapper.Map<UserViewModel, User>(user);
                 var result = await userService.Add(userDto);
 
-                GenerateTemplateForm(result);
-
                 var urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
                 var newUrl = new Uri(urlHelper.Action("GetUser", "Users", new
                 {
@@ -193,45 +191,6 @@ namespace FaaS.MVC.Controllers.Api
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        private async void GenerateTemplateForm(User newUser)
-        {
-            var templateProject = new Project();
-            templateProject.ProjectName = "TemplateProject";
-            templateProject.Created = DateTime.Now;
-            templateProject.Description = "For illustration purposes only.";
-
-            templateProject = await projectService.Add(newUser, templateProject);
-
-            var templateForm = new Form();
-            templateForm.FormName = "TemplateForm";
-            templateForm.Created = DateTime.Now;
-            templateForm.Description = "For illustration purposes only.";
-
-            templateForm = await formService.Add(templateProject, templateForm);
-
-            var templateElement = new Element();
-            templateElement.Description = "Enter your birthday:";
-            templateElement.Type = 1;
-            templateElement.Required = true;
-            templateElement.Options = "";
-
-            var templateElement2 = new Element();
-            templateElement2.Description = "Describe how was your day today:";
-            templateElement2.Type = 5;
-            templateElement2.Required = false;
-            templateElement2.Options = "";
-
-            var templateElement3 = new Element();
-            templateElement3.Description = "Which one do you prefer?";
-            templateElement3.Type = 2;
-            templateElement3.Required = true;
-            templateElement3.Options = "{\"1\":\"C#\",\"2\":\"JavaScript\"}";
-
-            templateElement = await elementService.Add(templateForm, templateElement);
-            templateElement2 = await elementService.Add(templateForm, templateElement2);
-            templateElement3 = await elementService.Add(templateForm, templateElement3);
         }
     }
 }

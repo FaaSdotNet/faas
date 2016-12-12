@@ -25,6 +25,11 @@ export class Elements extends Component {
 		this.setState({createOpen: {open: true}});
 	}
 
+	handleReturn()
+	{
+		document.location.href="/#/forms/";
+	}
+
 	closeModal()
 	{
 		this.setState({
@@ -53,6 +58,11 @@ export class Elements extends Component {
 						type="button"
 						className="btn btn-primary btn-md" role="button">
 					Add New Element
+				</button>
+				<button onClick={() => { this.handleReturn() }}
+						type="button"
+						className="btn btn-default btn-md" role="button">
+					Back to Form
 				</button>
 				<ModalWrapper title="Create element" open={this.state.createOpen}>
 					<ElementCreateComponent formId={this.props.page.formId} closeModal={this.closeModal.bind(this)} />

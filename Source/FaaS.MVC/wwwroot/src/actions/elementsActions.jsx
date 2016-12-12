@@ -34,9 +34,9 @@ export class ElementsActions {
 		};
 	}
 
-	static del(id){
+	static del(id, userId){
 		return (dispatch) => {
-			apiClient.delete(URL_ELEM + id)
+			apiClient.delete(URL_ELEM + `${id}?userId=${userId}`)
 				.then((res) => {
 					console.log(`[DELETE] ${COLL_NAME}: `, res);
 					dispatch({type: COLL_TYPE.DeleteSucc, payload: res.data});
@@ -49,9 +49,9 @@ export class ElementsActions {
 		};
 	}
 
-	static update(element){
+	static update(element, userId){
 		return (dispatch) => {
-			apiClient.put(URL_ELEM, element)
+			apiClient.put(URL_ELEM + `?userId=${userId}`, element)
 				.then(res => {
 					console.log(`[UPDATE] ${COLL_NAME}: `, res.data);
 					dispatch({

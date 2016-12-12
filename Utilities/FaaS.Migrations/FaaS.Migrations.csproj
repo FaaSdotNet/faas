@@ -68,9 +68,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FaaSContextMigrations\FaaSContextConfiguration.cs" />
-    <Compile Include="FaaSContextMigrations\Migrations\201611011828102_Initial.cs" />
-    <Compile Include="FaaSContextMigrations\Migrations\201611011828102_Initial.Designer.cs">
-      <DependentUpon>201611011828102_Initial.cs</DependentUpon>
+    <Compile Include="FaaSContextMigrations\Migrations\201612120856101_Initial.cs" />
+    <Compile Include="FaaSContextMigrations\Migrations\201612120856101_Initial.Designer.cs">
+      <DependentUpon>201612120856101_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -101,8 +101,8 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="FaaSContextMigrations\Migrations\201611011828102_Initial.resx">
-      <DependentUpon>201611011828102_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="FaaSContextMigrations\Migrations\201612120856101_Initial.resx">
+      <DependentUpon>201612120856101_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

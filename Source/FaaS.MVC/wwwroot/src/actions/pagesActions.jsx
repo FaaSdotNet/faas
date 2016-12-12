@@ -19,6 +19,12 @@ export class PagesActions {
 		}
 	}
 
+	static setSessions(id) {
+		return (dispatch) => {
+			dispatch({type: Pages.SessionSet, payload: id})
+		}
+	}
+
 }
 
 export default PagesActions;

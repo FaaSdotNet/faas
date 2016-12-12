@@ -64,7 +64,7 @@ export class ElementListRow extends Component{
 
 	handleElementDelete(elementId)
 	{
-		this.props.dispatch(ElementsActions.del(elementId));
+		this.props.dispatch(ElementsActions.del(elementId, this.props.user.userId));
 	}
 
 	closeModal()
@@ -84,7 +84,7 @@ export class ElementListRow extends Component{
 		return (
 			<tr>
 				<td>
-					<a onClick={() => this.handleElementClick()}>
+					<a class="details" onClick={() => this.handleElementClick()}>
 						{this.props.element.description}
 					</a>
 					<ModalWrapper title="Element Detail" open={this.state.detailOpen}>

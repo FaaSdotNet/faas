@@ -80,8 +80,10 @@ namespace FaaS.Migrations.FaaSContextMigrations
                     {
                         Id = c.Guid(nullable: false, identity: true),
                         Name = c.String(nullable: false, maxLength: 254),
-                        GoogleId = c.String(nullable: false),
+                        GoogleToken = c.String(nullable: false),
+                        Email = c.String(nullable: false),
                         Registered = c.DateTime(nullable: false),
+                        AvatarUrl = c.String(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             

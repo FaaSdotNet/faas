@@ -206,7 +206,7 @@ namespace FaaS.MVC.Controllers.Api
                 else
                 {
                     Response.StatusCode = 401;
-                    return BadRequest("You tried to update the form that does not belong to you");
+                    return BadRequest("You tried to delete a form that does not belong to you");
                 }
             }
             catch (Exception ex)

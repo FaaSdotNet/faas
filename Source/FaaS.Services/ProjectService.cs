@@ -51,14 +51,14 @@ namespace FaaS.Services
                 logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
-
+            /*
             var existingProject = await projectRepository.Get(project.Id);
             if (existingProject != null)
             {
                 var message = $"Project with ID = [{project.Id}] already exists.";
                 logger.LogError(message);
                 throw new InvalidOperationException(message);
-            }
+            }*/
 
             return await projectRepository.Add(existingUser, project);
         }

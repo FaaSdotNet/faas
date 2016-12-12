@@ -59,14 +59,6 @@ namespace FaaS.MVC.Controllers.Api
             [FromQuery(Name = "limit")]int limit,
             [FromQuery(Name = "attributes")]string[] attributes)
         {
-            var userId = HttpContext.Session.GetString("userId");
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                Response.StatusCode = 401;
-                return Unauthorized();
-            }
-
             var formDto = await formService.Get(formId);
             if (formDto == null)
             {

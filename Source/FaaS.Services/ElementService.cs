@@ -51,14 +51,14 @@ namespace FaaS.Services
                 logger.LogError(message);
                 throw new InvalidOperationException(message);
             }
-
+            /*
             var existingElement = await elementRepository.Get(element.Id);
             if (existingElement != null)
             {
                 var message = $"Element with ID = [{element.Id}] already exists.";
                 logger.LogError(message);
                 throw new InvalidOperationException(message);
-            }
+            }*/
 
             return await elementRepository.Add(existingForm, element);
         }

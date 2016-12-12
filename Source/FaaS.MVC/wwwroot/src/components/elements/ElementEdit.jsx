@@ -115,7 +115,7 @@ class ElementEdit extends Component {
             FormId: this.props.formId
 		};
 
-        this.props.dispatch(ElementsActions.update(payload));
+        this.props.dispatch(ElementsActions.update(payload, this.props.user.userId));
         this.props.closeModal();
     }
 

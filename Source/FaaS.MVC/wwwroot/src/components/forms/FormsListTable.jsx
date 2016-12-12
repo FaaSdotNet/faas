@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {connect} from "react-redux";
 import {FormsActions} from "../../actions/formsActions";
+import {SessionsActions} from "../../actions/sessionsActions";
 import {ButtonDelete} from "../table/ButtonDelete";
 import {ModalWrapper} from "../table/ModalWrapper";
 import FormEdit from "./FormEdit";
@@ -74,6 +75,12 @@ export class FormListRow extends Component{
 		document.location.href=`/#/form/${formId}`;
 	}
 
+	handleViewSessions(formId) {
+		this.props.dispatch(SessionsActions.reset());
+		this.props.dispatch(PagesActions.setSessions(formId));
+		document.location.href="/#/sessions/";
+	}
+
 	handleDeleteForm(formId)
 	{
 		this.props.dispatch(FormsActions.del(formId, this.props.user.userId));
@@ -95,13 +102,18 @@ export class FormListRow extends Component{
 		return (
             <tr>
                 <td>
-                    <a onClick={() => this.handleFormClick(this.props.form.id)}>
+                    <a class="details" onClick={() => this.handleFormClick(this.props.form.id)}>
 						{this.props.form.formName}
                     </a>
                 </td>
                 <td>
 					{this.props.form.numElems}
                 </td>
+				<td>
+					<button type="button" className="btn btn-default btn-md" onClick={ () => this.handleViewSessions(this.props.form.id)}>
+						<span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-list-alt" aria-hidden="true"/>
+					</button>
+				</td>
 				<td>
 					<button type="button" className="btn btn-default btn-md" onClick={ () => this.handleViewForm(this.props.form.id)}>
 						<span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-search" aria-hidden="true"/>
@@ -170,6 +182,7 @@ export class FormsListTable extends Component {
                     <tr>
                         <th>Form name</th>
                         <th>Number of elements</th>
+						<th>View Sessions</th>
                         <th>View form</th>
                         <th>Add element</th>
                         <th>Edit</th>

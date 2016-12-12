@@ -24,6 +24,8 @@ namespace FaaS.MVC.Controllers.Api
         /// </summary>
         private readonly IFormService formService;
 
+        private readonly IUserService userService;
+
         /// <summary>
         /// Element service
         /// </summary>
@@ -36,11 +38,13 @@ namespace FaaS.MVC.Controllers.Api
             IHttpContextAccessor httpContextAccessor,
             IUrlHelperFactory urlHelperFactory,
             IMapper mapper,
+            IUserService userService,
             IFormService formService,
             IElementService elementService,
             ILogger<ElementsController> logger)
             : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
         {
+            this.userService = userService;
             this.formService = formService;
             this.elementService = elementService;
             this.logger = logger;
@@ -132,12 +136,10 @@ namespace FaaS.MVC.Controllers.Api
         // PUT 
         [HttpPatch]
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] ElementViewModel element)
+        public async Task<IActionResult> Put([FromBody] ElementViewModel element, [FromQuery(Name = "userId")] string userId)
         {
             try
             {
-                var userId = HttpContext.Session.GetString("userId");
-
                 if (string.IsNullOrEmpty(userId))
                 {
                     Response.StatusCode = 401;
@@ -145,12 +147,21 @@ namespace FaaS.MVC.Controllers.Api
                 }
 
                 var elementDto = mapper.Map<ElementViewModel, Element>(element);
-                var result = await elementService.Update(elementDto);
 
-                logger.LogInformation("[UPDATE] element: {} ", elementDto);
-
-
-                return Ok(result);
+                // Access validation
+                var elementOwner = await userService.Get(new Guid(userId));
+                var elementToBeUpdated = await elementService.Get(elementDto.Id);
+                if (elementToBeUpdated.Form.Project.User.Email == elementOwner.Email)
+                {
+                    var result = await elementService.Update(elementDto);
+                    logger.LogInformation("[UPDATE] element: {} ", elementDto);
+                    return Ok(result);
+                }
+                else
+                {
+                    Response.StatusCode = 401;
+                    return BadRequest("You tried to update an element that does not belong to you");
+                }
             }
             catch (Exception ex)
             {
@@ -160,25 +171,30 @@ namespace FaaS.MVC.Controllers.Api
 
         // DELETE elements/{id}
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id, [FromQuery(Name = "userId")] string userId)
         {
             try
             {
-                var userId = HttpContext.Session.GetString("userId");
-
                 if (string.IsNullOrEmpty(userId))
                 {
                     Response.StatusCode = 401;
                     return Unauthorized();
                 }
 
-                var element = await elementService.Get(id);
-                var result = await elementService.Remove(element);
-
-                logger.LogInformation("[DELETE] element: {} ", element);
-
-
-                return Ok(result);
+                // Access validation
+                var elementOwner = await userService.Get(new Guid(userId));
+                var elementToBeDeleted = await elementService.Get(id);
+                if (elementToBeDeleted.Form.Project.User.Email == elementOwner.Email)
+                {
+                    var result = await elementService.Remove(elementToBeDeleted);
+                    logger.LogInformation("[DELETE] element: {} ", elementToBeDeleted);
+                    return Ok(result);
+                }
+                else
+                {
+                    Response.StatusCode = 401;
+                    return BadRequest("You tried to delete an element that does not belong to you");
+                }
             }
             catch (Exception ex)
             {

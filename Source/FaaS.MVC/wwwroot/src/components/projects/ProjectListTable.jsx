@@ -85,7 +85,7 @@ export class ProjectListRow extends Component{
         return (
             <tr>
                 <td>
-                    <a onClick={() => this.handleProjectClick(this.props.project.id)}>
+                    <a class="details" onClick={() => this.handleProjectClick(this.props.project.id)}>
                         {this.props.project.projectName}
                     </a>
                 </td>
