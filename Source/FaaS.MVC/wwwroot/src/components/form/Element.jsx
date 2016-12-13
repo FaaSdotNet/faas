@@ -19,7 +19,8 @@ class Element extends React.Component {
                         options: options,
                         type: this.props.content.type,
                         requiredLabel: false
-                     };
+        };
+
     };
 
     setRequiredLabel(value) {
@@ -33,7 +34,7 @@ class Element extends React.Component {
                 <h4>{this.state.description}
                 <Asterisk visible={this.props.content.required}/> </h4>
                 <RequiredLabel ref={"label" + this.state.id} visible={this.state.requiredLabel} color="red"/>
-                <InputField type={this.state.type} options={this.state.options} elementId={this.state.id} valueChanged={this.props.valueChanged} />
+                <InputField type={this.state.type} options={this.state.options} elementId={this.state.id} valueChanged={this.props.valueChanged} defaultValue={this.props.defaultValue} />
             </div>
         );
     };

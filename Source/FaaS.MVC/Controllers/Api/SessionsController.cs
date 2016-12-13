@@ -27,10 +27,6 @@ namespace FaaS.MVC.Controllers.Api
         /// </summary>
         private readonly ISessionService sessionService;
 
-        private readonly IFormService formService;
-        private readonly IElementService elementService;
-        private readonly IElementValueService elementValueService;
-
         private readonly ILogger<ProjectsController> logger;
 
         public SessionsController(IRandomIdService randomId,
@@ -39,76 +35,37 @@ namespace FaaS.MVC.Controllers.Api
             IUrlHelperFactory urlHelperFactory,
             IMapper mapper,
             ISessionService sessionService,
-            IFormService formService,
-            IElementService elementService,
-            IElementValueService elementValueService,
             ILogger<ProjectsController> logger)
             : base(randomId, actionContextAccessor, httpContextAccessor, urlHelperFactory, mapper)
         {
             this.sessionService = sessionService;
-            this.formService = formService;
-            this.elementService = elementService;
-            this.elementValueService = elementValueService;
             this.logger = logger;
         }
 
         // GET sessions
         [HttpGet]
         public async Task<IActionResult> GetAllSessions(
-            [FromQuery(Name = "formId")] Guid formId,
-            [FromQuery(Name = "limit")]int limit,
-            [FromQuery(Name = "attributes")]string[] attributes)
+            [FromQuery(Name = "formId")] Guid formId)
         {
-            var formDto = await formService.Get(formId);
-            if (formDto == null)
+            Session[] allSessions = await sessionService.GetAll();
+
+            List<Session> result = new List<Session>();
+
+            foreach (Session session in allSessions)
             {
-                return NotFound("Form not found with guid:" + formId);
-            }
-
-            var elements = await elementService.GetAllForForm(formDto);
-            HashSet<Guid> uniqueSessions = new HashSet<Guid>();
-
-            foreach (Element element in elements)
-            {
-                var elementValues = await elementValueService.GetAllForElement(element);
-
-                var uniquePart = elementValues.Select(elementValue => elementValue.Session.Id).Distinct();
-                uniqueSessions.UnionWith(uniquePart);
-            }
-
-            var sessions = new List<Session>();
-            foreach (Guid sessionId in uniqueSessions)
-            {
-                var session = await sessionService.Get(sessionId);
-                sessions.Add(session);
-            }
-
-            // Apply limit
-            if (limit > 0)
-            {
-                sessions = sessions.Take(limit).ToList();
-            }
-
-            // Select only given fields
-            if (attributes != null && attributes.Any())
-            {
-                sessions = sessions.Select(session =>
+                ElementValue elementValue = session.ElementValues.ElementAtOrDefault(0);
+                if (elementValue == null)
                 {
-                    var projection = new Session();
-
-                    foreach (var attribute in attributes)
-                    {
-                        projection.GetType()
-                            .GetProperty(attribute)
-                            .SetValue(projection, session.GetType().GetProperty(attribute).GetValue(session));
-                    }
-
-                    return projection;
-                }).ToList();
+                    continue;
+                }
+                if (elementValue.Element.Form.Id == formId)
+                {
+                    result.Add(session);
+                }
             }
 
-            logger.LogInformation($"Retrieved {sessions.Count} sessions.");
-            return Ok(sessions.ToArray());
+            logger.LogInformation($"Retrieved {result.Count} sessions.");
+            return Ok(result.ToArray().OrderByDescending(e => e.Filled));
         }
 
         // GET session/{id}/
@@ -124,5 +81,6 @@ namespace FaaS.MVC.Controllers.Api
 
             return Ok(session);
         }
+
     }
 }
