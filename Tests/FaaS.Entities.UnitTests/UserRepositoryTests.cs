@@ -102,7 +102,7 @@ namespace FaaS.Entities.UnitTests
         {
             var actualUser = await _UserRepository.Get("TestGoogleId1");
 
-            actualUser.GoogleToken = "NotHisPreviousGoogleId";
+            actualUser.Email = "NotHisPreviousGoogleId";
 
             actualUser = await _UserRepository.Update(actualUser);
             actualUser = await _UserRepository.Get("NotHisPreviousGoogleId");
