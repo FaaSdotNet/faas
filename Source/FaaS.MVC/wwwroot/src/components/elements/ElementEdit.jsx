@@ -26,12 +26,23 @@ class ElementEdit extends Component {
 			type: "",
 			required: ""
 		};
+
+        this.state.displayStyle = "none";
     }
 
     handleDescriptionChange(event) {
         this.setState({
             description: event.target.value
         });
+
+        if (event.target.value.trim() == "")
+		{
+			this.setState({displayStyle: "inline"});
+		}
+		else
+		{
+			this.setState({displayStyle: "none"});
+		}
     }
 
     handleOptionsChange(event) {
@@ -105,6 +116,12 @@ class ElementEdit extends Component {
         }
         const type = this.state.type;
         const required = this.state.required;
+
+        if (description.trim() == "")
+		{
+			this.setState({displayStyle: "inline"});
+			return;
+		}
 
         const payload = {
 			Id: this.props.element.id,
@@ -226,6 +243,7 @@ class ElementEdit extends Component {
 
                 <label htmlFor="description" className="col-md-5 control-label">
                     Description
+                    <span style={{color: "red", display: this.state.displayStyle}}><b> * (Required)</b></span>
                 </label>
                 <input ref="editDescription" type="text" id="Description"
                        onChange={this.handleDescriptionChange} className="form-control"

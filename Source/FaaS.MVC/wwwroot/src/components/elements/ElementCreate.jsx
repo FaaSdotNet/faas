@@ -26,12 +26,23 @@ export class ElementCreateComponent extends Component {
         this.state.type = "0";
         this.state.required = "";
         this.state.range = {min: "0", max: "100"};
+
+        this.state.displayStyle = "none";
     }
 
     handleDescriptionChange(event) {
         this.setState({
             description: event.target.value,
         });
+
+        if (event.target.value.trim() == "")
+		{
+			this.setState({displayStyle: "inline"});
+		}
+		else
+		{
+			this.setState({displayStyle: "none"});
+		}
     }
 
     handleOptionsChange(event) {
@@ -72,6 +83,12 @@ export class ElementCreateComponent extends Component {
         }
 		const type = this.state.type;
 		const required = this.state.required;
+
+        if (description.trim() == "")
+		{
+			this.setState({displayStyle: "inline"});
+			return;
+		}
 
 		const payload = {
 			Description: description,
@@ -190,6 +207,7 @@ export class ElementCreateComponent extends Component {
             <div className="form-horizontal">
                 <label htmlFor="description" className="col-md-5 control-label">
                     Description
+                    <span style={{color: "red", display: this.state.displayStyle}}><b> * (Required)</b></span>
                 </label>
                 <input ref="editDescription" type="text" id="Description"
                        onChange={this.handleDescriptionChange} className="form-control"

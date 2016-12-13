@@ -9,17 +9,44 @@ import {UserActions} from "../../actions/userActions";
 export class UserMenu extends Component {
 	render() {
 
+		let projects = null;
 		let forms = null;
 		let elements = null;
 		let sessions = null;
-		if(this.props.page.projectId) {
+		let about = null;
+		let faq = null;
+		
+		if (!this.props.user.userId)
+		{
+			faq = (
+				<NavItem href="/#/faq">
+					FAQ
+				</NavItem>
+			);
+			about = (
+				<NavItem href="/#/about">
+					About
+				</NavItem>
+			);
+		}
+		else
+		{
+			projects = (
+				<NavItem href="/#/projects">
+					Projects
+				</NavItem>
+			);
+		}
+
+		if (this.props.page.projectId) {
 			forms = (
 				<NavItem href="/#/forms">
 					Forms
 				</NavItem>
 			);
 		}
-		if(this.props.page.formId) {
+
+		if (this.props.page.formId) {
 			elements = (
 				<NavItem href="/#/elements">
 					Elements
@@ -35,12 +62,12 @@ export class UserMenu extends Component {
 
 		return(
 			<Nav>
-				<NavItem href="/#/projects">
-					Projects
-				</NavItem>
+				{projects}
 				{forms}
 				{elements}
 				{sessions}
+				{faq}
+				{about}
 			</Nav>
 		);
 	}

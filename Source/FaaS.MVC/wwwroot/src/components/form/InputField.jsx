@@ -85,7 +85,7 @@ export default class InputField extends React.Component {
             case 1:
                 return(
                     <div className="form-group" key={this.props.elementId}>
-                        <DatePicker inline placeholderText="Click to select a date" selected={moment(this.state.value)} onChange={this.onDateChanged.bind(this)} monthsShown={2} />
+                        <DatePicker inline placeholderText="Click to select a date" selected={moment(this.state.value)} onChange={this.onDateChanged.bind(this)} />
                     </div>
                 );
             case 2:
@@ -126,7 +126,8 @@ export default class InputField extends React.Component {
             case 5:
                 return(
                     <div className="form-group" key={this.props.elementId}>
-                        <textarea className="form-control" rows="5" cols="58" name={this.state.elementId} onChange={this.onValueChanged.bind(this)} value={this.state.value} />
+
+                        <textarea className="form-control" name={this.state.elementId} onChange={this.onValueChanged.bind(this)} value={this.state.value} />
                        </div>
                 );              
         }

@@ -257,6 +257,7 @@ namespace FaaS.Entities.UnitTests
             return new User
             {
                 GoogleToken = $"TestGoogleId{identifier}",
+                Email = $"TestGoogleId{identifier}",
                 Registered = new DateTime(2000, 1, identifier, 1, 1, 0),
                 Id = new Guid($"{{00000000-1111-0000-0000-{FormatForLastGuidPart(identifier)}}}")
             };
