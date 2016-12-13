@@ -10,6 +10,7 @@ import {connect} from "react-redux";
 class Form extends React.Component {
     constructor(props) {
         super(props);
+
         this.openModal = this.openModal.bind(this);
         this.redirectToHome = this.redirectToHome.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,6 +36,11 @@ class Form extends React.Component {
         });
         document.location.href = "/";
     }
+
+    handleReturn()
+	{
+		document.location.href="/#/forms/";
+	}
 
 	componentWillMount()
 	{
@@ -123,13 +129,31 @@ class Form extends React.Component {
                 )
             }
         }
+
+        let returnButton = null;
+        if (this.props.user.userId)
+        {
+            returnButton = (<input type="button" 
+                                    id="returnButton"
+                                    onClick={this.handleReturn}
+                                    value="Back to Project"
+                                    className="btn btn-default" />);
+        }
         
         return (
             <div id="elemContainer">
+                <h1 className="text-center" key="h1">{this.state.form.formName}</h1>
                 <div className="form-group">
-                    <h1 key="h1">{this.state.form.formName}</h1>
                     {elementsList}
-                    <MySubmit onClick={this.handleSubmit.bind(this)} id="formButton" value="Submit"/>
+
+                    <input type="button" 
+                        id="formButton"
+                        onClick={this.handleSubmit}
+                        value="Submit"
+                        className="btn center-block btn-primary"
+                        disabled={this.props.user.userId} />
+
+                    {returnButton}
 
                     <Modal isOpen={this.state.isOpen} onRequestHide={this.redirectToHome}>
                         <ModalHeader>
