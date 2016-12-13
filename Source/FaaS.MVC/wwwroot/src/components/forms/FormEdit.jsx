@@ -18,23 +18,30 @@ class FormEdit extends Component {
 		this.state.formName = "";
 		this.state.description = "";
 		this.state.created = "";
+
+		this.state.displayStyle = "none";
 	}
 
 	handleFormNameChange(event)
 	{
 		this.setState({
-			formName: event.target.value,
-			description: this.state.description,
-			created: this.state.created
+			formName: event.target.value
 		});
+
+		if (event.target.value.trim() == "")
+		{
+			this.setState({displayStyle: "inline"});
+		}
+		else
+		{
+			this.setState({displayStyle: "none"});
+		}
 	}
 
 	handleDescriptionChange(event)
 	{
 		this.setState({
-			formName: this.state.formName,
-			description: event.target.value,
-			created: this.state.created
+			description: event.target.value
 		});
 	}
 
@@ -47,6 +54,12 @@ class FormEdit extends Component {
 	{
 		const formName = this.state.formName;
 		const description = this.state.description;
+
+		if (formName.trim() == "")
+		{
+			return;
+		}
+		
 		const payload = {
 			Id: this.props.form.id,
 			formName: formName,
@@ -63,17 +76,18 @@ class FormEdit extends Component {
 	{
 		return (
 			<div className="form-horizontal">
-				<h4>Edit Form</h4>
-				<label htmlFor="formName" className="col-md-5 control-label">
+				<label className="col-md-5 control-label">
 					Form Name
+					<span style={{color: "red", display: this.state.displayStyle}}><b> * (Required)</b></span>
 				</label>
-				<input ref="editFormName" type="text" id="FormName"
+				<input type="text" id="FormName"
 					   onChange={this.handleFormNameChange} className="form-control"
 					   value={this.state.formName}/>
-				<label htmlFor="description" className="col-md-5 control-label">
+				<br/>
+				<label className="col-md-5 control-label">
 					Description
 				</label>
-				<input ref="editDescription" type="text" id="Description"
+				<input type="text" id="Description"
 					   onChange={this.handleDescriptionChange} className="form-control"
 					   value={this.state.description}/>
 
@@ -83,12 +97,6 @@ class FormEdit extends Component {
 					   onClick={this.handleSubmit}
 					   value="Save"
 					   className="btn btn-primary col-md-offset-5"/>
-
-				<input type="button"
-					   id="cancelButton"
-					   onClick={this.handleCancel}
-					   value="Cancel"
-					   className="btn btn-default"/>
 			</div>
 		);
 	}

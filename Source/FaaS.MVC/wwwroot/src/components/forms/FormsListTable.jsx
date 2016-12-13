@@ -131,7 +131,7 @@ export class FormListRow extends Component{
                     <button type="button" className="btn btn-default btn-md" onClick={ () => this.handleEditClick()}>
                         <span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-edit" aria-hidden="true"/>
                     </button>
-                    <ModalWrapper title="Edit Project" open={this.state.editOpen}  >
+                    <ModalWrapper title="Edit Form" open={this.state.editOpen}  >
                         <FormEdit form={this.props.form} closeModal={this.closeModal.bind(this)} />
                     </ModalWrapper>
                 </td>

@@ -1,5 +1,4 @@
 ﻿import React, {Component} from "react";
-import MyInput from "../form/MyInput";
 import ProjectActions from "../../actions/projectsActions";
 import {connect} from "react-redux";
 
@@ -13,12 +12,50 @@ export class ProjectCreateComponent extends Component {
 	{
 		super(props);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.handleProjectNameChange = this.handleProjectNameChange.bind(this);
+		this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
+
+		this.state = {};
+		this.state.projectName = "";
+		this.state.description = "";
+		this.state.created = "";
+
+		this.state.displayStyle = "none";
+	}
+
+	handleProjectNameChange(event)
+	{
+		this.setState({
+			projectName: event.target.value
+		});
+
+		if (event.target.value.trim() == "")
+		{
+			this.setState({displayStyle: "inline"});
+		}
+		else
+		{
+			this.setState({displayStyle: "none"});
+		}
+	}
+
+	handleDescriptionChange(event)
+	{
+		this.setState({
+			description: event.target.value
+		});
 	}
 
 	handleSubmit()
 	{
-		const projectName = this.refs.projectName.state.value;
-		const projectDesc = this.refs.projectDescription.state.value;
+		const projectName = this.state.projectName;
+		const projectDesc = this.state.description;
+
+		if (projectName.trim() == "")
+		{
+			this.setState({displayStyle: "inline"});
+			return;
+		}
 
 		const payload = {
 			ProjectName: projectName,
@@ -33,20 +70,27 @@ export class ProjectCreateComponent extends Component {
 	{
 		return (
 			<div className="form-horizontal">
-				<MyInput ref="projectName" id="projectName" label="Project Name"/>
-				<MyInput ref="projectDescription" id="projectDescription" label="Description"/>
+				<label className="col-md-5 control-label">
+					Project Name
+					<span style={{color: "red", display: this.state.displayStyle}}><b> * (Required)</b></span>
+				</label>
+				<input type="text" id="ProjectName"
+					   onChange={this.handleProjectNameChange} className="form-control"
+					   value={this.state.projectName}/>
+				<br/>
+				<label className="col-md-5 control-label">
+					Description
+				</label>
+				<input type="text" id="Description"
+					   onChange={this.handleDescriptionChange} className="form-control"
+					   value={this.state.description}/>
+
 				<br/>
 				<input type="button"
 					   id="submitButton"
 					   onClick={ () => this.handleSubmit()}
 					   value="Create"
 					   className="btn btn-primary col-md-offset-5"/>
-
-				<input type="button"
-					   id="cancelButton"
-					   onClick={this.handleCancel}
-					   value="Cancel"
-					   className="btn btn-default"/>
 			</div>
 		);
 	}

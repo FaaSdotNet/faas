@@ -19,6 +19,8 @@ export class ProjectEdit extends Component {
 		this.state.projectName = "";
 		this.state.description = "";
 		this.state.created = "";
+
+		this.state.displayStyle = "none";
 	}
 
 	handleProjectNameChange(event)
@@ -26,6 +28,15 @@ export class ProjectEdit extends Component {
 		this.setState({
 			projectName: event.target.value
 		});
+
+		if (event.target.value.trim() == "")
+		{
+			this.setState({displayStyle: "inline"});
+		}
+		else
+		{
+			this.setState({displayStyle: "none"});
+		}
 	}
 
 	handleDescriptionChange(event)
@@ -45,6 +56,11 @@ export class ProjectEdit extends Component {
 		const projectName = this.state.projectName;
 		const description = this.state.description;
 
+		if (projectName.trim() == "")
+		{
+			return;
+		}
+
 		const payload = {
 			Id: this.props.project.id,
 			projectName: projectName,
@@ -62,14 +78,16 @@ export class ProjectEdit extends Component {
 			<div className="form-horizontal">
 				<label htmlFor="projectName" className="col-md-5 control-label">
 					Project Name
+					<span style={{color: "red", display: this.state.displayStyle}}><b> * (Required)</b></span>
 				</label>
-				<input ref="editProjectName" type="text" id="ProjectName"
+				<input type="text" id="ProjectName"
 					   onChange={this.handleProjectNameChange} className="form-control"
 					   value={this.state.projectName}/>
+				<br/>
 				<label htmlFor="description" className="col-md-5 control-label">
 					Description
 				</label>
-				<input ref="editDescription" type="text" id="Description"
+				<input type="text" id="Description"
 					   onChange={this.handleDescriptionChange} className="form-control"
 					   value={this.state.description}/>
 

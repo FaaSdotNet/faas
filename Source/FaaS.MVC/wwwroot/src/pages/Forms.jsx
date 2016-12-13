@@ -60,6 +60,7 @@ export class Forms extends Component {
 						className="btn btn-primary btn-md" role="button">
 					Add New Form
 				</button>
+				{'\u00A0'}
 				<button onClick={() => { this.handleReturn() }}
 						type="button"
 						className="btn btn-default btn-md" role="button">
