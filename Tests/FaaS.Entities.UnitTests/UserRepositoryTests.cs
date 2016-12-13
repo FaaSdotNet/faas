@@ -101,11 +101,11 @@ namespace FaaS.Entities.UnitTests
         public async void UpdateUser_NotNull_InDB()
         {
             var actualUser = await _UserRepository.Get("TestGoogleId1");
-
-            actualUser.Email = "NotHisPreviousGoogleId";
+            
+            actualUser.GoogleToken = "NotHisPreviousGoogleId";
 
             actualUser = await _UserRepository.Update(actualUser);
-            actualUser = await _UserRepository.Get("NotHisPreviousGoogleId");
+            actualUser = await _UserRepository.Get("TestGoogleId1");
 
             // Checks returned value
             Assert.NotNull(actualUser);
