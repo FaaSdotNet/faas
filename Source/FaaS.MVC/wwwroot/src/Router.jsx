@@ -10,7 +10,7 @@ import Elements from "./pages/Elements";
 import Users from "./pages/Users";
 import About from "./pages/About";
 import FAQ from "./pages/FAQ";
-
+import SessionView from "./components/sessions/SessionView";
 
 export class Root extends Component {
 
@@ -33,6 +33,7 @@ export class Root extends Component {
                     <Route path="about" component={About} />
                     <Route path="faq" component={FAQ} />
                     <Route path="form/:formid" component={Form} />
+                    <Route path="session/:sessionId" component={SessionView} />
                     <IndexRoute component={Index} />
                 </Route>
             </Router>

@@ -17,12 +17,11 @@ export class SessionListRow extends Component{
 	 */
 	constructor(props) {
 		super(props);
-
 		this.handleViewSession = this.handleViewSession.bind(this);
 	}
 
 	handleViewSession(sessionId) {
-		document.location.href=`/#/form/${sessionId}`;
+		document.location.href=`/#/session/${sessionId}`;
 	}
 
 	/**

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace FaaS.DataTransferModels
 {
@@ -8,9 +9,12 @@ namespace FaaS.DataTransferModels
 
         public DateTime Filled { get; set; }
 
+        public virtual ICollection<ElementValue> ElementValues { get; set; } = new List<ElementValue>();
+
         public override string ToString()
         {
             return $"{nameof(Id)}: {Id}, {nameof(Filled)}: {Filled}";
         }
     }
+
 }

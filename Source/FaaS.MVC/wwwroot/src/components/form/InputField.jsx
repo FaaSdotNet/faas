@@ -1,19 +1,25 @@
 import React from 'react';
 import {Checkbox, CheckboxGroup} from 'react-checkbox-group';
 import DatePicker from 'react-datepicker'
-
+import moment from 'moment';
 import 'react-datepicker/dist/react-datepicker.css';
 
 export default class InputField extends React.Component {
+
     constructor(props) {
         super(props);
         
+        let splitted = [];
+        if (this.props.type == 0) {
+            splitted = this.stringToArray(this.props.defaultValue);
+        }
+
         this.state = {
             elementId: this.props.elementId,
             type: this.props.type,
-            value: this.props.value,
+            value: this.props.defaultValue,
             options: this.props.options,
-            checked: []
+            checked: splitted
         }
     };
     
@@ -51,14 +57,21 @@ export default class InputField extends React.Component {
         return resultString; 
     }
 
+    stringToArray(str) {
+        if (!str) return [];
+        return str.split(" ");
+    }
 
     render() {
 		let arrayOptions = [];
         switch(this.state.type){
             case 0:
                 arrayOptions = [];
-                for(let key in this.props.options){
-                    arrayOptions.push(<div key={this.props.elementId + key}><label key={this.props.elementId + key + 'label'}><Checkbox key={this.props.elementId + key + 'chckbx'} value={key} /> {this.props.options[key]} </label></div>);
+                
+                for(let key in this.props.options) {
+                    arrayOptions.push(
+                        <div key={this.props.elementId + key}><label key={this.props.elementId + key + 'label'}><Checkbox key={this.props.elementId + key + 'chckbx'} value={key} /> {this.props.options[key]} </label></div>
+                        );
                 }
                 return (
                     <div className="form-group">
@@ -72,7 +85,7 @@ export default class InputField extends React.Component {
             case 1:
                 return(
                     <div className="form-group" key={this.props.elementId}>
-                        <DatePicker inline placeholderText="Click to select a date" selected={this.state.value} onChange={this.onDateChanged.bind(this)} monthsShown={2} />
+                        <DatePicker inline placeholderText="Click to select a date" selected={moment(this.state.value)} onChange={this.onDateChanged.bind(this)} monthsShown={2} />
                     </div>
                 );
             case 2:
@@ -101,20 +114,20 @@ export default class InputField extends React.Component {
                 return(
                     <div className="form-group" key={this.props.elementId}>
                         <label>{this.state.value}</label>
-                        <input className="form-control" type="range" name={this.state.elementId} onChange={this.onValueChanged.bind(this)} min={this.state.options.min} max={this.state.options.max} />
+                        <input className="form-control" type="range" name={this.state.elementId} onChange={this.onValueChanged.bind(this)} min={this.state.options.min} max={this.state.options.max} value={this.state.value} />
                     </div>
                 );
             case 4:
                 return(
                     <div className="form-group" key={this.props.elementId}>
-                        <input className="form-control" type="text" name={this.state.elementId} onChange={this.onValueChanged.bind(this)}/>
+                        <input className="form-control" type="text" name={this.state.elementId} onChange={this.onValueChanged.bind(this)} value={this.state.value}/>
                     </div>
                 );   
             case 5:
                 return(
                     <div className="form-group" key={this.props.elementId}>
-                        <textarea className="form-control" rows="5" cols="58" name={this.state.elementId} onChange={this.onValueChanged.bind(this)}/>
-                    </div>
+                        <textarea className="form-control" rows="5" cols="58" name={this.state.elementId} onChange={this.onValueChanged.bind(this)} value={this.state.value} />
+                       </div>
                 );              
         }
     };
