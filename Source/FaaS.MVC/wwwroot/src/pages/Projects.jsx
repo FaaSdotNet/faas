@@ -31,6 +31,11 @@ export class Projects extends Component {
 
 	render()
 	{
+
+		if(!this.props.user.userId){
+			document.location.href="/";
+		}
+
 		return (
 			<div>
 				<h1>

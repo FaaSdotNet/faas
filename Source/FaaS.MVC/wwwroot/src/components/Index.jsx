@@ -16,12 +16,15 @@ export class IndexComponent extends Component {
         if (userToken) {
             const payload = {
                 GoogleToken: userToken
-            }
+            };
             this.props.dispatch(UserActions.logIn(payload));
-            document.location.href = "/#/projects";
         }
     }
     render() {
+
+            if(this.props.user.userId){
+				document.location.href = "/#/projects";
+			}
                 return (
                     <div className="row">
                 <h3 className="text-center">

@@ -3,13 +3,44 @@ import { Nav, Navbar, NavItem, NavDropdown, MenuItem, Header, Brand } from "reac
 import {connect} from "react-redux";
 import {UserActions} from "../../actions/userActions";
 
+@connect((store) => {
+	return store;
+})
 export class UserMenu extends Component {
 	render() {
+
+		let forms = null;
+		let elements = null;
+		let sessions = null;
+		if(this.props.page.projectId) {
+			forms = (
+				<NavItem href="/#/forms">
+					Forms
+				</NavItem>
+			);
+		}
+		if(this.props.page.formId) {
+			elements = (
+				<NavItem href="/#/elements">
+					Elements
+				</NavItem>
+			);
+			sessions = (
+				<NavItem href="/#/sessions">
+					Sessions
+				</NavItem>
+			);
+		}
+
+
 		return(
 			<Nav>
 				<NavItem href="/#/projects">
 					Projects
 				</NavItem>
+				{forms}
+				{elements}
+				{sessions}
 			</Nav>
 		);
 	}

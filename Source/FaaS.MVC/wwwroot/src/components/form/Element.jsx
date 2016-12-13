@@ -7,7 +7,9 @@ class Element extends React.Component {
     constructor(props) {
         super(props);
 
-        var options;
+        this.setRequiredLabel = this.setRequiredLabel.bind(this);
+
+        let options;
         if (this.props.content.options != null && this.props.content.options != "") {
             options = JSON.parse(this.props.content.options);
         }
@@ -21,13 +23,13 @@ class Element extends React.Component {
     };
 
     setRequiredLabel(value) {
-        this.setState({requiredLabel: value})
+        this.setState({requiredLabel: value});
         this.refs["label" + this.state.id].setVisible(value);
     };
 
     render() {
         return (
-            <div>
+            <div className="form-group">
                 <h4>{this.state.description}
                 <Asterisk visible={this.props.content.required}/> </h4>
                 <RequiredLabel ref={"label" + this.state.id} visible={this.state.requiredLabel} color="red"/>
@@ -47,7 +49,7 @@ class Asterisk extends React.Component{
     };
 
     setVisible(value) {
-        this.updateState({visible: value});
+        this.setState({visible: value});
         this.forceUpdate();
     };
 
@@ -87,7 +89,7 @@ class RequiredLabel extends React.Component{
             );
         else {
             return(
-                <div>
+                <div className="form-group">
                     <font color="red">
                         <label >This field is required</label>
                     </font>

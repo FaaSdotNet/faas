@@ -2,11 +2,18 @@
 import Element from './form/Element.jsx'
 import MySubmit from "./form/MySubmit.jsx"
 import { Modal, ModalHeader, ModalTitle, ModalClose, ModalBody, ModalFooter } from 'react-modal-bootstrap';
+import {connect} from "react-redux";
 
+@connect((store) => {
+   return store;
+})
 class Form extends React.Component {
     constructor(props) {
         super(props);
         this.openModal = this.openModal.bind(this);
+        this.redirectToHome = this.redirectToHome.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.valueChanged = this.valueChanged.bind(this);
 
 		this.state = { 
             isOpen: false,
@@ -23,10 +30,10 @@ class Form extends React.Component {
     };
 
     redirectToHome(){
-        this.updateState({
+        this.setState({
             isOpen: false
         });
-        document.location.href = "/#/index";
+        document.location.href = "/";
     }
 
 	componentWillMount()
@@ -52,16 +59,16 @@ class Form extends React.Component {
 		});
 	}
 
-    handleSubmit(e) {
-        var valuesToPost = [];
-        var i = 0;
-        for(var key in this.state.elements){
-            valuesToPost[i] = this.state.values[this.state.elements[key].id]
+    handleSubmit() {
+        let valuesToPost = [];
+        let i = 0;
+        for(let key in this.state.elements){
+            valuesToPost[i] = this.state.values[this.state.elements[key].id];
             i++;
         }
 
-        var incomplete = false;
-        for(var key in this.state.elements){
+        let incomplete = false;
+        for(let key in this.state.elements){
             if(this.state.elements[key].required && (valuesToPost[key] == null || valuesToPost[key] == "")){
                 incomplete = true;
                 this.refs["elem"+key].setRequiredLabel(true);
@@ -75,17 +82,17 @@ class Form extends React.Component {
             return;
         }
         
-        var postObj = {};
+        let postObj = {};
         postObj.form = this.state.form;
         postObj.elements = this.state.elements;
         postObj.values = valuesToPost;
-        var stringToSend = JSON.stringify({
+        const stringToSend = JSON.stringify({
             Form: this.state.form,
             Elements: this.state.elements,
             Values: valuesToPost
         });
 
-        var result = fetch('/api/v1.0/form', {
+        const result = fetch('/api/v1.0/form', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -102,36 +109,40 @@ class Form extends React.Component {
     }
 
     valueChanged(elementId, newVal){
-        var values = this.state.values;
+        let values = this.state.values;
         values[elementId] = newVal;
         this.setState({values: values}); 
     }
 
     render() {
-        var elementsList = [];
-        for(var key in this.state.elements){
+        let elementsList = [];
+        for(let key in this.state.elements){
             if(this.state.elements.hasOwnProperty(key)){
-                elementsList.push(<li key={key}><Element ref={"elem"+key} key={"element"+key} content={this.state.elements[key]} valueChanged={this.valueChanged.bind(this)}/></li>)
+                elementsList.push(
+                    <Element ref={"elem"+key} key={"element"+key} content={this.state.elements[key]} valueChanged={this.valueChanged.bind(this)}/>
+                )
             }
         }
         
         return (
             <div id="elemContainer">
-                <h1 key="h1">{this.state.form.formName}</h1>
-                {elementsList}
-                <MySubmit onClick={this.handleSubmit.bind(this)} id="formButton" value="Submit"/>
+                <div className="form-group">
+                    <h1 key="h1">{this.state.form.formName}</h1>
+                    {elementsList}
+                    <MySubmit onClick={this.handleSubmit.bind(this)} id="formButton" value="Submit"/>
 
-                <Modal isOpen={this.state.isOpen} onRequestHide={this.redirectToHome}>
-                    <ModalHeader>
-                        <ModalClose onClick={this.hideModal}/>
-                        <ModalTitle>Form has been submitted</ModalTitle>
-                    </ModalHeader>
-                    <ModalBody>
-                        <button className='btn btn-default' onClick={this.redirectToHome}>
-                            Close
-                        </button>
-                    </ModalBody>
-                </Modal>
+                    <Modal isOpen={this.state.isOpen} onRequestHide={this.redirectToHome}>
+                        <ModalHeader>
+                            <ModalClose onClick={this.hideModal}/>
+                            <ModalTitle>Form has been submitted</ModalTitle>
+                        </ModalHeader>
+                        <ModalBody>
+                            <button className='btn btn-default' onClick={this.redirectToHome}>
+                                Close
+                            </button>
+                        </ModalBody>
+                    </Modal>
+                </div>
             </div>
 
         );
