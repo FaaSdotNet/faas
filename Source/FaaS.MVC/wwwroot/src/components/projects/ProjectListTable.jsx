@@ -90,9 +90,6 @@ export class ProjectListRow extends Component{
                     </a>
                 </td>
                 <td>
-                    {this.props.project.numForms}
-                </td>
-                <td>
                     <button type="button" className="btn btn-default btn-md" onClick={ () => this.handleAddForm(this.props.project.id)}>
 						<span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-plus" aria-hidden="true"/>
 					</button>
@@ -149,7 +146,6 @@ export class ProjectListTable extends Component {
                     <thead>
 						<tr>
 							<th>Project name</th>
-							<th>Number of forms</th>
 							<th>Add form</th>
 							<th>Edit</th>
 							<th>Delete</th>

@@ -106,9 +106,6 @@ export class FormListRow extends Component{
 						{this.props.form.formName}
                     </a>
                 </td>
-                <td>
-					{this.props.form.numElems}
-                </td>
 				<td>
 					<button type="button" className="btn btn-default btn-md" onClick={ () => this.handleViewSessions(this.props.form.id)}>
 						<span style={{fontSize: 1.5 + 'em'}} className="glyphicon glyphicon-list-alt" aria-hidden="true"/>
@@ -181,7 +178,6 @@ export class FormsListTable extends Component {
                     <thead>
                     <tr>
                         <th>Form name</th>
-                        <th>Number of elements</th>
 						<th>View Sessions</th>
                         <th>View form</th>
                         <th>Add element</th>
