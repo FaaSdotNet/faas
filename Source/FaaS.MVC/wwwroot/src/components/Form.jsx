@@ -139,6 +139,16 @@ class Form extends React.Component {
                                     value="Back to Project"
                                     className="btn btn-default" />);
         }
+
+        let submitButton = null;
+        if (!this.props.user.userId) {
+            submitButton =
+                <input type="button"
+                    id="formButton"
+                    onClick={this.handleSubmit}
+                    value="Submit"
+                    className="btn center-block btn-primary" />
+        }
         
         return (
             <div id="elemContainer">
@@ -146,12 +156,7 @@ class Form extends React.Component {
                 <div className="form-group">
                     {elementsList}
 
-                    <input type="button" 
-                        id="formButton"
-                        onClick={this.handleSubmit}
-                        value="Submit"
-                        className="btn center-block btn-primary"
-                        disabled={this.props.user.userId} />
+                    {submitButton}
 
                     {returnButton}
 
